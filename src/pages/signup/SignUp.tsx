@@ -1,6 +1,6 @@
 
 import { useNavigate } from "react-router-dom"
-import "./css/style.css"
+// import "./css/signup.css"
 import signinImg from "./images/signin-image.jpg"
 import { ROUTES } from "../../constants/routes"
 
