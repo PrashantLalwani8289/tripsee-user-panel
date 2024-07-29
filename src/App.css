@@ -1,4 +1,4 @@
-#root {
+/* #root {
   max-width: 1280px;
   margin: 0 auto;
   padding: 2rem;
@@ -39,4 +39,28 @@
 
 .read-the-docs {
   color: #888;
+} */
+.nav-item .dropdown-menu {
+  display: none;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  z-index: 1000;
+  float: left;
+  min-width: 10rem;
+  padding: 0.5rem 0;
+  margin: 0.125rem 0 0;
+  font-size: 1rem;
+  color: #fffdfd;
+  text-align: left;
+  list-style: none;
+  background-color: grey;
+  background-clip: padding-box;
+  border: 2px solid rgba(0, 0, 0, 0.15);
+  border-radius: 0.25rem;
+}
+
+/* Show the dropdown menu on hover */
+.nav-item:hover .dropdown-menu {
+  display: block;
 }
