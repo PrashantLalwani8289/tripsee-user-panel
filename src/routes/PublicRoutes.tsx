@@ -1,7 +1,7 @@
-import React from "react";
-import { Navigate } from "react-router-dom";
+// import React from "react";
+// import { Navigate } from "react-router-dom";
 // import home from "../pages/home/home";
-import { ROUTES } from "../constants/routes";
+// import { ROUTES } from "../constants/routes";
 
 interface PublicRouteProps {
   isAuthenticated: boolean;
@@ -9,7 +9,7 @@ interface PublicRouteProps {
 }
 
 const PublicRoutes: React.FC<PublicRouteProps> = ({ isAuthenticated, element }) => {
-  return isAuthenticated ? element : <Navigate to={ROUTES.HOME}/> ;
+  return isAuthenticated ? element : element ;
 };
 
 export default PublicRoutes;

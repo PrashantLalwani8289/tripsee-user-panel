@@ -59,9 +59,11 @@ import { gsap } from "gsap";
   $(window).on("scroll", function () {
     var scroll = $(window).scrollTop();
     if (scroll < 50) {
+      console.log("lesfdsladfjl  ")
       $(".sticky-navbar").removeClass("sticky");
       $(".back-to-top").hide();
     } else {
+      console.log("neeche val a      ")
       $(".sticky-navbar").addClass("sticky");
       $(".back-to-top").show();
     }
