@@ -12,6 +12,7 @@ import Home from "../pages/home/home";
 import SignUp from "../pages/signup/SignUp";
 import SignIn from "../pages/signin/SignIn";
 import PrivateRoute from "./PrivateRoutes";
+import BlogEditor from "../pages/blogEditor/BlogEditor";
 // const home = lazy(() => import("../pages/home/home"));
 // const Login = lazy(() => import("../pages/Login"));
 // const Signup = lazy(() => import("../pages/Signup"));
@@ -40,6 +41,12 @@ const RoutesConfig: React.FC<RoutesConfigProps> = ({ isAuthenticated }) => {
                 path={ROUTES.BLOGS}
                 element={
                     <PublicRoutes isAuthenticated={isAuthenticated} element={<Blogs />} />
+                }
+            />
+            <Route
+                path={ROUTES.EDITOR}
+                element={
+                    <PublicRoutes isAuthenticated={isAuthenticated} element={<BlogEditor />} />
                 }
             />
             <Route

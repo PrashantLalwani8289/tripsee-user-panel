@@ -96,72 +96,72 @@ import { gsap } from "gsap";
   /*--------------------------------------------------------
     // --------     dark_light themes     --------
     /--------------------------------------------------------*/
-  document.addEventListener("DOMContentLoaded", function () {
-    const htmlDocument = document.documentElement;
-    const bodyDocument = document.body;
-    const toggleBtn = document.getElementById("toggleBtn");
-    const lightIcon = document.querySelector(".light-icon");
-    const darkIcon = document.querySelector(".dark-icon");
+  // document.addEventListener("DOMContentLoaded", function () {
+  //   const htmlDocument = document.documentElement;
+  //   const bodyDocument = document.body;
+  //   const toggleBtn = document.getElementById("toggleBtn");
+  //   const lightIcon = document.querySelector(".light-icon");
+  //   const darkIcon = document.querySelector(".dark-icon");
 
-    // Check user's preference
-    if (localStorage.getItem("theme") === "dark") {
-      setTheme("dark");
-    } else {
-      setTheme("light");
-    }
+  //   // Check user's preference
+  //   if (localStorage.getItem("theme") === "dark") {
+  //     setTheme("dark");
+  //   } else {
+  //     setTheme("light");
+  //   }
 
-    updateIconClasses(); // Initial update based on the theme
-    updateBodyClass(); // Add body class based on the theme
+  //   updateIconClasses(); // Initial update based on the theme
+  //   updateBodyClass(); // Add body class based on the theme
 
-    // Toggle between dark and light mode
-    toggleBtn.addEventListener("click", function () {
-      if (htmlDocument.getAttribute("data-bs-theme") === "dark") {
-        setTheme("light");
-      } else {
-        setTheme("dark");
-      }
+  //   // Toggle between dark and light mode
+  //   toggleBtn.addEventListener("click", function () {
+  //     if (htmlDocument.getAttribute("data-bs-theme") === "dark") {
+  //       setTheme("light");
+  //     } else {
+  //       setTheme("dark");
+  //     }
 
-      updateIconClasses(); // Update icons after toggling
-      updateBodyClass(); // Update body class after toggling
-    });
+  //     updateIconClasses(); // Update icons after toggling
+  //     updateBodyClass(); // Update body class after toggling
+  //   });
 
-    function setTheme(theme) {
-      htmlDocument.setAttribute("data-bs-theme", theme);
-      localStorage.setItem("theme", theme);
-    }
+  //   function setTheme(theme) {
+  //     htmlDocument.setAttribute("data-bs-theme", theme);
+  //     localStorage.setItem("theme", theme);
+  //   }
 
-    function updateIconClasses() {
-      const themeMode = htmlDocument.getAttribute("data-bs-theme");
+  //   function updateIconClasses() {
+  //     const themeMode = htmlDocument.getAttribute("data-bs-theme");
 
-      // Check if lightIcon and darkIcon exist before updating classes
-      if (lightIcon && darkIcon) {
-        // Reset classes
-        lightIcon.classList.remove("active");
-        darkIcon.classList.remove("active");
+  //     // Check if lightIcon and darkIcon exist before updating classes
+  //     if (lightIcon && darkIcon) {
+  //       // Reset classes
+  //       lightIcon.classList.remove("active");
+  //       darkIcon.classList.remove("active");
 
-        // Add 'active' class based on the current theme
-        if (themeMode === "light") {
-          lightIcon.classList.add("active");
-        } else {
-          darkIcon.classList.add("active");
-        }
-      }
-    }
+  //       // Add 'active' class based on the current theme
+  //       if (themeMode === "light") {
+  //         lightIcon.classList.add("active");
+  //       } else {
+  //         darkIcon.classList.add("active");
+  //       }
+  //     }
+  //   }
 
-    function updateBodyClass() {
-      const themeMode = htmlDocument.getAttribute("data-bs-theme");
+  //   function updateBodyClass() {
+  //     const themeMode = htmlDocument.getAttribute("data-bs-theme");
 
-      // Remove existing classes
-      bodyDocument.classList.remove("light-mode", "dark-mode");
+  //     // Remove existing classes
+  //     bodyDocument.classList.remove("light-mode", "dark-mode");
 
-      // Add class based on the current theme
-      if (themeMode === "light") {
-        bodyDocument.classList.add("light-mode");
-      } else {
-        bodyDocument.classList.add("dark-mode");
-      }
-    }
-  });
+  //     // Add class based on the current theme
+  //     if (themeMode === "light") {
+  //       bodyDocument.classList.add("light-mode");
+  //     } else {
+  //       bodyDocument.classList.add("dark-mode");
+  //     }
+  //   }
+  // });
 
   /*--------------------------------------------------------
     // -------- End dark_light themes     --------
