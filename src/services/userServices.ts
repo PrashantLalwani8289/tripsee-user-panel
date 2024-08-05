@@ -30,3 +30,15 @@ export const LoginUser = async (loginData:IUserSignInSchema):Promise<ApiResponse
     console.log(data)
     return data;
 }
+
+export const UploadImage = async ():Promise<ApiResponse> =>{
+    const {data} = await axios.get(endpoints.User.UPLOAD_BLOG_IMAGE,
+        {
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        }
+    )
+    // console.log(data)
+    return data;
+}

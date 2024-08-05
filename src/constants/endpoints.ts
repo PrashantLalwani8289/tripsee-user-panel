@@ -7,6 +7,7 @@ export default {
     User:{
         SIGNUP:`${URL}/user/signup`,
         LOGIN:`${URL}/user/login`,
-        GOOGLE_SIGN_IN:`${URL}/user/google-signin`
+        GOOGLE_SIGN_IN:`${URL}/user/google-signin`,
+        UPLOAD_BLOG_IMAGE:`${URL}/user/upload-blog-image`
     }
 } as const;
