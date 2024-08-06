@@ -23,5 +23,11 @@ export interface userData{
     name: string;
     email: string;
     token: string;
+}
 
+export interface IBlogSchema{
+    title: string;
+    category:'Technology'|'Health'|'Travel'| 'Education'| 'Finance'
+    mainImage?: string;
+    descryption:string;
 }

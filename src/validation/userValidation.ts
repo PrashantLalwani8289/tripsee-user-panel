@@ -16,3 +16,17 @@ export const signInSchema = () =>
     email: yup.string().email().required(),
     password: yup.string().required().min(8),
   });
+
+export const BlogSchema = () =>
+  yup.object().shape({
+    title: yup.string().required(),
+    category: yup
+      .string()
+      .oneOf(
+        ["Technology", "Health", "Travel", "Education", "Finance"],
+        "Invalid category"
+      )
+      .required("Category is required"),
+    mainImage: yup.string(),
+    descryption: yup.string().required(),
+  });
