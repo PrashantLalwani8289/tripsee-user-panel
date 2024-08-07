@@ -9,5 +9,8 @@ export default {
         LOGIN:`${URL}/user/login`,
         GOOGLE_SIGN_IN:`${URL}/user/google-signin`,
         UPLOAD_BLOG_IMAGE:`${URL}/user/upload-blog-image`
+    },
+    Blog:{
+        CREATE_BLOG:`${URL}/blog/create-blog`
     }
 } as const;

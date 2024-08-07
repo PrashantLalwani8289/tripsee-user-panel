@@ -7,8 +7,12 @@ import { Controller, useForm } from 'react-hook-form';
 import { IBlogSchema } from '../interface/userInterface';
 import { UploadImage } from '../services/userServices';
 import { BlogSchema } from '../validation/userValidation';
+import { CreateBlog } from '../services/blogServices';
+import { useNavigate } from 'react-router-dom';
+import { ROUTES } from '../constants/routes';
+import { toastMessageError, toastMessageSuccess } from './utilities/commonToast/CommonToastMessage';
 const BlogEditor: React.FC = () => {
-
+  const navigate = useNavigate()
   // const [content, setContent] = useState<string>('');
   const PublicKey = "public_E9EI0xKylhWQ6Zg8IuojaJTrvQw="
 
@@ -69,6 +73,13 @@ const BlogEditor: React.FC = () => {
     console.log(data)
     formData.descryption = data
     console.log(formData)
+    const response = await CreateBlog(formData);
+    if (response.success) {
+      navigate(ROUTES.BLOGS)
+      toastMessageSuccess(response.message)
+    } else {
+      toastMessageError(response.message)
+    }
     console.log(formData.mainImage)
   };
 
