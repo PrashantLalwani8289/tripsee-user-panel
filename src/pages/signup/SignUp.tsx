@@ -32,6 +32,7 @@ const SignUp = () => {
         const response = await SignUpUser(data);
         if(response.success && response.data){
             navigate(ROUTES.HOME)
+            console.log(response)
             dispatch(setUser(response.data.user))
         }
         else{

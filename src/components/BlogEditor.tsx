@@ -7,16 +7,13 @@ import { Controller, useForm } from 'react-hook-form';
 import { IBlogSchema } from '../interface/userInterface';
 import { UploadImage } from '../services/userServices';
 import { BlogSchema } from '../validation/userValidation';
-import { CreateBlog } from '../services/blogServices';
+import { CreateBlog, UploadToImagekit } from '../services/blogServices';
 import { useNavigate } from 'react-router-dom';
 import { ROUTES } from '../constants/routes';
 import { toastMessageError, toastMessageSuccess } from './utilities/commonToast/CommonToastMessage';
 const BlogEditor: React.FC = () => {
   const navigate = useNavigate()
-  // const [content, setContent] = useState<string>('');
   const PublicKey = "public_E9EI0xKylhWQ6Zg8IuojaJTrvQw="
-
-
   const {
     control,
     handleSubmit,
@@ -27,19 +24,12 @@ const BlogEditor: React.FC = () => {
     resolver: yupResolver(BlogSchema())
   });
 
-
-  // const handleEditorChange = (content: string) => {
-  //   setContent(content);
-  //   console.log(content)
-  // };
-
   const handleImageChange = (file: File) => {
     const reader = new FileReader();
     reader.onloadend = async () => {
       if (typeof reader.result === 'string') {
         const authResponse = await UploadImage();
-
-        const { signature, expire, token } = authResponse.data;
+        const { signature, expire, token } = authResponse.data as { signature: string; expire: string; token: string };
         const base64 = reader.result;
         const date = new Date();
         const formData = new FormData();
@@ -67,7 +57,6 @@ const BlogEditor: React.FC = () => {
   };
 
   const handleClick = async (formData: IBlogSchema) => {
-    // imageURLs= extractBase64Images(content)
     const newHtml = await extractBase64Images(formData.descryption)
     const data = newHtml
     console.log(data)
@@ -94,7 +83,7 @@ const BlogEditor: React.FC = () => {
         try {
           const authResponse = await UploadImage();
 
-          const { signature, expire, token } = authResponse.data;
+          const { signature, expire, token } = authResponse.data as { signature: string; expire: string; token: string };
           const base64 = src;
           const date = new Date();
           const formData = new FormData();
@@ -104,23 +93,15 @@ const BlogEditor: React.FC = () => {
           formData.append('expire', expire);
           formData.append('token', token);
           formData.append('fileName', date.toISOString());
-
-          // Send the request to ImageKit
-          const uploadResponse = await axios.post('https://upload.imagekit.io/api/v1/files/upload', formData, {
-            headers: {
-              'Content-Type': 'multipart/form-data',
-            },
-          });
-
+          const uploadResponse = await UploadToImagekit(formData)
           const url = uploadResponse.data.url;
-          img.setAttribute('src', url);  // Replace src attribute with the new URL
+          img.setAttribute('src', url);
         } catch (e) {
           console.log("Error uploading image", e);
         }
       }
     }
-
-    return doc.documentElement.outerHTML;  // Return the updated HTML content
+    return doc.documentElement.outerHTML;
   };
 
 
