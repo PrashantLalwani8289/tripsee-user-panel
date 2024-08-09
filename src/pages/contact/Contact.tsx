@@ -7,7 +7,7 @@ import OffCanvasSearch from '../../components/OffCanvasSearch'
 
 const Contact = () => {
     return (
-        <>
+        <div className='page'>
             <Header />
             <OffCanvasMenu />
             <OffCanvasMobileMenu />
@@ -19,6 +19,7 @@ const Contact = () => {
                 data-bs-target="#navContentmenu"
                 data-bs-root-margin="0px 0px -50%"
                 data-bs-smooth-scroll="true"
+                style={{marginTop:"7.5rem"}}
             >
                 {/*breadcrumb Section ======================*/}
                 <div className="section-breadcrumb pb-30">
@@ -323,7 +324,7 @@ const Contact = () => {
             </div>
 
             <Footer />
-        </>
+        </div>
     )
 }
 

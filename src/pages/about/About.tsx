@@ -4,13 +4,17 @@ import DarkThemeButton from '../../components/dark-theme-button'
 import OffCanvasMenu from '../../components/OffCanvasMenu'
 import OffCanvasMobileMenu from '../../components/OffCanvasMobileMenu'
 import OffCanvasSearch from '../../components/OffCanvasSearch'
+import { Link } from 'react-router-dom'
+import { ROUTES } from '../../constants/routes'
+import StartToTopButton from '../../components/start-to-top-button'
 
 const About = () => {
     return (
-        <>
+        <div className='page'>
             <Header />
             <OffCanvasMenu />
             <OffCanvasMobileMenu />
+            <StartToTopButton/>
             <OffCanvasSearch />
             <DarkThemeButton />
             <div className="main" style={{marginTop:"7.5rem"}}  data-bs-spy="scroll" data-bs-target="#navContentmenu" data-bs-root-margin="0px 0px -50%" data-bs-smooth-scroll="true">
@@ -19,7 +23,7 @@ const About = () => {
                     <div className="container">
                         <nav aria-label="breadcrumb-nav">
                             <ol className="breadcrumb breadcrumb-style-2 mt-20 mb-0 ">
-                            <li className="breadcrumb-item breadcrumb-item-style-2"><a href="index.html">Home</a></li>
+                            <li className="breadcrumb-item breadcrumb-item-style-2"><Link to={ROUTES.HOME}>Home</Link></li>
                             <li className="breadcrumb-item breadcrumb-item-style-2 active" aria-current="page">About</li>
                             </ol>
                         </nav>
@@ -299,7 +303,7 @@ const About = () => {
 
             </div>
             <Footer />
-        </>
+        </div>
     )
 }
 

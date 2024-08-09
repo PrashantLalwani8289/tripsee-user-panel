@@ -66,3 +66,17 @@ button:focus-visible {
     background-color: #f9f9f9;
   }
 } */
+body.dark-mode .navbar .nav-link,
+body.dark-mode .navbar-brand {
+    color: #000;
+}
+
+body.dark-mode .header-1.scrolled {
+    background-color: #fff;
+}
+
+/* Scrolled state */
+.header-1.scrolled .navbar .nav-link,
+.header-1.scrolled .navbar-brand {
+    color: #000;
+}

@@ -1,7 +1,6 @@
 // BlogEditor.tsx
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Editor } from '@tinymce/tinymce-react';
-import axios from 'axios';
 import React from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { IBlogSchema } from '../interface/userInterface';
@@ -11,7 +10,10 @@ import { CreateBlog, UploadToImagekit } from '../services/blogServices';
 import { useNavigate } from 'react-router-dom';
 import { ROUTES } from '../constants/routes';
 import { toastMessageError, toastMessageSuccess } from './utilities/commonToast/CommonToastMessage';
+import { useSelector } from 'react-redux'
+import { RootState } from '../State Management/Store/Store';
 const BlogEditor: React.FC = () => {
+  const token = useSelector((state:RootState) => state.root.user?.token)
   const navigate = useNavigate()
   const PublicKey = "public_E9EI0xKylhWQ6Zg8IuojaJTrvQw="
   const {
@@ -41,11 +43,7 @@ const BlogEditor: React.FC = () => {
         formData.append('fileName', date.toISOString());
 
         // Send the request to ImageKit
-        const uploadResponse = await axios.post('https://upload.imagekit.io/api/v1/files/upload', formData, {
-          headers: {
-            'Content-Type': 'multipart/form-data',
-          },
-        });
+        const uploadResponse = await UploadToImagekit(formData)
 
         const url = uploadResponse.data.url;
         setValue('mainImage', url);
@@ -62,7 +60,7 @@ const BlogEditor: React.FC = () => {
     console.log(data)
     formData.descryption = data
     console.log(formData)
-    const response = await CreateBlog(formData);
+    const response = await CreateBlog(formData, token as string);
     if (response.success) {
       navigate(ROUTES.BLOGS)
       toastMessageSuccess(response.message)

@@ -5,7 +5,7 @@ import Footer from '../../components/footer'
 
 const App = () => {
   return (
-    <div className="App">
+    <div className="page">
       <Header/>
       <header className="App-header d-flex justify-content-center" style={{marginTop:"100px"}}>
         <h1 className='mb-60'>Create your own blog</h1>

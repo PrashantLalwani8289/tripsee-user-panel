@@ -13,6 +13,11 @@ import SignUp from "../pages/signup/SignUp";
 import SignIn from "../pages/signin/SignIn";
 import PrivateRoute from "./PrivateRoutes";
 import BlogEditor from "../pages/blogEditor/BlogEditor";
+import About from "../pages/about/About";
+import Error from "../pages/error/Error";
+import Contact from "../pages/contact/Contact";
+import Article from "../pages/article/Article";
+import Category from "../pages/category/Category";
 // const home = lazy(() => import("../pages/home/home"));
 // const Login = lazy(() => import("../pages/Login"));
 // const Signup = lazy(() => import("../pages/Signup"));
@@ -44,6 +49,12 @@ const RoutesConfig: React.FC<RoutesConfigProps> = ({ isAuthenticated }) => {
                 }
             />
             <Route
+                path={ROUTES.ABOUT}
+                element={
+                    <PublicRoutes isAuthenticated={isAuthenticated} element={<About />} />
+                }
+            />
+            <Route
                 path={ROUTES.EDITOR}
                 element={
                     <PublicRoutes isAuthenticated={isAuthenticated} element={<BlogEditor />} />
@@ -62,7 +73,24 @@ const RoutesConfig: React.FC<RoutesConfigProps> = ({ isAuthenticated }) => {
                     <PrivateRoute isAuthenticated={isAuthenticated} element={<SignIn />} />
                 }
             />
-
+            <Route
+                path={ROUTES.CONTACT}
+                element={
+                    <PrivateRoute isAuthenticated={isAuthenticated} element={<Contact />} />
+                }
+            />
+            <Route
+                path="/demo-article"
+                element={
+                    <PrivateRoute isAuthenticated={isAuthenticated} element={<Article />} />
+                }
+            />
+            <Route
+                path="/demo-category"
+                element={
+                    <PrivateRoute isAuthenticated={isAuthenticated} element={<Category />} />
+                }
+            />
             <Route
                 path="/"
                 element={
@@ -72,7 +100,7 @@ const RoutesConfig: React.FC<RoutesConfigProps> = ({ isAuthenticated }) => {
             <Route
                 path="*"
                 element={
-                    <Home />
+                    <Error/>
                 }
             />
         </Routes>

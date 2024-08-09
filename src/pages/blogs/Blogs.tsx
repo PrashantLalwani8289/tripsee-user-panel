@@ -7,7 +7,7 @@ import OffCanvasSearch from '../../components/OffCanvasSearch'
 
 const Blogs = () => {
     return (
-        <>
+        <div className='page'>
             <Header />
             <OffCanvasMenu />
             <OffCanvasMobileMenu />
@@ -505,7 +505,7 @@ const Blogs = () => {
 
             </div>
             <Footer />
-        </>
+        </div>
     )
 }
 
