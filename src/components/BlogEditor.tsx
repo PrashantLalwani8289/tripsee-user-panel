@@ -1,21 +1,22 @@
 // BlogEditor.tsx
 import { yupResolver } from '@hookform/resolvers/yup';
-import { Editor } from '@tinymce/tinymce-react';
 import React from 'react';
 import { Controller, useForm } from 'react-hook-form';
-import { IBlogSchema } from '../interface/userInterface';
-import { UploadImage } from '../services/userServices';
-import { BlogSchema } from '../validation/userValidation';
-import { CreateBlog, UploadToImagekit } from '../services/blogServices';
+import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
+import "../App.css";
 import { ROUTES } from '../constants/routes';
-import { toastMessageError, toastMessageSuccess } from './utilities/commonToast/CommonToastMessage';
-import { useSelector } from 'react-redux'
+import { IBlogSchema } from '../interface/userInterface';
+import { CreateBlog, UploadToImagekit } from '../services/blogServices';
+import { UploadImage } from '../services/userServices';
 import { RootState } from '../State Management/Store/Store';
+import { BlogSchema } from '../validation/userValidation';
+import { toastMessageError, toastMessageSuccess } from './utilities/commonToast/CommonToastMessage';
 const BlogEditor: React.FC = () => {
-  const token = useSelector((state:RootState) => state.root.user?.token)
+  const token = useSelector((state: RootState) => state.root.user?.token)
   const navigate = useNavigate()
   const PublicKey = "public_E9EI0xKylhWQ6Zg8IuojaJTrvQw="
+
   const {
     control,
     handleSubmit,
@@ -26,6 +27,53 @@ const BlogEditor: React.FC = () => {
     resolver: yupResolver(BlogSchema())
   });
 
+
+  const handleImagesChange = async (files: FileList) => {
+    console.log(files);
+    
+    const demoFileList: string[] = [];
+
+    for (let i = 0; i < files.length; i++) {
+      const file = files[i];
+
+      if (file) {
+        const reader = new FileReader(); // Create a new FileReader instance for each file
+
+        reader.onloadend = async () => {
+          if (typeof reader.result === 'string') {
+            try {
+              const authResponse = await UploadImage();
+              const { signature, expire, token } = authResponse.data as { signature: string; expire: string; token: string };
+              const base64 = reader.result;
+              const date = new Date();
+
+              const formData = new FormData();
+              formData.append('file', base64);
+              formData.append('publicKey', PublicKey as string);
+              formData.append('signature', signature);
+              formData.append('expire', expire);
+              formData.append('token', token);
+              formData.append('fileName', date.toISOString());
+
+              // Send the request to ImageKit
+              const uploadResponse = await UploadToImagekit(formData);
+              const url = uploadResponse.data.url;
+
+              demoFileList.push(url);
+
+              setValue("photos", demoFileList);
+              // Update the value after each upload
+            } catch (error) {
+              console.error('Error uploading image:', error);
+            }
+          }
+        };
+
+        reader.readAsDataURL(file); // Start reading the file
+      }
+
+    }
+  };
   const handleImageChange = (file: File) => {
     const reader = new FileReader();
     reader.onloadend = async () => {
@@ -55,10 +103,6 @@ const BlogEditor: React.FC = () => {
   };
 
   const handleClick = async (formData: IBlogSchema) => {
-    const newHtml = await extractBase64Images(formData.descryption)
-    const data = newHtml
-    console.log(data)
-    formData.descryption = data
     console.log(formData)
     const response = await CreateBlog(formData, token as string);
     if (response.success) {
@@ -67,39 +111,6 @@ const BlogEditor: React.FC = () => {
     } else {
       toastMessageError(response.message)
     }
-    console.log(formData.mainImage)
-  };
-
-  const extractBase64Images = async (htmlContent: string): Promise<string> => {
-    const parser = new DOMParser();
-    const doc = parser.parseFromString(htmlContent, 'text/html');
-    const imgTags = doc.querySelectorAll('img');
-
-    for (const img of imgTags) {
-      const src = img.getAttribute('src');
-      if (src && src.startsWith('data:image/')) {
-        try {
-          const authResponse = await UploadImage();
-
-          const { signature, expire, token } = authResponse.data as { signature: string; expire: string; token: string };
-          const base64 = src;
-          const date = new Date();
-          const formData = new FormData();
-          formData.append('file', base64);
-          formData.append('publicKey', PublicKey as string);
-          formData.append('signature', signature);
-          formData.append('expire', expire);
-          formData.append('token', token);
-          formData.append('fileName', date.toISOString());
-          const uploadResponse = await UploadToImagekit(formData)
-          const url = uploadResponse.data.url;
-          img.setAttribute('src', url);
-        } catch (e) {
-          console.log("Error uploading image", e);
-        }
-      }
-    }
-    return doc.documentElement.outerHTML;
   };
 
 
@@ -143,23 +154,29 @@ const BlogEditor: React.FC = () => {
                       {errors.title && <p className="error">{errors.title.message}</p>}
                     </div>
 
-                    <Controller
-                      name="category"
-                      control={control}
-                      defaultValue="Technology"
-                      render={({ field }) => (
-                        <select {...field} className="form-control">
-                          <option value="">Select Category</option>
-                          <option value="Technology">Technology</option>
-                          <option value="Health">Health</option>
-                          <option value="Travel">Travel</option>
-                          <option value="Education">Education</option>
-                          <option value="Finance">Finance</option>
-                        </select>
-                      )}
-                    />
+                    <div className="form-group">
+                      <label htmlFor="category">Category</label>
+                      <Controller
+                        name="category"
+                        control={control}
+                        defaultValue="other"
+                        render={({ field }) => (
+                          <select {...field} className="form-control">
+                            <option value="">Select Category</option>
+                            <option value="Technology">Technology</option>
+                            <option value="Health">Health</option>
+                            <option value="Travel">Travel</option>
+                            <option value="Education">Education</option>
+                            <option value="Finance">Finance</option>
+                            <option value="other">Other</option>
+                          </select>
+                        )}
+                      />
+                      {errors.category && <p className="error">{errors.category.message}</p>}
+                    </div>
 
                     <div className="form-group">
+                      <label htmlFor="mainImage">Main Image</label>
                       <Controller
                         name="mainImage"
                         control={control}
@@ -180,37 +197,219 @@ const BlogEditor: React.FC = () => {
                       {errors.mainImage && <p className="error">{errors.mainImage.message}</p>}
                     </div>
 
-                    <div>
+                    <div className="form-group">
+                      <label htmlFor="introduction">Introduction</label>
                       <Controller
-                        name="descryption"
+                        name="introduction"
                         control={control}
                         defaultValue=""
                         render={({ field }) => (
-                          <Editor
-                            apiKey="fuvt6x8c9zz8wo4qccvikz3h89rzpk1koxnyznlzak4ymmcz"
-                            value={field.value}
-                            init={{
-                              height: 500,
-                              menubar: false,
-                              plugins: [
-                                'advlist autolink lists link charmap print preview anchor',
-                                'searchreplace visualblocks code fullscreen',
-                                'insertdatetime media table paste code help wordcount',
-                                'image', 'code'
-                              ],
-                              toolbar:
-                                'undo redo | formatselect | bold italic backcolor | ' +
-                                'alignleft aligncenter alignright alignjustify | ' +
-                                'bullist numlist outdent indent | removeformat | link| image | help | code',
-                              automatic_uploads: true,
-                              file_picker_types: 'image'
-                            }}
-                            onEditorChange={field.onChange}
+                          <input
+                            {...field}
+                            type="text"
+                            className="form-control"
+                            placeholder="Enter the introduction"
                           />
                         )}
                       />
-                      {errors.descryption && <p className="error">{errors.descryption.message}</p>}
+                      {errors.introduction && <p className="error">{errors.introduction.message}</p>}
                     </div>
+
+                    <div className="form-group">
+                      <label htmlFor="photos">Photos</label>
+                      <Controller
+                        name="photos"
+                        control={control}
+                        defaultValue={[]}
+                        render={({ field: { onBlur, ref } }) => (
+                          <input
+                            type="file"
+                            className="form-control"
+                            multiple
+                            
+                            accept="image/*"
+                            placeholder="Upload your trip photos"
+                            onChange={(e) => {
+                              if (e && e.target && e.target.files) {
+                                if(e.target.files.length > 5){
+                                  toastMessageError("Cannot select more than 5 Images")
+                                }
+                                else{
+                                  handleImagesChange(e.target.files);
+                                }
+                                  
+                              }
+                            }}
+                            onBlur={onBlur}
+                            ref={ref}
+                          />
+                        )}
+                      />
+                      {errors.photos && <p className="error">{errors.photos.message}</p>}
+                    </div>
+
+                    <div className="form-group">
+                      <label htmlFor="tips">Travel Tips and Hacks</label>
+                      <Controller
+                        name="tips"
+                        control={control}
+                        defaultValue=""
+                        render={({ field }) => (
+                          <input
+                            {...field}
+                            type="text"
+                            className="form-control"
+                            placeholder="Enter travel tips"
+                          />
+                        )}
+                      />
+                      {errors.tips && <p className="error">{errors.tips.message}</p>}
+                    </div>
+
+                    <div className="form-group">
+                      <label htmlFor="adventure">Adventure</label>
+                      <Controller
+                        name="adventure"
+                        control={control}
+                        defaultValue=""
+                        render={({ field }) => (
+                          <input
+                            {...field}
+                            type="text"
+                            className="form-control"
+                            placeholder="Enter adventure details"
+                          />
+                        )}
+                      />
+                      {errors.adventure && <p className="error">{errors.adventure.message}</p>}
+                    </div>
+
+                    <div className="form-group">
+                      <label htmlFor="accomodationReview">Accommodation Review</label>
+                      <Controller
+                        name="accomodationReview"
+                        control={control}
+                        defaultValue=""
+                        render={({ field }) => (
+                          <input
+                            {...field}
+                            type="text"
+                            className="form-control"
+                            placeholder="Enter accommodation review"
+                          />
+                        )}
+                      />
+                      {errors.accomodationReview && <p className="error">{errors.accomodationReview.message}</p>}
+                    </div>
+
+                    <div className="form-group">
+                      <label htmlFor="destinationGuides">Destination Guides</label>
+                      <Controller
+                        name="destinationGuides"
+                        control={control}
+                        defaultValue=""
+                        render={({ field }) => (
+                          <input
+                            {...field}
+                            type="text"
+                            className="form-control"
+                            placeholder="Enter destination guides"
+                          />
+                        )}
+                      />
+                      {errors.destinationGuides && <p className="error">{errors.destinationGuides.message}</p>}
+                    </div>
+
+                    <div className="form-group">
+                      <label htmlFor="customerReview">Customer Review</label>
+                      <Controller
+                        name="customerReview"
+                        control={control}
+                        defaultValue=""
+                        render={({ field }) => (
+                          <input
+                            {...field}
+                            type="text"
+                            className="form-control"
+                            placeholder="Enter customer review"
+                          />
+                        )}
+                      />
+                      {errors.customerReview && <p className="error">{errors.customerReview.message}</p>}
+                    </div>
+
+                    <div className="form-group">
+                      <label htmlFor="travelChallenges">Travel Challenges</label>
+                      <Controller
+                        name="travelChallenges"
+                        control={control}
+                        defaultValue=""
+                        render={({ field }) => (
+                          <input
+                            {...field}
+                            type="text"
+                            className="form-control"
+                            placeholder="Enter travel challenges"
+                          />
+                        )}
+                      />
+                      {errors.travelChallenges && <p className="error">{errors.travelChallenges.message}</p>}
+                    </div>
+
+                    <div className="form-group">
+                      <label htmlFor="conclusion">Conclusion</label>
+                      <Controller
+                        name="conclusion"
+                        control={control}
+                        defaultValue=""
+                        render={({ field }) => (
+                          <input
+                            {...field}
+                            type="text"
+                            className="form-control"
+                            placeholder="Enter conclusion"
+                          />
+                        )}
+                      />
+                      {errors.conclusion && <p className="error">{errors.conclusion.message}</p>}
+                    </div>
+
+                    <div className="form-group">
+                      <label htmlFor="latitude">Latitude</label>
+                      <Controller
+                        name="latitude"
+                        control={control}
+                        defaultValue={0}
+                        render={({ field }) => (
+                          <input
+                            {...field}
+                            type="number"
+                            className="form-control"
+                            placeholder="Enter latitude"
+                          />
+                        )}
+                      />
+                      {errors.latitude && <p className="error">{errors.latitude.message}</p>}
+                    </div>
+
+                    <div className="form-group">
+                      <label htmlFor="longitude">Longitude</label>
+                      <Controller
+                        name="longitude"
+                        control={control}
+                        defaultValue={0}
+                        render={({ field }) => (
+                          <input
+                            {...field}
+                            type="number"
+                            className="form-control"
+                            placeholder="Enter longitude"
+                          />
+                        )}
+                      />
+                      {errors.longitude && <p className="error">{errors.longitude.message}</p>}
+                    </div>
+
 
                     <div className="form-group">
                       <button

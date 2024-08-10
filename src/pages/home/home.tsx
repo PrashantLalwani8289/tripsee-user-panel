@@ -9,7 +9,10 @@ import { Navigation } from 'swiper/modules';
 import 'swiper/css';
 import 'swiper/css/pagination';
 import 'swiper/css/effect-fade';
+import { ROUTES } from '../../constants/routes'
+import { Link } from 'react-router-dom'
 const home = () => {
+    const Catogories = ['Technology', 'Health', 'Travel', 'Education', 'Finance']
     return (
         <div className='page'>
             <Header />
@@ -47,95 +50,26 @@ const home = () => {
                                     slidesPerView={5}
                                     loop={true} // Enables infinite loop
                                 >
-                                    <SwiperSlide>
-                                        <div className="card card-style-18">
-                                            <div className="card-image-wrapper">
-                                                <a href="category-1.html">
-                                                    <img src="assets/images/card/hiking.jpg" className="card-img-top" alt="hiking" />
-                                                </a>
-                                            </div>
-                                            <div className="card-body text-center">
-                                                <a href="category-1.html">
-                                                    <p className="small mb-0 fw-extrabold text-white text-uppercase">hiking</p>
-                                                </a>
-                                            </div>
-                                        </div>
-                                    </SwiperSlide>
-
-                                    <SwiperSlide>
-                                        <div className="card card-style-18">
-                                            <div className="card-image-wrapper">
-                                                <a href="category-1.html">
-                                                    <img src="assets/images/card/desert.jpg" className="card-img-top" alt="desert" />
-                                                </a>
-                                            </div>
-                                            <div className="card-body text-center">
-                                                <a href="category-1.html">
-                                                    <p className="small mb-0 fw-extrabold text-white text-uppercase">desert</p>
-                                                </a>
-                                            </div>
-                                        </div>
-                                    </SwiperSlide>
-
-                                    {/* Add other SwiperSlide components similarly */}
-
-                                    <SwiperSlide>
-                                        <div className="card card-style-18">
-                                            <div className="card-image-wrapper">
-                                                <a href="category-1.html">
-                                                    <img src="assets/images/card/camping.jpg" className="card-img-top" alt="camping" />
-                                                </a>
-                                            </div>
-                                            <div className="card-body text-center">
-                                                <a href="category-1.html">
-                                                    <p className="small mb-0 fw-extrabold text-white text-uppercase">camping</p>
-                                                </a>
-                                            </div>
-                                        </div>
-                                    </SwiperSlide>
-                                    <SwiperSlide>
-                                        <div className="card card-style-18">
-                                            <div className="card-image-wrapper">
-                                                <a href="category-1.html">
-                                                    <img src="assets/images/card/hiking.jpg" className="card-img-top" alt="hiking" />
-                                                </a>
-                                            </div>
-                                            <div className="card-body text-center">
-                                                <a href="category-1.html">
-                                                    <p className="small mb-0 fw-extrabold text-white text-uppercase">hiking</p>
-                                                </a>
-                                            </div>
-                                        </div>
-                                    </SwiperSlide>
-                                    <SwiperSlide>
-                                        <div className="card card-style-18">
-                                            <div className="card-image-wrapper">
-                                                <a href="category-1.html">
-                                                    <img src="assets/images/card/hiking.jpg" className="card-img-top" alt="hiking" />
-                                                </a>
-                                            </div>
-                                            <div className="card-body text-center">
-                                                <a href="category-1.html">
-                                                    <p className="small mb-0 fw-extrabold text-white text-uppercase">hiking</p>
-                                                </a>
-                                            </div>
-                                        </div>
-                                    </SwiperSlide>
-                                    <SwiperSlide>
-                                        <div className="card card-style-18">
-                                            <div className="card-image-wrapper">
-                                                <a href="category-1.html">
-                                                    <img src="assets/images/card/hiking.jpg" className="card-img-top" alt="hiking" />
-                                                </a>
-                                            </div>
-                                            <div className="card-body text-center">
-                                                <a href="category-1.html">
-                                                    <p className="small mb-0 fw-extrabold text-white text-uppercase">hiking</p>
-                                                </a>
-                                            </div>
-                                        </div>
-                                    </SwiperSlide>
-
+                                    {
+                                        Catogories.map((catogory, index) => {
+                                            return (
+                                                <SwiperSlide key={index}>
+                                                    <div className="card card-style-18">
+                                                        <div className="card-image-wrapper">
+                                                            <Link to={ROUTES.CATEGORY.replace(":categoryName", catogory)}>
+                                                                <img src={`assets/images/card/hiking.jpg`} className="card-img-top" alt={catogory} />
+                                                            </Link>
+                                                        </div>
+                                                        <div className="card-body text-center">
+                                                            <a href={`category-${index + 1}.html`}>
+                                                                <p className="small mb-0 fw-extrabold text-white text-uppercase">{catogory}</p>
+                                                            </a>
+                                                        </div>
+                                                    </div>
+                                                </SwiperSlide>
+                                            )
+                                        })
+                                    }
                                 </Swiper>
                             </div>
 

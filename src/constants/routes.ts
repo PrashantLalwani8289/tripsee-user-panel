@@ -5,7 +5,9 @@ export const ROUTES = {
     CONTACT:"/contact",
     SIGN_IN:"/sign-in",
     SIGN_UP:"/sign-up",
-    EDITOR:"/editor"
+    EDITOR:"/editor",
+    CATEGORY:"/category/:categoryName",
+    ARTICLE:"/article"
     // USER_EDIT:"/user-edit/:userId",
     // PROFILE: "/profile/:userId",
     // LOGIN: "/login",

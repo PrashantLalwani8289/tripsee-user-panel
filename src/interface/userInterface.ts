@@ -27,7 +27,27 @@ export interface userData{
 
 export interface IBlogSchema{
     title: string;
-    category:'Technology'|'Health'|'Travel'| 'Education'| 'Finance'
-    mainImage?: string;
-    descryption:string;
+    category: 'Technology' | 'Health' | 'Travel' | 'Education' | 'Finance' | 'other';
+    mainImage: string;
+    introduction: string;
+    photos: string[];
+    tips?: string;
+    adventure: string;
+    accomodationReview?: string;
+    destinationGuides?: string;
+    customerReview?: string;
+    travelChallenges?: string;
+    conclusion: string;
+    latitude: number;
+    longitude: number;
 }
+
+
+
+
+
+// overallRating: yup.number().min(1).max(5),
+// priceRange: yup.number().min(1).max(5),
+// guestRating: yup.number().min(1).max(5),
+
+

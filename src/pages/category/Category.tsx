@@ -1,3 +1,4 @@
+import { useParams } from "react-router-dom"
 import DarkThemeButton from "../../components/dark-theme-button"
 import Footer from "../../components/footer"
 import Header from "../../components/header"
@@ -7,6 +8,8 @@ import OffCanvasSearch from "../../components/OffCanvasSearch"
 
 
 const Category = () => {
+    const { categoryName } = useParams<string>()
+    console.log(categoryName);
     return (
         <div className="page">
             <Header/>
@@ -42,7 +45,7 @@ const Category = () => {
                             <div className="row">
                                 <div className="col-lg-3 col-md-4 col-sm-6">
                                     <div className="category-title-style-1 text-start category-title-bg-position">
-                                        <h2 className="text-white">Camping</h2>
+                                        <h2 className="text-white">{categoryName}</h2>
                                         <p className="text-white">10 articles</p>
                                     </div>
                                 </div>

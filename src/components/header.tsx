@@ -122,7 +122,7 @@ const header = () => {
                                                 Catogories.map((category, index) => {
                                                     return (
                                                         <li key={index}>
-                                                            <Link className="dropdown-item" to={ROUTES.BLOGS} aria-label="single-pages">
+                                                            <Link className="dropdown-item" to={ROUTES.CATEGORY.replace(":categoryName",category)} aria-label="single-pages">
                                                                 {category}
                                                             </Link>
                                                         </li>
