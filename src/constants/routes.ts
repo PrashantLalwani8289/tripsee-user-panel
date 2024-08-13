@@ -7,7 +7,7 @@ export const ROUTES = {
     SIGN_UP:"/sign-up",
     EDITOR:"/editor",
     CATEGORY:"/category/:categoryName",
-    ARTICLE:"/article"
+    ARTICLE:"/article/:articleId"
     // USER_EDIT:"/user-edit/:userId",
     // PROFILE: "/profile/:userId",
     // LOGIN: "/login",

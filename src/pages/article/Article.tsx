@@ -1,12 +1,56 @@
+import { Link, useNavigate, useParams } from "react-router-dom"
 import DarkThemeButton from "../../components/dark-theme-button"
 import Footer from "../../components/footer"
 import Header from "../../components/header"
 import OffCanvasMenu from "../../components/OffCanvasMenu"
 import OffCanvasMobileMenu from "../../components/OffCanvasMobileMenu"
 import OffCanvasSearch from "../../components/OffCanvasSearch"
+import { useEffect, useState } from "react"
+import { Blog } from "../../interface/blog"
+import { GetBlog } from "../../services/blogServices"
+import { toastMessageError } from "../../components/utilities/commonToast/CommonToastMessage"
+import { ROUTES } from "../../constants/routes"
+import FsLightbox from 'fslightbox-react';
+import { Swiper, SwiperSlide } from 'swiper/react';
+import SwiperCore, { Swiper } from 'swiper';
+import { Pagination } from "swiper/modules"
+import { Controller } from "swiper/modules"
+import { Navigation } from "swiper/modules"
+// import 'swiper/swiper-bundle.min.css';
+// import 'swiper/swiper.min.css';
+
+SwiperCore.use([Navigation, Pagination, Controller]);
 
 
 const Article = () => {
+    const { articleId } = useParams();
+    console.log(articleId)
+    const navigate = useNavigate()
+
+    const [blog, setBlog] = useState<Blog>()
+    const [loading, setLoading] = useState(false)
+    const [toggler, setToggler] = useState(false);
+
+    const [mainSwiper, setMainSwiper] = useState<Swiper| null>(null);
+    const [thumbSwiper, setThumbSwiper] = useState<Swiper| null>(null);
+    const BlogData = async () => {
+        setLoading(true)
+        const response = await GetBlog(articleId as unknown as number)
+        if (response.success && response.data) {
+            setBlog(response.data as Blog)
+            setLoading(false)
+        }
+        else {
+            toastMessageError("Unable to fetch the data")
+            setLoading(false)
+            navigate(ROUTES.BLOGS)
+        }
+    }
+    useEffect(() => {
+        console.log("herererererereere in use ");
+
+        BlogData()
+    }, [])
     return (
         <div className="page">
             <Header />
@@ -29,15 +73,14 @@ const Article = () => {
                             <nav aria-label="breadcrumb">
                                 <ol className="breadcrumb mb-100">
                                     <li className="breadcrumb-item">
-                                        <a href="index.html">Home</a>
+                                        <Link to={ROUTES.HOME}>Home</Link>
                                     </li>
                                     <li className="breadcrumb-item">
                                         {" "}
-                                        <a href="#">Blog</a>
+                                        <Link to={ROUTES.BLOGS}>Blog</Link>
                                     </li>
                                     <li className="breadcrumb-item active" aria-current="page">
-                                        Backpacking In Lake Clark National Park With Alaska Alpine
-                                        Adventures
+                                        {blog?.title}
                                     </li>
                                 </ol>
                             </nav>
@@ -46,8 +89,7 @@ const Article = () => {
                                 <div className="col-md-10">
                                     <div className="text-center py-30">
                                         <h2 className="section-banner-title text-white pb-30 ">
-                                            Backpacking In Lake Clark National Park With Alaska Alpine
-                                            Adventures
+                                            {blog?.title}
                                         </h2>
                                         <div className="d-flex gap-20 flex-wrap justify-content-center">
                                             <span className="text-white">3 Comments</span>
@@ -75,9 +117,10 @@ const Article = () => {
                                         <div className="author-details mb-lg-60 mb-40">
                                             <p className="text-end mb-0 ">Written by</p>
                                             <h6 className="text-end">
-                                                <a href="author-1.html" className="author-name">
+                                                <Link to="author-1.html" className="author-name">
+                                                    {/* //todo */}
                                                     Mike Aiden
-                                                </a>
+                                                </Link>
                                             </h6>
                                             <div className="author-image">
                                                 <img
@@ -89,19 +132,19 @@ const Article = () => {
                                         </div>
                                         <div className="sidebar-social">
                                             <span>SHARE THIS ARTICLE</span>
-                                            <a href="https://www.facebook.com/" className="facebook">
+                                            <Link to="https://www.facebook.com/" className="facebook">
                                                 <i className="fa-brands fa-facebook-f" />
-                                            </a>
-                                            <a href="https://www.instagram.com/" className="instagram">
+                                            </Link>
+                                            <Link to="https://www.instagram.com/" className="instagram">
                                                 <i className="fa-brands fa-instagram" />
-                                            </a>
-                                            <a href="https://www.linkedin.com/" className="linkedin">
+                                            </Link>
+                                            <Link to="https://www.linkedin.com/" className="linkedin">
                                                 <i className="fa-brands fa-linkedin" />
-                                            </a>
-                                            <a href="https://www.pinterest.com/" className="pinterest">
+                                            </Link>
+                                            <Link to="https://www.pinterest.com/" className="pinterest">
                                                 <i className="fa-brands fa-pinterest-p" />
-                                            </a>
-                                            <a href="https://twitter.com/" className="twitter">
+                                            </Link>
+                                            <Link to="https://twitter.com/" className="twitter">
                                                 <svg
                                                     width={16}
                                                     height={14}
@@ -111,7 +154,7 @@ const Article = () => {
                                                 >
                                                     <path d="M15.8092 15.98H11.1569L6.89801 9.78339L1.56807 15.98H0.19043L6.28619 8.89157L0.19043 0.0195312H4.84276L8.87486 5.88989L13.9234 0.0195312H15.301L9.48808 6.77751L15.8092 15.98ZM11.8079 14.9929H13.9234L4.18054 1.05696H2.06508L11.8079 14.9929Z" />
                                                 </svg>
-                                            </a>
+                                            </Link>
                                         </div>
                                     </div>
                                 </div>
@@ -119,12 +162,12 @@ const Article = () => {
                             <div className="col-xl-7">
                                 {/* Start article-blog-content */}
                                 <div className="article-blog-content mb-lg-0 mb-20">
-                                    <p className="mb-30 mb-lg-60">
+                                    {/* <p className="mb-30 mb-lg-60">
                                         The third Bearfoot Theory group tour is in the books. Explore Lake
                                         Clark National Park, one of the most remote parks in the country
                                         in this review of my 10-day backpacking trip with Alaska Alpine
                                         Adventures.
-                                    </p>
+                                    </p> */}
                                     <div className="table-of-content table-of-content-style-2">
                                         <div
                                             className="accordion accordion-flush"
@@ -254,12 +297,7 @@ const Article = () => {
                                             Introduction
                                         </h3>
                                         <p className="pb-20 pb-lg-30 ">
-                                            This summer, I offered the third-ever Bearfoot Theory group
-                                            adventure. This time, myself and a group of Bearfoot Theory
-                                            readers ventured into the Alaskan wilderness for 10 days of
-                                            backpac. Led by our guides from&nbsp;
-                                            <a href="#">Alaska Alpine Adventures,</a> our trip in Lake Clark
-                                            offered a true Alaska experience in every sense.
+                                            {blog?.introduction}
                                         </p>
                                         {/* quote */}
                                         <div className="quote mb-10 mb-lg-30 ">
@@ -310,53 +348,28 @@ const Article = () => {
                                             Travel Tips and Hacks
                                         </h3>
                                         <ul className="">
-                                            <li>
-                                                <p>
-                                                    Book in Advance: Accommodations can be limited, so book well
-                                                    in advance, especially is at during the peak season.
-                                                </p>
-                                            </li>
-                                            <li>
-                                                <p>
-                                                    Bear Safety: Familiarize yourself with bear safety
-                                                    protocols, including proper food storage on and carrying
-                                                    bear spray.
-                                                </p>
-                                            </li>
-                                            <li>
-                                                <p>
-                                                    Water Activities: Consider kayaking or boating to explore
-                                                    the lake's shoreline. Rentals are of available, or you can
-                                                    bring your own gear.
-                                                </p>
-                                            </li>
-                                            <li>
-                                                <p>
-                                                    Golden Hour Shots: Take advantage of the extended golden
-                                                    hour in Alaska for stunning and photography. Sunrise and
-                                                    sunset offer magical lighting.
-                                                </p>
-                                            </li>
-                                            <li>
-                                                <p>
-                                                    Emergency Preparedness: Be prepared for and emergencies by
-                                                    carrying a basic first aid kit, communication devices, and
-                                                    knowing the location of the nearest ranger station.
-                                                </p>
-                                            </li>
+                                            <p className="pb-20 pb-lg-30 ">
+
+
+                                                Here are some travel tips and hacks that we learned on our trip:
+                                                {blog?.tips}
+
+                                            </p>
+
                                         </ul>
                                         <p className="mb-20 mb-lg-30">
                                             By following these travel tips and hacks, you'll be
                                             well-prepared to be immerse yourself in the natural beauty and
                                             tranquillity of Lake Clark, creating memories that will last a
                                             lifetime.
+                                        //todo
                                         </p>
                                         <div className="single-blog  pb-20">
                                             {/* single blog */}
                                             <div className="blog-image border-rarius-14">
                                                 <img
-                                                    src="assets/images/placeholder.svg"
-                                                    data-src="assets/images/blog/explore-image-29.jpg"
+                                                    src={blog?.photos[0]}
+                                                    data-src={blog?.photos[0]}
                                                     className="border-rarius-14"
                                                     alt="img-top"
                                                 />
@@ -370,20 +383,15 @@ const Article = () => {
                                             Outdoor and Adventure
                                         </h3>
                                         <p className="mb-lg-30 mb-20 ">
-                                            Lake Clark, nestled within the heart of Alaska's untamed
-                                            wilderness, is a haven for outdoor enthusiasts and adventure
-                                            seekers alike. Surrounded by the rugged peaks of the Alaska
-                                            Range, this pristine lake, a centerpiece of the Lake Clark
-                                            National Park and Preserve, beckons with its crystal-clear
-                                            waters and awe-inspiring landscapes.
+                                            {blog?.adventure}
                                         </p>
                                         <div className="single-article-post-style">
                                             <div className="single-article-post-grid">
                                                 <div className="single-article-post-image pb-20">
                                                     <div className="iamge-wrapper border-rarius-14 image-hover-effect">
                                                         <img
-                                                            src="assets/images/placeholder.svg"
-                                                            data-src="assets/images/article/post-iamge-1.jpg"
+                                                            src={blog?.photos[1]}
+                                                            data-src={blog?.photos[1]}
                                                             className="card-img-top border-rarius-14"
                                                             alt="img-top"
                                                         />
@@ -442,24 +450,24 @@ const Article = () => {
                                         <div className="article-post-gallery-grid pb-30">
                                             <div className="div1 image-hover-effect">
                                                 <img
-                                                    src="assets/images/placeholder.svg"
-                                                    data-src="assets/images/categories/category-2.jpg"
+                                                    src={blog?.photos[0]}
+                                                    data-src={blog?.photos[0]}
                                                     className="border-rarius-14"
                                                     alt="img-top"
                                                 />
                                             </div>
                                             <div className="div2 image-hover-effect">
                                                 <img
-                                                    src="assets/images/placeholder.svg"
-                                                    data-src="assets/images/categories/category-28.jpg"
+                                                    src={blog?.photos[0]}
+                                                    data-src={blog?.photos[0]}
                                                     className="border-rarius-14"
                                                     alt="img-top"
                                                 />
                                             </div>
                                             <div className="div3 image-hover-effect">
                                                 <img
-                                                    src="assets/images/placeholder.svg"
-                                                    data-src="assets/images/article/post-iamge-2.jpg"
+                                                    src={blog?.photos[0]}
+                                                    data-src={blog?.photos[0]}
                                                     className="border-rarius-14"
                                                     alt="img-top"
                                                 />
@@ -492,73 +500,37 @@ const Article = () => {
                                         >
                                             Photo and Video Gallery
                                         </h6>
+                                        <FsLightbox
+                                            toggler={toggler}
+                                            UIFadeOutTime={10000}
+                                            sources={blog?.photos}
+                                        />
                                         {/* article-slider */}
                                         <div className="article-slider-wrapper-main">
                                             <div className="swiper article-slider-wrapper">
-                                                <div className="swiper-wrapper">
-                                                    <div className="swiper-slide border-rarius-14 article-slider-single">
-                                                        <img
-                                                            className="border-rarius-14"
-                                                            src="assets/images/placeholder.svg"
-                                                            data-src="assets/images/blog/explore-image-29.jpg"
-                                                            alt="Beach"
-                                                        />
-                                                        <a
-                                                            href="https://www.youtube.com/embed/TKnufs85hXk"
-                                                            data-vbtype="iframe"
-                                                            className="popup-youtube play-icon play-icon-effect"
-                                                        >
-                                                            <i className="fa-light fa-circle-play" />
-                                                        </a>
-                                                    </div>
-                                                    <div className="swiper-slide border-rarius-14 article-slider-single">
-                                                        <img
-                                                            className="border-rarius-14"
-                                                            src="assets/images/placeholder.svg"
-                                                            data-src="assets/images/blog/explore-image-28.jpg"
-                                                            alt="deserts"
-                                                        />
-                                                    </div>
-                                                    <div className="swiper-slide border-rarius-14 article-slider-single">
-                                                        <img
-                                                            className="border-rarius-14"
-                                                            src="assets/images/placeholder.svg"
-                                                            data-src="assets/images/blog/explore-image-54.jpg"
-                                                            alt="Forest"
-                                                        />
-                                                    </div>
-                                                    <div className="swiper-slide border-rarius-14 article-slider-single">
-                                                        <img
-                                                            className="border-rarius-14"
-                                                            src="assets/images/placeholder.svg"
-                                                            data-src="assets/images/blog/explore-image-27.jpg"
-                                                            alt="beach-iamge"
-                                                        />
-                                                    </div>
-                                                    <div className="swiper-slide border-rarius-14 article-slider-single">
-                                                        <img
-                                                            className="border-rarius-14"
-                                                            src="assets/images/placeholder.svg"
-                                                            data-src="assets/images/blog/explore-image-15.jpg"
-                                                            alt="hill"
-                                                        />
-                                                        <a
-                                                            href="https://www.youtube.com/embed/TKnufs85hXk"
-                                                            data-vbtype="iframe"
-                                                            className="popup-youtube play-icon play-icon-effect"
-                                                        >
-                                                            <i className="fa-light fa-circle-play" />
-                                                        </a>
-                                                    </div>
-                                                    <div className="swiper-slide border-rarius-14 article-slider-single">
-                                                        <img
-                                                            className="border-rarius-14"
-                                                            src="assets/images/placeholder.svg"
-                                                            data-src="assets/images/blog/explore-image-54.jpg"
-                                                            alt="desert-iamge"
-                                                        />
-                                                    </div>
-                                                </div>
+                                                <Swiper
+                                                    spaceBetween={20}
+                                                    slidesPerView={1}
+                                                    loop={true}
+                                                    navigation={{
+                                                        nextEl: '.swiper-slide-button-next',
+                                                        prevEl: '.swiper-slide-button-prev',
+                                                    }}
+                                                    pagination={{ clickable: true }}
+                                                    onSwiper={mainSwiper => setMainSwiper(mainSwiper)}
+                                                    controller={{ control: thumbSwiper }}
+                                                >
+                                                    {blog?.photos?.map((photo, index) => (
+                                                        <SwiperSlide key={index} className="border-rarius-14 article-slider-single">
+                                                            <img
+                                                                className="border-rarius-14"
+                                                                src={photo}
+                                                                alt={`Image ${index}`}
+                                                                onClick={() => setToggler(!toggler)}
+                                                            />
+                                                        </SwiperSlide>
+                                                    ))}
+                                                </Swiper>
                                                 <div className="swiper-slide-button-wrapper">
                                                     <div className="swiper-slide-button-prev">
                                                         <i className="fa-solid fa-angle-left" />
@@ -571,56 +543,25 @@ const Article = () => {
                                             <div className="row justify-content-center">
                                                 <div className="col-md-8">
                                                     <div className="swiper article-slider-thumb-wrapper">
-                                                        <div className="swiper-wrapper">
-                                                            <div className="swiper-slide article-slider-thumb-single">
-                                                                <img
-                                                                    src="assets/images/placeholder.svg"
-                                                                    data-src="assets/images/blog/explore-image-29.jpg"
-                                                                    alt="slide-image"
-                                                                />
-                                                                <span className="play-icon">
-                                                                    <i className="fa-light fa-circle-play" />
-                                                                </span>
-                                                            </div>
-                                                            <div className="swiper-slide article-slider-thumb-single">
-                                                                <img
-                                                                    src="assets/images/placeholder.svg"
-                                                                    data-src="assets/images/blog/explore-image-28.jpg"
-                                                                    alt="slide-image-two"
-                                                                />
-                                                            </div>
-                                                            <div className="swiper-slide article-slider-thumb-single">
-                                                                <img
-                                                                    src="assets/images/placeholder.svg"
-                                                                    data-src="assets/images/blog/explore-image-54.jpg"
-                                                                    alt="slide-image-three"
-                                                                />
-                                                            </div>
-                                                            <div className="swiper-slide article-slider-thumb-single">
-                                                                <img
-                                                                    src="assets/images/placeholder.svg"
-                                                                    data-src="assets/images/blog/explore-image-27.jpg"
-                                                                    alt="slide-image-four"
-                                                                />
-                                                            </div>
-                                                            <div className="swiper-slide article-slider-thumb-single">
-                                                                <img
-                                                                    src="assets/images/placeholder.svg"
-                                                                    data-src="assets/images/blog/explore-image-15.jpg"
-                                                                    alt="slide-image-four"
-                                                                />
-                                                                <span className="play-icon">
-                                                                    <i className="fa-light fa-circle-play" />
-                                                                </span>
-                                                            </div>
-                                                            <div className="swiper-slide article-slider-thumb-single">
-                                                                <img
-                                                                    src="assets/images/placeholder.svg"
-                                                                    data-src="assets/images/blog/explore-image-54.jpg"
-                                                                    alt="slide-image-five"
-                                                                />
-                                                            </div>
-                                                        </div>
+                                                        <Swiper
+                                                            spaceBetween={10}
+                                                            slidesPerView={4}
+                                                            freeMode={true}
+                                                            watchSlidesProgress={true}
+                                                            loop={true}
+                                                            navigation={true}
+                                                            onSwiper={setThumbSwiper}
+                                                            controller={{ control: mainSwiper }}
+                                                        >
+                                                            {blog?.photos?.map((image, index) => (
+                                                                <SwiperSlide key={index} className="article-slider-thumb-single">
+                                                                    <img
+                                                                        src={image}
+                                                                        alt={`slide-image-${index}`}
+                                                                    />
+                                                                </SwiperSlide>
+                                                            ))}
+                                                        </Swiper>
                                                     </div>
                                                 </div>
                                             </div>
@@ -633,43 +574,35 @@ const Article = () => {
                                             Accommodation Reviews
                                         </h3>
                                         <p className="mb-lg-30  mb-10">
-                                            The Lake Clark's accommodation options blend comfort with the
-                                            untamed Alaskan wilderness. Lakeside retreats offer panoramic
-                                            views, allowing guests to wake up to the serenity of nature.
-                                            Cozy cabins, equipped with modern amenities, provide a refuge
-                                            after day of outdoor adventure.
+                                            {blog?.accomodationReview}
                                         </p>
                                         <div className="blog-image-wrapper mb-lg-60 mb-30">
-                                            <div className="blog-image image-hover-effect-2">
-                                                <img
-                                                    src="assets/images/placeholder.svg"
-                                                    data-src="assets/images/blog/explore-image-53.jpg"
-                                                    className=" full-image border-rarius-14"
-                                                    alt="img-top"
-                                                />
-                                            </div>
-                                            <div className="blog-image image-hover-effect-2">
-                                                <img
-                                                    src="assets/images/placeholder.svg"
-                                                    data-src="assets/images/blog/explore-image-54.jpg"
-                                                    className=" full-image border-rarius-14"
-                                                    alt="img-top"
-                                                />
-                                            </div>
+                                            {!loading && blog?.photos.map((image, index) => {
+                                                return (
+                                                    <div
+                                                        key={index}
+                                                        className={`blog-image image-hover-effect-2`}
+                                                    >
+                                                        <img
+                                                            src={image}
+                                                            data-src={image}
+                                                            className="full-image border-rarius-14"
+                                                            alt="img-top"
+                                                        />
+                                                    </div>
+                                                );
+                                            })}
                                         </div>
-                                        <p className="mb-lg-60  mb-md-30 mb-10">
-                                            Camping by the shores offers a more immersive experience under
-                                            the midnight sun or dancing Northern Lights. Whether opting for
-                                            luxury lodges or embracing the simplicity of camping, Lake Clark
-                                            ensures a harmonious coexistence with nature, making each
-                                            night's stay an integral part of the broader Alaskan adventure.
-                                        </p>
+
                                         <h3
                                             id="destination"
                                             className="article-post-heading mb-lg-20 mb-10 "
                                         >
                                             Destination Guides
                                         </h3>
+                                        <p className="mb-lg-60  mb-md-30 mb-10">
+                                            {blog?.destinationGuides}
+                                        </p>
                                         <div className="google-map pb-40">
                                             <iframe
                                                 src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d9341.018597461838!2d-4.432307619358653!3d54.175565819955594!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x486384adaa7f6fd3%3A0x1fe2385732f12c3a!2sGroudle%20Beach!5e0!3m2!1sen!2sbd!4v1711792810684!5m2!1sen!2sbd"
@@ -685,18 +618,9 @@ const Article = () => {
                                             Travel Challenges
                                         </h3>
                                         <p className="mb-lg-20 mb-10">
-                                            Embarking on the Lake Clark travel challenge unveils both the
-                                            beauty and demands of Alaska's wilderness. Navigating its
-                                            untamed landscape requires resilience against unpredictable
-                                            weather, rigorous hiking, and encounters with wildlife.
+                                            {blog?.travelChallenges}
                                         </p>
-                                        <p className="mb-lg-60  mb-md-30 mb-20">
-                                            The challenge lies immersing oneself in the raw element of
-                                            nature, embraing the ruged terrains, and adapting the wild,
-                                            creating an unforgettable expedition that tests both physical
-                                            endurance and a deep connection with the unparalleled beauty of
-                                            Lake Clark's outdoor wonders.
-                                        </p>
+
                                         <h3
                                             id="conclusion"
                                             className="article-post-heading mb-lg-20 mb-10 "
@@ -704,17 +628,7 @@ const Article = () => {
                                             Conclusion
                                         </h3>
                                         <p className="mb-lg-60  mb-30">
-                                            In the heart of Alaska, Lake Clark beckons with untamed beauty
-                                            and outdoor wonders. As the journey through this the wilderness
-                                            concludes, memories linger—kayaking crystal-clear waters, hiking
-                                            amidst the towering peaks, and witnessing the unique harmony of
-                                            wildlife. Lake Clark's pristine charm and rugged landscapes
-                                            imprint an indelible mark, inviting all who venture here to
-                                            become part of its tale. The adventure transcends a mere trip;
-                                            it's a transformative experience, a communion with nature's
-                                            grandeur that leaves travelers with a profound appreciation for
-                                            the raw and unyielding beauty of Alaska's Lake Clark National
-                                            Park and Preserve.
+                                            {blog?.conclusion}
                                         </p>
                                     </div>
                                     {/* article content */}
@@ -733,27 +647,27 @@ const Article = () => {
                                                     data-wow-delay="0.4s"
                                                 >
                                                     <div className="card-image-wrapper">
-                                                        <a href="article-1.html">
+                                                        <Link to="article-1.html">
                                                             <img
                                                                 src="assets/images/placeholder.svg"
                                                                 data-src="assets/images/feature-images/feature-image-1.jpg"
                                                                 className="card-img-top"
                                                                 alt="Breakfast"
                                                             />{" "}
-                                                        </a>
+                                                        </Link>
                                                     </div>
                                                     <div className="card-body">
                                                         <h5 className="card-title lead fw-extrabold mb-0">
-                                                            <a href="article-1.html" className="blog-title">
+                                                            <Link to="article-1.html" className="blog-title">
                                                                 Quick and Easy Flaky Pastry for Tasty Breakfast
-                                                            </a>
+                                                            </Link>
                                                         </h5>
                                                         <ul className="list-unstyled card-meta-style-2 mb-0 extra-small">
                                                             <li>
                                                                 By{" "}
-                                                                <a href="author-1.html" className="fw-bold">
+                                                                <Link to="author-1.html" className="fw-bold">
                                                                     Mike Aiden
-                                                                </a>
+                                                                </Link>
                                                             </li>
                                                             <li>
                                                                 January 27, <span className="dynamic-year"> </span>.
@@ -767,7 +681,7 @@ const Article = () => {
                                                     data-wow-delay="0.4s"
                                                 >
                                                     <div className="card-image-wrapper">
-                                                        <a href="article-1.html">
+                                                        <Link to="article-1.html">
                                                             {" "}
                                                             <img
                                                                 src="assets/images/placeholder.svg"
@@ -775,20 +689,20 @@ const Article = () => {
                                                                 className="card-img-top"
                                                                 alt="Stories"
                                                             />{" "}
-                                                        </a>
+                                                        </Link>
                                                     </div>
                                                     <div className="card-body">
                                                         <h5 className="card-title lead fw-extrabold mb-0">
-                                                            <a href="article-1.html" className="blog-title">
+                                                            <Link to="article-1.html" className="blog-title">
                                                                 Footprints in the Wilderness: Hiking Stories
-                                                            </a>
+                                                            </Link>
                                                         </h5>
                                                         <ul className="list-unstyled card-meta-style-2 mb-0 extra-small">
                                                             <li>
                                                                 By{" "}
-                                                                <a href="author-1.html" className="fw-bold">
+                                                                <Link to="author-1.html" className="fw-bold">
                                                                     Mike Aiden
-                                                                </a>
+                                                                </Link>
                                                             </li>
                                                             <li>
                                                                 January 25, <span className="dynamic-year"> </span>.
@@ -802,7 +716,7 @@ const Article = () => {
                                                     data-wow-delay="0.4s"
                                                 >
                                                     <div className="card-image-wrapper">
-                                                        <a href="article-1.html">
+                                                        <Link to="article-1.html">
                                                             {" "}
                                                             <img
                                                                 src="assets/images/placeholder.svg"
@@ -810,20 +724,20 @@ const Article = () => {
                                                                 className="card-img-top"
                                                                 alt="Stories"
                                                             />{" "}
-                                                        </a>
+                                                        </Link>
                                                     </div>
                                                     <div className="card-body">
                                                         <h5 className="card-title lead fw-extrabold mb-0">
-                                                            <a href="article-1.html" className="blog-title">
+                                                            <Link to="article-1.html" className="blog-title">
                                                                 Lost Treasures: Top 10 Ancient City Sites
-                                                            </a>
+                                                            </Link>
                                                         </h5>
                                                         <ul className="list-unstyled card-meta-style-2 mb-0 extra-small">
                                                             <li>
                                                                 By{" "}
-                                                                <a href="author-1.html" className="fw-bold">
+                                                                <Link to="author-1.html" className="fw-bold">
                                                                     Mike Aiden
-                                                                </a>
+                                                                </Link>
                                                             </li>
                                                             <li>
                                                                 January 13, <span className="dynamic-year"> </span>.
@@ -837,7 +751,7 @@ const Article = () => {
                                                     data-wow-delay="0.4s"
                                                 >
                                                     <div className="card-image-wrapper">
-                                                        <a href="article-1.html">
+                                                        <Link to="article-1.html">
                                                             {" "}
                                                             <img
                                                                 src="assets/images/placeholder.svg"
@@ -845,20 +759,20 @@ const Article = () => {
                                                                 className="card-img-top"
                                                                 alt="Stories"
                                                             />{" "}
-                                                        </a>
+                                                        </Link>
                                                     </div>
                                                     <div className="card-body">
                                                         <h5 className="card-title lead fw-extrabold mb-0">
-                                                            <a href="article-1.html" className="blog-title">
+                                                            <Link to="article-1.html" className="blog-title">
                                                                 Beyond Shores: Discovering Idyllic Lake Paradises
-                                                            </a>
+                                                            </Link>
                                                         </h5>
                                                         <ul className="list-unstyled card-meta-style-2 mb-0 extra-small">
                                                             <li>
                                                                 By{" "}
-                                                                <a href="author-1.html" className="fw-bold">
+                                                                <Link to="author-1.html" className="fw-bold">
                                                                     Mike Aiden
-                                                                </a>
+                                                                </Link>
                                                             </li>
                                                             <li>
                                                                 January 12, <span className="dynamic-year"> </span>.
@@ -872,7 +786,7 @@ const Article = () => {
                                                     data-wow-delay="0.4s"
                                                 >
                                                     <div className="card-image-wrapper">
-                                                        <a href="article-1.html">
+                                                        <Link to="article-1.html">
                                                             {" "}
                                                             <img
                                                                 src="assets/images/placeholder.svg"
@@ -880,20 +794,20 @@ const Article = () => {
                                                                 className="card-img-top"
                                                                 alt="Stories"
                                                             />{" "}
-                                                        </a>
+                                                        </Link>
                                                     </div>
                                                     <div className="card-body">
                                                         <h5 className="card-title lead fw-extrabold mb-0">
-                                                            <a href="article-1.html" className="blog-title">
+                                                            <Link to="article-1.html" className="blog-title">
                                                                 Seaside Serenity: Beachside Beauty Uncovered
-                                                            </a>
+                                                            </Link>
                                                         </h5>
                                                         <ul className="list-unstyled card-meta-style-2 mb-0 extra-small">
                                                             <li>
                                                                 By{" "}
-                                                                <a href="author-1.html" className="fw-bold">
+                                                                <Link to="author-1.html" className="fw-bold">
                                                                     Mike Aiden
-                                                                </a>
+                                                                </Link>
                                                             </li>
                                                             <li>
                                                                 January 04, <span className="dynamic-year"> </span>.
@@ -916,7 +830,7 @@ const Article = () => {
                                                 Follow Me On Social Media
                                             </p>
                                             <div className="social-icons d-flex justify-content-center align-items-center flex-wrap gap-20">
-                                                <a href="https://www.facebook.com/">
+                                                <Link to="https://www.facebook.com/">
                                                     <span className="">
                                                         <svg
                                                             width={10}
@@ -928,8 +842,8 @@ const Article = () => {
                                                             <path d="M9.13046 2.63679V0.036944C9.13046 0.036944 6.47179 0.0117188 6.29118 0.0117188C5.08995 0.0117188 3.36232 1.37817 3.36232 2.92941C3.36232 4.67665 3.36232 5.71267 3.36232 5.71267H0.873047V8.66395H3.32872V15.9876H6.2352V8.63036H8.80428L9.13046 5.74627H6.2688C6.2688 5.74627 6.2688 3.97383 6.2688 3.62803C6.2688 3.11981 6.65242 2.62141 7.22643 2.62141C7.60864 2.62141 9.13046 2.63679 9.13046 2.63679Z" />
                                                         </svg>
                                                     </span>
-                                                </a>
-                                                <a href="https://www.instagram.com/">
+                                                </Link>
+                                                <Link to="https://www.instagram.com/">
                                                     <span className="">
                                                         <svg
                                                             width={16}
@@ -943,8 +857,8 @@ const Article = () => {
                                                             <path d="M12.982 3.68044C12.982 4.06125 12.6726 4.37069 12.2918 4.37069C11.911 4.37069 11.6016 4.06125 11.6016 3.68044C11.6016 3.29963 11.911 2.99023 12.2918 2.99023C12.6726 2.99023 12.982 3.29823 12.982 3.68044Z" />
                                                         </svg>
                                                     </span>
-                                                </a>
-                                                <a href="https://www.youtube.com/">
+                                                </Link>
+                                                <Link to="https://www.youtube.com/">
                                                     <span className="">
                                                         <svg
                                                             width={18}
@@ -956,8 +870,8 @@ const Article = () => {
                                                             <path d="M14.4105 0.0820312H3.591C1.89275 0.0820312 0.503906 1.47084 0.503906 3.16909V8.83366C0.503906 10.5319 1.89275 11.9207 3.591 11.9207H14.4105C16.1087 11.9207 17.4975 10.5319 17.4975 8.83366V3.16909C17.4975 1.47084 16.1087 0.0820312 14.4105 0.0820312ZM9.47816 7.67723L6.84188 9.30826V6.04617V2.78408L9.47816 4.41514L12.1144 6.04617L9.47816 7.67723Z" />
                                                         </svg>
                                                     </span>
-                                                </a>
-                                                <a href="https://twitter.com/">
+                                                </Link>
+                                                <Link to="https://twitter.com/">
                                                     <span className="">
                                                         <svg
                                                             width={16}
@@ -969,8 +883,8 @@ const Article = () => {
                                                             <path d="M15.8092 15.98H11.1569L6.89801 9.78339L1.56807 15.98H0.19043L6.28619 8.89157L0.19043 0.0195312H4.84276L8.87486 5.88989L13.9234 0.0195312H15.301L9.48808 6.77751L15.8092 15.98ZM11.8079 14.9929H13.9234L4.18054 1.05696H2.06508L11.8079 14.9929Z" />
                                                         </svg>
                                                     </span>
-                                                </a>
-                                                <a href="https://www.pinterest.com/">
+                                                </Link>
+                                                <Link to="https://www.pinterest.com/">
                                                     <span className="">
                                                         <svg
                                                             width={14}
@@ -982,8 +896,8 @@ const Article = () => {
                                                             <path d="M4.21932 8.5049C4.21932 8.5049 3.5417 6.42445 4.33972 5.28762C5.13774 4.15079 5.81536 4.0052 6.68619 4.22361C7.55701 4.44201 7.77542 5.57882 7.58081 6.54625C7.38761 7.51367 6.8794 9.23153 6.8556 9.49753C6.8318 9.76354 6.7828 10.5378 7.53322 10.8528C8.28364 11.1678 9.49327 10.78 10.1219 9.49753C10.7505 8.2151 10.9927 6.49724 10.8961 5.84483C10.7995 5.19101 10.7029 3.57118 8.76664 2.84456C6.83039 2.11794 5.29595 2.83617 4.92074 3.06718C4.36073 3.41159 3.30089 4.1956 2.86688 5.23583C2.59668 5.88405 2.49729 6.63306 2.56449 7.18467C2.64009 7.80629 2.9607 8.45591 3.2267 8.73452C3.49271 9.01313 3.3961 9.30292 3.3597 9.52132C3.3233 9.73973 3.2421 10.3445 3.0335 10.57C2.82349 10.7954 2.37967 10.8247 2.20187 10.7365C2.02406 10.6483 1.18826 10.2116 0.695443 9.35893C0.18163 8.46711 -0.0367782 7.08387 0.325831 5.29462C0.688441 3.50398 2.18787 1.89954 3.78251 1.10292C5.36875 0.310501 7.28401 -0.0871181 9.07466 0.429495C10.8653 0.946109 12.4445 1.92612 13.3154 3.81337C14.1862 5.70062 13.8236 8.14369 13.412 9.28192C13.0004 10.4188 12.2583 11.718 10.8555 12.5076C9.45266 13.2986 8.22623 13.2818 7.82302 13.1852C7.41981 13.0886 6.48459 12.7988 6.06458 12.3298C6.06458 12.3298 5.46816 14.6525 5.22596 15.2811C4.98375 15.9097 4.56934 16.9387 4.20533 17.3251C3.84272 17.7115 3.67332 17.846 3.33451 17.797C2.9957 17.748 2.8025 17.4455 2.7423 16.5383C2.68209 15.6311 3.12869 13.0228 3.3065 12.264C3.4857 11.5052 4.13112 8.86051 4.21932 8.5049Z" />
                                                         </svg>
                                                     </span>
-                                                </a>
-                                                <a href="https://www.linkedin.com/">
+                                                </Link>
+                                                <Link to="https://www.linkedin.com/">
                                                     <span className="">
                                                         <svg
                                                             width={17}
@@ -997,41 +911,41 @@ const Article = () => {
                                                             <path d="M4.56523 4.4804C5.27928 3.76636 5.27928 2.60864 4.56523 1.8946C3.85119 1.18055 2.69347 1.18055 1.97943 1.8946C1.26538 2.60864 1.26538 3.76636 1.97943 4.4804C2.69347 5.19445 3.85119 5.19445 4.56523 4.4804Z" />
                                                         </svg>
                                                     </span>
-                                                </a>
+                                                </Link>
                                             </div>
                                             {/* social-icons */}
                                         </div>
                                         <div className="catagory">
                                             <h3 className="mb-40">Category</h3>
                                             <div className="catagory-tag">
-                                                <a href="category-1.html">
+                                                <Link to="category-1.html">
                                                     HIKING <span className="catagory-count">10</span>
-                                                </a>
-                                                <a href="category-1.html">
+                                                </Link>
+                                                <Link to="category-1.html">
                                                     CAMPING <span className="catagory-count">20</span>
-                                                </a>
-                                                <a href="category-1.html">
+                                                </Link>
+                                                <Link to="category-1.html">
                                                     FOREST <span className="catagory-count">18</span>
-                                                </a>
-                                                <a href="category-1.html">
+                                                </Link>
+                                                <Link to="category-1.html">
                                                     DESERT <span className="catagory-count">14</span>
-                                                </a>
-                                                <a href="category-1.html">
+                                                </Link>
+                                                <Link to="category-1.html">
                                                     MARINE <span className="catagory-count">45</span>
-                                                </a>
+                                                </Link>
                                             </div>
                                         </div>
                                         <div
                                             className="add-iamge d-none d-xl-block wow fadeInUp"
                                             data-wow-delay="0.4s"
                                         >
-                                            <a href="#">
+                                            <Link to="#">
                                                 <img
                                                     src="assets/images/add.png"
                                                     className="img-fluid"
                                                     alt="img"
                                                 />
-                                            </a>
+                                            </Link>
                                         </div>
                                     </div>
                                 </div>
@@ -1045,26 +959,26 @@ const Article = () => {
                                     <div className="card card-style-10 card-border">
                                         <div className="d-flex align-items-center gap-lg-20 gap-10 ">
                                             <div className="card-image-wrapper-style-2 image-hover-effect-2">
-                                                <a href="article-1.html">
+                                                <Link to="article-1.html">
                                                     <img
                                                         src="assets/images/placeholder.svg"
                                                         data-src="assets/images/feature-images/feature-image-4.jpg"
                                                         alt="img-top"
                                                     />
-                                                </a>
+                                                </Link>
                                             </div>
                                             <div className="card-body p-0  mt-auto">
-                                                <a
-                                                    href="#"
+                                                <Link
+                                                    to="#"
                                                     className="d-flex gap-2 align-items-center mini-card-button-prev text-body mb-2"
                                                 >
                                                     <i className="fa-solid fa-arrow-left" />
                                                     <span>Previous</span>
-                                                </a>
+                                                </Link>
                                                 <h5 className="card-title lead fw-extrabold">
-                                                    <a href="article-1.html" className="blog-title">
+                                                    <Link to="article-1.html" className="blog-title">
                                                         Quick and Easy Flaky Pastry for Tasty Breakfast
-                                                    </a>
+                                                    </Link>
                                                 </h5>
                                             </div>
                                         </div>
@@ -1074,25 +988,25 @@ const Article = () => {
                                     <div className="card card-style-10 card-border">
                                         <div className="d-flex align-items-center gap-lg-20 gap-10 ">
                                             <div className="card-image-wrapper-style-2 image-hover-effect-2">
-                                                <a href="article-1.html">
+                                                <Link to="article-1.html">
                                                     <img
                                                         src="assets/images/placeholder.svg"
                                                         data-src="assets/images/feature-images/feature-image-5.jpg"
                                                         alt="img-top"
                                                     />
-                                                </a>
+                                                </Link>
                                             </div>
                                             <div className="card-body p-0  mt-auto">
-                                                <a
-                                                    href="#"
+                                                <Link
+                                                    to="#"
                                                     className="d-flex gap-2 align-items-center mini-card-button-next text-body pb-2"
                                                 >
                                                     <span>Next</span> <i className="fa-solid fa-arrow-right" />
-                                                </a>
+                                                </Link>
                                                 <h5 className="card-title lead fw-extrabold">
-                                                    <a href="article-1.html" className="blog-title">
+                                                    <Link to="article-1.html" className="blog-title">
                                                         Footprints in the Wilderness: Hiking Stories
-                                                    </a>
+                                                    </Link>
                                                 </h5>
                                             </div>
                                         </div>
@@ -1118,9 +1032,9 @@ const Article = () => {
                                                 </div>
                                                 <div className="comment-content">
                                                     <h5>
-                                                        <a href="#" className="comment-name">
+                                                        <Link to="#" className="comment-name">
                                                             Liam Adams
-                                                        </a>
+                                                        </Link>
                                                     </h5>
                                                     <span className="timestamp">
                                                         January 12, <span className="dynamic-year"> </span>. at
@@ -1151,9 +1065,9 @@ const Article = () => {
                                                 </div>
                                                 <div className="comment-content">
                                                     <h5>
-                                                        <a href="#" className="comment-name">
+                                                        <Link to="#" className="comment-name">
                                                             Liam Adams <span>(Author)</span>
-                                                        </a>
+                                                        </Link>
                                                     </h5>
                                                     <span className="timestamp">
                                                         January 12, <span className="dynamic-year"> </span>. at
@@ -1184,9 +1098,9 @@ const Article = () => {
                                                 </div>
                                                 <div className="comment-content">
                                                     <h5>
-                                                        <a href="#" className="comment-name">
+                                                        <Link to="#" className="comment-name">
                                                             Mike Aiden
-                                                        </a>
+                                                        </Link>
                                                     </h5>
                                                     <span className="timestamp">
                                                         January 12, <span className="dynamic-year"> </span>. at
@@ -1315,30 +1229,30 @@ const Article = () => {
                                     data-wow-delay="0.4s"
                                 >
                                     <div className="card-image-wrapper">
-                                        <a href="article-1.html">
+                                        <Link to="article-1.html">
                                             <img
                                                 src="assets/images/placeholder.svg"
                                                 data-src="assets/images/blog/explore-image-21.jpg"
                                                 className="card-img-top"
                                                 alt="Lake"
                                             />
-                                        </a>
+                                        </Link>
                                     </div>
                                     <div className="card-body">
                                         <div className="card-header text-uppercase">
-                                            <a href="category-1.html"> Lake</a>
+                                            <Link to="category-1.html"> Lake</Link>
                                         </div>
                                         <h5 className="fs-4 card-title">
-                                            <a href="article-1.html" className="blog-title">
+                                            <Link to="article-1.html" className="blog-title">
                                                 Lakeside Wonders: Nature's Peaceful Miracles
-                                            </a>
+                                            </Link>
                                         </h5>
                                         <ul className="list-unstyled card-meta lead  small">
                                             <li>
                                                 By{" "}
-                                                <a href="author-1.html" className="blog-author fw-bold">
+                                                <Link to="author-1.html" className="blog-author fw-bold">
                                                     Mike Aiden
-                                                </a>
+                                                </Link>
                                             </li>
                                             <li>
                                                 January 27, <span className="dynamic-year"> </span>.
@@ -1358,7 +1272,7 @@ const Article = () => {
                                     data-wow-delay="0.4s"
                                 >
                                     <div className="card-image-wrapper">
-                                        <a href="blog-3.html">
+                                        <Link to="blog-3.html">
                                             {" "}
                                             <img
                                                 src="assets/images/placeholder.svg"
@@ -1366,23 +1280,23 @@ const Article = () => {
                                                 className="card-img-top"
                                                 alt="Forest"
                                             />
-                                        </a>
+                                        </Link>
                                     </div>
                                     <div className="card-body">
                                         <div className="card-header text-uppercase">
-                                            <a href="category-1.html">Forest</a>
+                                            <Link to="category-1.html">Forest</Link>
                                         </div>
                                         <h5 className="fs-4 card-title">
-                                            <a href="article-1.html" className="blog-title">
+                                            <Link to="article-1.html" className="blog-title">
                                                 The Mystic Woods: Nature's Healing Sanctuary
-                                            </a>
+                                            </Link>
                                         </h5>
                                         <ul className="list-unstyled card-meta lead  small">
                                             <li>
                                                 By{" "}
-                                                <a href="author-1.html" className="blog-author fw-bold">
+                                                <Link to="author-1.html" className="blog-author fw-bold">
                                                     Mike Aiden
-                                                </a>
+                                                </Link>
                                             </li>
                                             <li>
                                                 January 23, <span className="dynamic-year"> </span>.
@@ -1402,7 +1316,7 @@ const Article = () => {
                                     data-wow-delay="0.4s"
                                 >
                                     <div className="card-image-wrapper">
-                                        <a href="blog-7.html">
+                                        <Link to="blog-7.html">
                                             {" "}
                                             <img
                                                 src="assets/images/placeholder.svg"
@@ -1410,23 +1324,23 @@ const Article = () => {
                                                 className="card-img-top"
                                                 alt="img-top"
                                             />
-                                        </a>
+                                        </Link>
                                     </div>
                                     <div className="card-body">
                                         <div className="card-header text-uppercase">
-                                            <a href="category-1.html">Beach</a>
+                                            <Link to="category-1.html">Beach</Link>
                                         </div>
                                         <h5 className="fs-4 card-title">
-                                            <a href="article-1.html" className="blog-title">
+                                            <Link to="article-1.html" className="blog-title">
                                                 Seaside Serenity: Beachside Beauty Uncovered
-                                            </a>
+                                            </Link>
                                         </h5>
                                         <ul className="list-unstyled card-meta lead  small">
                                             <li>
                                                 By{" "}
-                                                <a href="author-1.html" className="blog-author fw-bold">
+                                                <Link to="author-1.html" className="blog-author fw-bold">
                                                     Mike Aiden
-                                                </a>
+                                                </Link>
                                             </li>
                                             <li>
                                                 January 23, <span className="dynamic-year"> </span>.

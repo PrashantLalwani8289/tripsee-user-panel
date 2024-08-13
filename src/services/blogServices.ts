@@ -37,3 +37,13 @@ export const UploadToImagekit = async (
   );
   return uploadResponse
 };
+
+
+export const GetBlog = async (
+    BlogId: number
+  ): Promise<ApiResponse> => {
+      // const useUser = useSelector((state:RootState) => state.root.user?.token)
+    const { data } = await axios.get(`${endpoints.Blog.GET_BLOG}?BlogId=${BlogId}`);
+    console.log(data);
+    return data;
+  };

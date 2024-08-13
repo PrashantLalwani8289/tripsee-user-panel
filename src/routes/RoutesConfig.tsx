@@ -76,19 +76,19 @@ const RoutesConfig: React.FC<RoutesConfigProps> = ({ isAuthenticated }) => {
             <Route
                 path={ROUTES.CONTACT}
                 element={
-                    <PrivateRoute isAuthenticated={isAuthenticated} element={<Contact />} />
+                    <PublicRoutes isAuthenticated={isAuthenticated} element={<Contact />} />
                 }
             />
             <Route
                 path={ROUTES.ARTICLE}
                 element={
-                    <PrivateRoute isAuthenticated={isAuthenticated} element={<Article />} />
+                    <PublicRoutes isAuthenticated={isAuthenticated} element={<Article />} />
                 }
             />
             <Route
                 path={ROUTES.CATEGORY}
                 element={
-                    <PrivateRoute isAuthenticated={isAuthenticated} element={<Category />} />
+                    <PublicRoutes isAuthenticated={isAuthenticated} element={<Category />} />
                 }
             />
             <Route

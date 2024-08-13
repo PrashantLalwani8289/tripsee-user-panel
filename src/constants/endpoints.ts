@@ -11,6 +11,7 @@ export default {
         UPLOAD_BLOG_IMAGE:`${URL}/user/upload-blog-image`
     },
     Blog:{
-        CREATE_BLOG:`${URL}/blog/create-blog`
+        CREATE_BLOG:`${URL}/blog/create-blog`,
+        GET_BLOG:`${URL}/blog/get-blog`,
     }
 } as const;
