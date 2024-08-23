@@ -50,3 +50,9 @@ export const signInSchema = () =>
         .min(-180, "Longitude must be greater than or equal to -180")
         .max(180, "Longitude must be less than or equal to 180"),
     });
+
+
+  export const ctaValidation = () => 
+    yup.object().shape({
+      email: yup.string().required()
+    })

@@ -13,5 +13,6 @@ export default {
     Blog:{
         CREATE_BLOG:`${URL}/blog/create-blog`,
         GET_BLOG:`${URL}/blog/get-blog`,
+        GET_ALL_BLOGS:`${URL}/blog/get-all-blogs`,
     }
 } as const;

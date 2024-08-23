@@ -12,10 +12,13 @@ import { toastMessageError } from "../../components/utilities/commonToast/Common
 import { ROUTES } from "../../constants/routes"
 import FsLightbox from 'fslightbox-react';
 import { Swiper, SwiperSlide } from 'swiper/react';
-import SwiperCore, { Swiper } from 'swiper';
+import SwiperCore from 'swiper';
 import { Pagination } from "swiper/modules"
 import { Controller } from "swiper/modules"
 import { Navigation } from "swiper/modules"
+import { Swiper as SwiperType } from 'swiper/types';
+import MapComponent from "../../components/mapComponent/MapComponent"
+import CTASection from "../../components/ctaSection/CTASection"
 // import 'swiper/swiper-bundle.min.css';
 // import 'swiper/swiper.min.css';
 
@@ -31,8 +34,8 @@ const Article = () => {
     const [loading, setLoading] = useState(false)
     const [toggler, setToggler] = useState(false);
 
-    const [mainSwiper, setMainSwiper] = useState<Swiper| null>(null);
-    const [thumbSwiper, setThumbSwiper] = useState<Swiper| null>(null);
+    const [mainSwiper, setMainSwiper] = useState<SwiperType | undefined>(undefined);
+    const [thumbSwiper, setThumbSwiper] = useState<SwiperType | undefined>(undefined);
     const BlogData = async () => {
         setLoading(true)
         const response = await GetBlog(articleId as unknown as number)
@@ -545,7 +548,7 @@ const Article = () => {
                                                     <div className="swiper article-slider-thumb-wrapper">
                                                         <Swiper
                                                             spaceBetween={10}
-                                                            slidesPerView={4}
+                                                            slidesPerView={3}
                                                             freeMode={true}
                                                             watchSlidesProgress={true}
                                                             loop={true}
@@ -604,12 +607,7 @@ const Article = () => {
                                             {blog?.destinationGuides}
                                         </p>
                                         <div className="google-map pb-40">
-                                            <iframe
-                                                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d9341.018597461838!2d-4.432307619358653!3d54.175565819955594!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x486384adaa7f6fd3%3A0x1fe2385732f12c3a!2sGroudle%20Beach!5e0!3m2!1sen!2sbd!4v1711792810684!5m2!1sen!2sbd"
-                                                allowFullScreen
-                                                loading="lazy"
-                                                referrerPolicy="no-referrer-when-downgrade"
-                                            />
+                                            <MapComponent latitude={26.9124} longitude={75.7873}/>
                                         </div>
                                         <h3
                                             id="travelchallenges"
@@ -1358,32 +1356,7 @@ const Article = () => {
                     </div>
                 </section>
                 {/*CTA Section ======================*/}
-                <section className="section-cta wow fadeInUp" data-wow-delay="0.4s">
-                    <div className="container">
-                        <div className="cta-area pt-lg-60 pb-lg-90 pt-30 pb-30">
-                            <div className="col-lg-6">
-                                <div className="cta-content pl-lg-100">
-                                    <p className="fs-6 text-white mb-10">Keep in Touch</p>
-                                    <h3 className=" fs-3 text-white  mb-30 ">Explore the world</h3>
-                                    <form>
-                                        <div className="form-group d-flex gap-30">
-                                            <input
-                                                type="email"
-                                                className="form-control"
-                                                name="email"
-                                                placeholder="Your email address"
-                                                required
-                                            />
-                                            <button type="submit" className="btn btn-secondary">
-                                                Subscribe
-                                            </button>
-                                        </div>
-                                    </form>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </section>
+                <CTASection />
                 {/*CTA Section ======================*/}
             </div>
             <Footer />

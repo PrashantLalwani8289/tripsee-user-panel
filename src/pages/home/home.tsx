@@ -11,8 +11,44 @@ import 'swiper/css/pagination';
 import 'swiper/css/effect-fade';
 import { ROUTES } from '../../constants/routes'
 import { Link } from 'react-router-dom'
-const home = () => {
-    const Catogories = ['Technology', 'Health', 'Travel', 'Education', 'Finance']
+import { Controller, useForm } from 'react-hook-form'
+import { ctaSection } from '../../interface/extra'
+import { yupResolver } from '@hookform/resolvers/yup'
+import { ctaValidation } from '../../validation/userValidation'
+import { GetAllBlogs } from '../../services/blogServices'
+import { useEffect, useState } from 'react'
+import { Blog } from '../../interface/blog'
+const Home = () => {
+    const Catogories = ["Beach", "Camping", "Hiking", "Desert", "Forest", "LongDrives", "FamilyTrips"]
+    const [blogs, setBlogs] = useState<Blog[]>([])
+    const [blogsLoading, setBlogsLoading] = useState<boolean>(true)
+    const { control, handleSubmit, formState: { errors } } = useForm<ctaSection>({
+        mode: "onChange",
+        resolver: yupResolver(ctaValidation())
+    })
+    const handleClick = (data: ctaSection) => {
+        console.log(data)
+    }
+
+    const getAllBlogs = async () => {
+        setBlogsLoading(true)
+        const response = await GetAllBlogs()
+        if (response.success && response.data) {
+            setBlogs(response.data as Blog[])
+            setBlogsLoading(false)
+        }
+        else {
+            console.error(response.message)
+            setBlogsLoading(false)
+        }
+
+    }
+
+    useEffect(() => {
+        getAllBlogs()
+    }, [])
+
+
     return (
         <div className='page'>
             <Header />
@@ -61,9 +97,9 @@ const home = () => {
                                                             </Link>
                                                         </div>
                                                         <div className="card-body text-center">
-                                                            <a href={`category-${index + 1}.html`}>
+                                                            <Link to={`category-${index + 1}.html`}>
                                                                 <p className="small mb-0 fw-extrabold text-white text-uppercase">{catogory}</p>
-                                                            </a>
+                                                            </Link>
                                                         </div>
                                                     </div>
                                                 </SwiperSlide>
@@ -89,176 +125,48 @@ const home = () => {
                                         <div className="widget wow fadeInUp" data-wow-delay="0.3s">
                                             <h4 className="fs-1 mb-40">Featured Article</h4>
                                             <div className="d-flex flex-column gap-3 gap-xl-30">
+
                                                 {/* mini-card-style */}
-                                                <div
-                                                    className="mini-card-style wow fadeInUp"
-                                                    data-wow-delay="0.4s"
-                                                >
-                                                    <div className="card-image-wrapper">
-                                                        <a href="article-1.html">
-                                                            <img
-                                                                src="assets/images/placeholder.svg"
-                                                                data-src="assets/images/feature-images/feature-image-1.jpg"
-                                                                className="card-img-top"
-                                                                alt="Breakfast"
-                                                            />{" "}
-                                                        </a>
-                                                    </div>
-                                                    <div className="card-body">
-                                                        <h5 className="card-title lead fw-extrabold mb-0">
-                                                            <a href="article-1.html" className="blog-title">
-                                                                Quick and Easy Flaky Pastry for Tasty Breakfast
-                                                            </a>
-                                                        </h5>
-                                                        <ul className="list-unstyled card-meta-style-2 mb-0 extra-small">
-                                                            <li>
-                                                                By{" "}
-                                                                <a href="author-1.html" className="fw-bold">
-                                                                    Mike Aiden
-                                                                </a>
-                                                            </li>
-                                                            <li>
-                                                                January 27, <span className="dynamic-year"> </span>.
-                                                            </li>
-                                                        </ul>
-                                                    </div>
-                                                </div>
-                                                {/* mini-card-style */}
-                                                <div
-                                                    className="mini-card-style wow fadeInUp"
-                                                    data-wow-delay="0.4s"
-                                                >
-                                                    <div className="card-image-wrapper">
-                                                        <a href="article-1.html">
-                                                            {" "}
-                                                            <img
-                                                                src="assets/images/placeholder.svg"
-                                                                data-src="assets/images/feature-images/feature-image-7.jpg"
-                                                                className="card-img-top"
-                                                                alt="Stories"
-                                                            />{" "}
-                                                        </a>
-                                                    </div>
-                                                    <div className="card-body">
-                                                        <h5 className="card-title lead fw-extrabold mb-0">
-                                                            <a href="article-1.html" className="blog-title">
-                                                                Footprints in the Wilderness: Hiking Stories
-                                                            </a>
-                                                        </h5>
-                                                        <ul className="list-unstyled card-meta-style-2 mb-0 extra-small">
-                                                            <li>
-                                                                By{" "}
-                                                                <a href="author-1.html" className="fw-bold">
-                                                                    Mike Aiden
-                                                                </a>
-                                                            </li>
-                                                            <li>
-                                                                January 25, <span className="dynamic-year"> </span>.
-                                                            </li>
-                                                        </ul>
-                                                    </div>
-                                                </div>
-                                                {/* mini-card-style */}
-                                                <div
-                                                    className="mini-card-style wow fadeInUp"
-                                                    data-wow-delay="0.4s"
-                                                >
-                                                    <div className="card-image-wrapper">
-                                                        <a href="article-1.html">
-                                                            {" "}
-                                                            <img
-                                                                src="assets/images/placeholder.svg"
-                                                                data-src="assets/images/feature-images/feature-image-3.jpg"
-                                                                className="card-img-top"
-                                                                alt="Stories"
-                                                            />{" "}
-                                                        </a>
-                                                    </div>
-                                                    <div className="card-body">
-                                                        <h5 className="card-title lead fw-extrabold mb-0">
-                                                            <a href="article-1.html" className="blog-title">
-                                                                Lost Treasures: Top 10 Ancient City Sites
-                                                            </a>
-                                                        </h5>
-                                                        <ul className="list-unstyled card-meta-style-2 mb-0 extra-small">
-                                                            <li>
-                                                                By{" "}
-                                                                <a href="author-1.html" className="fw-bold">
-                                                                    Mike Aiden
-                                                                </a>
-                                                            </li>
-                                                            <li>
-                                                                January 22, <span className="dynamic-year"> </span>.
-                                                            </li>
-                                                        </ul>
-                                                    </div>
-                                                </div>
-                                                {/* mini-card-style */}
-                                                <div
-                                                    className="mini-card-style wow fadeInUp"
-                                                    data-wow-delay="0.4s"
-                                                >
-                                                    <div className="card-image-wrapper">
-                                                        <a href="article-1.html">
-                                                            {" "}
-                                                            <img
-                                                                src="assets/images/placeholder.svg"
-                                                                data-src="assets/images/feature-images/feature-image-4.jpg"
-                                                                className="card-img-top"
-                                                                alt="Stories"
-                                                            />{" "}
-                                                        </a>
-                                                    </div>
-                                                    <div className="card-body">
-                                                        <h5 className="card-title lead fw-extrabold mb-0">
-                                                            <a href="article-1.html" className="blog-title">
-                                                                Beyond Shores: Discovering Idyllic Lake Paradises
-                                                            </a>
-                                                        </h5>
-                                                        <ul className="list-unstyled card-meta-style-2 mb-0 extra-small">
-                                                            <li>
-                                                                By{" "}
-                                                                <a href="author-1.html" className="fw-bold">
-                                                                    Mike Aiden
-                                                                </a>
-                                                            </li>
-                                                            <li>June 28, 2023</li>
-                                                        </ul>
-                                                    </div>
-                                                </div>
-                                                {/* mini-card-style */}
-                                                <div
-                                                    className="mini-card-style wow fadeInUp"
-                                                    data-wow-delay="0.4s"
-                                                >
-                                                    <div className="card-image-wrapper">
-                                                        <a href="article-1.html">
-                                                            {" "}
-                                                            <img
-                                                                src="assets/images/placeholder.svg"
-                                                                data-src="assets/images/feature-images/feature-image-5.jpg"
-                                                                className="card-img-top"
-                                                                alt="Stories"
-                                                            />{" "}
-                                                        </a>
-                                                    </div>
-                                                    <div className="card-body">
-                                                        <h5 className="card-title lead fw-extrabold mb-0">
-                                                            <a href="article-1.html" className="blog-title">
-                                                                Seaside Serenity: Beachside Beauty Uncovered
-                                                            </a>
-                                                        </h5>
-                                                        <ul className="list-unstyled card-meta-style-2 mb-0 extra-small">
-                                                            <li>
-                                                                By{" "}
-                                                                <a href="author-1.html" className="fw-bold">
-                                                                    Mike Aiden
-                                                                </a>
-                                                            </li>
-                                                            <li>June 24, 2023</li>
-                                                        </ul>
-                                                    </div>
-                                                </div>
+                                                {blogs && !blogsLoading && (
+                                                    blogs.slice(0, 4).map((blog, index) => {
+                                                        return (
+                                                            <div
+                                                                className="mini-card-style wow fadeInUp"
+                                                                data-wow-delay="0.4s"
+                                                                key={index}
+                                                            >
+                                                                <div className="card-image-wrapper">
+                                                                    <Link to={ROUTES.ARTICLE.replace(":articleId",String(blog.id))}>
+                                                                        <img
+                                                                            src={blog.mainImage}
+                                                                            data-src={blog.mainImage}
+                                                                            className="card-img-top"
+                                                                            alt="Breakfast"
+                                                                        />{" "}
+                                                                    </Link>
+                                                                </div>
+                                                                <div className="card-body">
+                                                                    <h5 className="card-title lead fw-extrabold mb-0">
+                                                                        <Link to={ROUTES.ARTICLE.replace(":articleId",String(blog.id))} className="blog-title">
+                                                                            {blog.title}
+                                                                        </Link>
+                                                                    </h5>
+                                                                    <ul className="list-unstyled card-meta-style-2 mb-0 extra-small">
+                                                                        <li>
+                                                                            By{" "}
+                                                                            <Link to="author-1.html" className="fw-bold">
+                                                                                Mike Aiden
+                                                                            </Link>
+                                                                        </li>
+                                                                        <li>
+                                                                            January 27, <span className="dynamic-year"> </span>.
+                                                                        </li>
+                                                                    </ul>
+                                                                </div>
+                                                            </div>
+                                                        )
+                                                    })
+                                                )}
                                             </div>
                                         </div>
                                         {/* widget */}
@@ -273,26 +181,30 @@ const home = () => {
                                                         Make sure to subscribe to our newsletter and be first to
                                                         get latest updates and news.
                                                     </p>
-                                                    <form
-                                                        id="contactForm-04"
-                                                        className="contact-form d-flex flex-column gap-20"
-                                                    >
-                                                        <div>
-                                                            <input
-                                                                type="email"
-                                                                name="email"
-                                                                className="form-control"
-                                                                placeholder="Your email address"
-                                                                required
-                                                            />
-                                                        </div>
-                                                        <div>
-                                                            <button
-                                                                type="submit"
-                                                                className="btn btn-xl btn-primary w-100"
-                                                            >
-                                                                Subscribe
-                                                            </button>
+                                                    <form onSubmit={handleSubmit(handleClick)} >
+                                                        <div className="contact-form d-flex flex-column gap-20">
+                                                            <div>
+                                                                <Controller
+                                                                    control={control}
+                                                                    name="email"
+                                                                    rules={{ required: "Email is required" }}
+                                                                    render={({ field }) => (
+                                                                        <input
+                                                                            {...field}
+                                                                            type="email"
+                                                                            className="form-control"
+                                                                        />
+                                                                    )}
+
+
+                                                                />
+                                                            </div>
+                                                            {errors && errors.email && <div style={{ marginTop: "-15px" }}>Enter a valid email</div>}
+                                                            <div className="text-center">
+                                                                <button type="submit" className="btn btn-xl btn-primary">
+                                                                    Subscribe
+                                                                </button>
+                                                            </div>
                                                         </div>
                                                     </form>
                                                 </div>
@@ -307,7 +219,7 @@ const home = () => {
                                                         improve your online presence.
                                                     </p>
                                                     <div className="social-icons d-flex flex-wrap align-items-center gap-20">
-                                                        <a href="https://www.facebook.com/">
+                                                        <Link to="https://www.facebook.com/">
                                                             <span className="">
                                                                 <svg
                                                                     width={10}
@@ -319,8 +231,8 @@ const home = () => {
                                                                     <path d="M9.13046 2.63679V0.036944C9.13046 0.036944 6.47179 0.0117188 6.29118 0.0117188C5.08995 0.0117188 3.36232 1.37817 3.36232 2.92941C3.36232 4.67665 3.36232 5.71267 3.36232 5.71267H0.873047V8.66395H3.32872V15.9876H6.2352V8.63036H8.80428L9.13046 5.74627H6.2688C6.2688 5.74627 6.2688 3.97383 6.2688 3.62803C6.2688 3.11981 6.65242 2.62141 7.22643 2.62141C7.60864 2.62141 9.13046 2.63679 9.13046 2.63679Z" />
                                                                 </svg>
                                                             </span>
-                                                        </a>
-                                                        <a href="https://www.instagram.com/">
+                                                        </Link>
+                                                        <Link to="https://www.instagram.com/">
                                                             <span className="">
                                                                 <svg
                                                                     width={16}
@@ -334,8 +246,8 @@ const home = () => {
                                                                     <path d="M12.982 3.68044C12.982 4.06125 12.6726 4.37069 12.2918 4.37069C11.911 4.37069 11.6016 4.06125 11.6016 3.68044C11.6016 3.29963 11.911 2.99023 12.2918 2.99023C12.6726 2.99023 12.982 3.29823 12.982 3.68044Z" />
                                                                 </svg>
                                                             </span>
-                                                        </a>
-                                                        <a href="https://www.youtube.com/">
+                                                        </Link>
+                                                        <Link to="https://www.youtube.com/">
                                                             <span className="">
                                                                 <svg
                                                                     width={18}
@@ -347,8 +259,8 @@ const home = () => {
                                                                     <path d="M14.4105 0.0820312H3.591C1.89275 0.0820312 0.503906 1.47084 0.503906 3.16909V8.83366C0.503906 10.5319 1.89275 11.9207 3.591 11.9207H14.4105C16.1087 11.9207 17.4975 10.5319 17.4975 8.83366V3.16909C17.4975 1.47084 16.1087 0.0820312 14.4105 0.0820312ZM9.47816 7.67723L6.84188 9.30826V6.04617V2.78408L9.47816 4.41514L12.1144 6.04617L9.47816 7.67723Z" />
                                                                 </svg>
                                                             </span>
-                                                        </a>
-                                                        <a href="https://twitter.com/">
+                                                        </Link>
+                                                        <Link to="https://twitter.com/">
                                                             <span className="">
                                                                 <svg
                                                                     width={16}
@@ -360,8 +272,8 @@ const home = () => {
                                                                     <path d="M15.8092 15.98H11.1569L6.89801 9.78339L1.56807 15.98H0.19043L6.28619 8.89157L0.19043 0.0195312H4.84276L8.87486 5.88989L13.9234 0.0195312H15.301L9.48808 6.77751L15.8092 15.98ZM11.8079 14.9929H13.9234L4.18054 1.05696H2.06508L11.8079 14.9929Z" />
                                                                 </svg>
                                                             </span>
-                                                        </a>
-                                                        <a href="https://www.pinterest.com/">
+                                                        </Link>
+                                                        <Link to="https://www.pinterest.com/">
                                                             <span className="">
                                                                 <svg
                                                                     width={14}
@@ -373,8 +285,8 @@ const home = () => {
                                                                     <path d="M4.21932 8.5049C4.21932 8.5049 3.5417 6.42445 4.33972 5.28762C5.13774 4.15079 5.81536 4.0052 6.68619 4.22361C7.55701 4.44201 7.77542 5.57882 7.58081 6.54625C7.38761 7.51367 6.8794 9.23153 6.8556 9.49753C6.8318 9.76354 6.7828 10.5378 7.53322 10.8528C8.28364 11.1678 9.49327 10.78 10.1219 9.49753C10.7505 8.2151 10.9927 6.49724 10.8961 5.84483C10.7995 5.19101 10.7029 3.57118 8.76664 2.84456C6.83039 2.11794 5.29595 2.83617 4.92074 3.06718C4.36073 3.41159 3.30089 4.1956 2.86688 5.23583C2.59668 5.88405 2.49729 6.63306 2.56449 7.18467C2.64009 7.80629 2.9607 8.45591 3.2267 8.73452C3.49271 9.01313 3.3961 9.30292 3.3597 9.52132C3.3233 9.73973 3.2421 10.3445 3.0335 10.57C2.82349 10.7954 2.37967 10.8247 2.20187 10.7365C2.02406 10.6483 1.18826 10.2116 0.695443 9.35893C0.18163 8.46711 -0.0367782 7.08387 0.325831 5.29462C0.688441 3.50398 2.18787 1.89954 3.78251 1.10292C5.36875 0.310501 7.28401 -0.0871181 9.07466 0.429495C10.8653 0.946109 12.4445 1.92612 13.3154 3.81337C14.1862 5.70062 13.8236 8.14369 13.412 9.28192C13.0004 10.4188 12.2583 11.718 10.8555 12.5076C9.45266 13.2986 8.22623 13.2818 7.82302 13.1852C7.41981 13.0886 6.48459 12.7988 6.06458 12.3298C6.06458 12.3298 5.46816 14.6525 5.22596 15.2811C4.98375 15.9097 4.56934 16.9387 4.20533 17.3251C3.84272 17.7115 3.67332 17.846 3.33451 17.797C2.9957 17.748 2.8025 17.4455 2.7423 16.5383C2.68209 15.6311 3.12869 13.0228 3.3065 12.264C3.4857 11.5052 4.13112 8.86051 4.21932 8.5049Z" />
                                                                 </svg>
                                                             </span>
-                                                        </a>
-                                                        <a href="https://www.linkedin.com/">
+                                                        </Link>
+                                                        <Link to="https://www.linkedin.com/">
                                                             <span className="">
                                                                 <svg
                                                                     width={17}
@@ -388,7 +300,7 @@ const home = () => {
                                                                     <path d="M4.56523 4.4804C5.27928 3.76636 5.27928 2.60864 4.56523 1.8946C3.85119 1.18055 2.69347 1.18055 1.97943 1.8946C1.26538 2.60864 1.26538 3.76636 1.97943 4.4804C2.69347 5.19445 3.85119 5.19445 4.56523 4.4804Z" />
                                                                 </svg>
                                                             </span>
-                                                        </a>
+                                                        </Link>
                                                     </div>
                                                     {/* social-icons */}
                                                 </div>
@@ -397,13 +309,13 @@ const home = () => {
                                                     className="add d-lg-none d-xl-block  wow fadeInUp"
                                                     data-wow-delay="0.3s"
                                                 >
-                                                    <a href="#">
+                                                    <Link to="#">
                                                         <img
                                                             src="assets/images/add.png"
                                                             className="img-fluid"
                                                             alt="add-image"
                                                         />
-                                                    </a>
+                                                    </Link>
                                                 </div>
                                             </div>
                                         </div>
@@ -414,455 +326,63 @@ const home = () => {
                             {/* col-4 */}
                             <div className="col-xl-8 order-xl-0">
                                 <div className="d-flex flex-column">
-                                    <div
-                                        className="card card-style-1 mb-lg-30 md-mb-20 mb-10  wow fadeInUp"
-                                        data-wow-delay="0.3s"
-                                    >
-                                        <div className="card-image-wrapper">
-                                            <a href="article-1.html">
-                                                {" "}
-                                                <img
-                                                    src="assets/images/placeholder.svg"
-                                                    data-src="assets/images/blog/explore-image-13.jpg"
-                                                    className="card-img-top"
-                                                    alt="beach"
-                                                />{" "}
-                                            </a>
-                                        </div>
-                                        <div className="card-body">
-                                            <div className="card-header text-uppercase">
-                                                <a href="category-1.html" className="fs-6 card-header-title">
-                                                    beach
-                                                </a>
-                                            </div>
-                                            <h5 className="fs-1 card-title ">
-                                                <a href="article-1.html" className="blog-title">
-                                                    Sun, Sand, and Serenity: Beach Bliss
-                                                </a>
-                                            </h5>
-                                            <ul className="list-unstyled card-meta lead ">
-                                                <li>
-                                                    By{" "}
-                                                    <a href="author-1.html" className="blog-author fw-bold">
-                                                        Mike Aiden
-                                                    </a>
-                                                </li>
-                                                <li>
-                                                    January 20, <span className="dynamic-year"> </span>.
-                                                </li>
-                                            </ul>
-                                            <p className="card-text">
-                                                Embark on a journey to coastal tranquility with "Sun, Sand,
-                                                and Serenity: Beach Bliss." Discover the allure of sandy
-                                                shores, azure waters, and the peaceful rhythm of beach life...
-                                            </p>
-                                        </div>
-                                    </div>
                                     {/* card-style-1 */}
-                                    <div
-                                        className="card card-style-1 mb-lg-30 md-mb-20 mb-10  wow fadeInUp"
-                                        data-wow-delay="0.3s"
-                                    >
-                                        <div className="card-image-wrapper">
-                                            <a href="article-1.html">
-                                                {" "}
-                                                <img
-                                                    src="assets/images/card/hiking.jpg"
-                                                    data-src="assets/images/blog/explore-image-1.jpg"
-                                                    className="card-img-top"
-                                                    alt="hiking"
-                                                />
-                                            </a>
-                                        </div>
-                                        <div className="card-body">
-                                            <div className="card-header text-uppercase">
-                                                <a href="category-1.html" className="fs-6 card-header-title">
-                                                    hiking
-                                                </a>
+                                    {blogs && !blogsLoading && blogs.slice(4).map((blog, index) => {
+                                        return (
+                                            <div
+                                                className="card card-style-1 mb-lg-30 md-mb-20 mb-10  wow fadeInUp"
+                                                data-wow-delay="0.3s"
+                                                key={index}
+                                            >
+                                                <div className="card-image-wrapper">
+                                                    <Link to={ROUTES.ARTICLE.replace(":articleId",String(blog.id))}>
+                                                        {" "}
+                                                        <img
+                                                            src={blog.mainImage}
+                                                            data-src={blog.mainImage}
+                                                            className="card-img-top"
+                                                            alt="beach"
+                                                        />{" "}
+                                                    </Link>
+                                                </div>
+                                                <div className="card-body">
+                                                    <div className="card-header text-uppercase">
+                                                        <Link to={ROUTES.CATEGORY.replace(":categoryName", String(blog.category))} className="fs-6 card-header-title">
+                                                            {blog.category} 
+                                                        </Link>
+                                                    </div>
+                                                    <h5 className="fs-1 card-title ">
+                                                        <Link to="article-1.html" className="blog-title">
+                                                            {blog.title}
+                                                        </Link>
+                                                    </h5>
+                                                    <ul className="list-unstyled card-meta lead ">
+                                                        <li>
+                                                            By{" "}
+                                                            <Link to={ROUTES.ARTICLE.replace(":articleId",String(blog.id))} className="blog-author fw-bold">
+                                                                Mike Aiden
+                                                            </Link>
+                                                        </li>
+                                                        <li>
+                                                            January 20, <span className="dynamic-year"> </span>.
+                                                        </li>
+                                                    </ul>
+                                                    <p className="card-text">
+                                                        {blog.introduction.substring(0,25)}...
+                                                    </p>
+                                                </div>
                                             </div>
-                                            <h5 className="fs-1 card-title ">
-                                                <a href="article-1.html" className="blog-title">
-                                                    Hike Highs: Elevate Your Spirit with Nature
-                                                </a>
-                                            </h5>
-                                            <ul className="list-unstyled card-meta lead ">
-                                                <li>
-                                                    By{" "}
-                                                    <a href="author-1.html" className="blog-author fw-bold">
-                                                        Mike Aiden
-                                                    </a>
-                                                </li>
-                                                <li>
-                                                    January 19, <span className="dynamic-year"> </span>.
-                                                </li>
-                                            </ul>
-                                            <p className="card-text">
-                                                Elevate Your Spirit with Nature invites you on a
-                                                transformative journey through scenic landscapes. Immerse
-                                                yourself in the beauty of the great outdoors and rejuvenate
-                                                your soul....
-                                            </p>
-                                        </div>
-                                    </div>
-                                    {/* card-style-1 */}
-                                    <div
-                                        className="card card-style-1 mb-lg-30 md-mb-20 mb-10  wow fadeInUp"
-                                        data-wow-delay="0.3s"
-                                    >
-                                        <div className="card-image-wrapper">
-                                            <a href="article-1.html">
-                                                <img
-                                                    src="assets/images/card/hiking.jpg"
-                                                    data-src="assets/images/blog/explore-image-8.jpg"
-                                                    className="card-img-top"
-                                                    alt="camping"
-                                                />{" "}
-                                            </a>
-                                        </div>
-                                        <div className="card-body">
-                                            <div className="card-header text-uppercase">
-                                                <a href="category-1.html" className="fs-6 card-header-title">
-                                                    camping
-                                                </a>
-                                            </div>
-                                            <h5 className="fs-1 card-title ">
-                                                <a href="article-1.html" className="blog-title">
-                                                    Tent Talks: Outdoor Adventures Unleashed
-                                                </a>
-                                            </h5>
-                                            <ul className="list-unstyled card-meta lead ">
-                                                <li>
-                                                    By{" "}
-                                                    <a href="author-1.html" className="blog-author fw-bold">
-                                                        Mike Aiden
-                                                    </a>
-                                                </li>
-                                                <li>
-                                                    January 18, <span className="dynamic-year"> </span>.
-                                                </li>
-                                            </ul>
-                                            <p className="card-text">
-                                                Outdoor Adventures Unleashed" invites enthusiasts to a
-                                                captivating forum where nature lovers share tales of
-                                                exploration. Join the dialogue, ignite your wanderlust...
-                                            </p>
-                                        </div>
-                                    </div>
-                                    {/* card-style-1 */}
-                                    <div
-                                        className="card card-style-1 mb-lg-30 md-mb-20 mb-10  wow fadeInUp"
-                                        data-wow-delay="0.3s"
-                                    >
-                                        <div className="card-image-wrapper">
-                                            <a href="article-1.html">
-                                                {" "}
-                                                <img
-                                                    src="assets/images/card/hiking.jpg"
-                                                    data-src="assets/images/blog/explore-image-15.jpg"
-                                                    className="card-img-top"
-                                                    alt="memoirs"
-                                                />{" "}
-                                            </a>
-                                        </div>
-                                        <div className="card-body">
-                                            <div className="card-header text-uppercase">
-                                                <a href="category-1.html" className="fs-6 card-header-title">
-                                                    city
-                                                </a>
-                                            </div>
-                                            <h5 className="fs-1 card-title ">
-                                                <a href="#" className="blog-title">
-                                                    Metro Memoirs: Capturing City Stories Daily
-                                                </a>
-                                            </h5>
-                                            <ul className="list-unstyled card-meta lead ">
-                                                <li>
-                                                    By{" "}
-                                                    <a href="author-1.html" className="blog-author fw-bold">
-                                                        Mike Aiden
-                                                    </a>
-                                                </li>
-                                                <li>
-                                                    January 15, <span className="dynamic-year"> </span>.
-                                                </li>
-                                            </ul>
-                                            <p className="card-text">
-                                                Capturing City Stories Daily" is a captivating exploration of
-                                                urban life, weaving daily narratives that illuminate the
-                                                vibrant tapestry of city existence. Dive into diverse...
-                                            </p>
-                                        </div>
-                                    </div>
-                                    {/* card-style-1 */}
-                                    <div
-                                        className="card card-style-1 mb-lg-30 md-mb-20 mb-10  wow fadeInUp"
-                                        data-wow-delay="0.3s"
-                                    >
-                                        <div className="card-image-wrapper">
-                                            <a href="article-1.html">
-                                                <img
-                                                    src="assets/images/card/hiking.jpg"
-                                                    data-src="assets/images/blog/explore-image-16.jpg"
-                                                    className="card-img-top"
-                                                    alt="adventures"
-                                                />
-                                            </a>
-                                        </div>
-                                        <div className="card-body">
-                                            <div className="card-header text-uppercase">
-                                                <a href="category-1.html" className="fs-6 card-header-title">
-                                                    hiking
-                                                </a>
-                                            </div>
-                                            <h5 className="fs-1 card-title ">
-                                                <a href="#" className="blog-title">
-                                                    Trail Tales: Adventures in Every Step
-                                                </a>
-                                            </h5>
-                                            <ul className="list-unstyled card-meta lead ">
-                                                <li>
-                                                    By{" "}
-                                                    <a href="author-1.html" className="blog-author fw-bold">
-                                                        Mike Aiden
-                                                    </a>
-                                                </li>
-                                                <li>
-                                                    January 07, <span className="dynamic-year"> </span>.
-                                                </li>
-                                            </ul>
-                                            <p className="card-text">
-                                                Adventures in Every Step" is an exhilarating journey through
-                                                the wilderness, weaving captivating stories of exploration and
-                                                self-discovery. With each step, readers ...
-                                            </p>
-                                        </div>
-                                    </div>
-                                    {/* card-style-1 */}
-                                    <div
-                                        className="card card-style-1 mb-lg-30 md-mb-20 mb-10  wow fadeInUp"
-                                        data-wow-delay="0.3s"
-                                    >
-                                        <div className="card-image-wrapper">
-                                            <a href="article-1.html">
-                                                {" "}
-                                                <img
-                                                    src="assets/images/placeholder.svg"
-                                                    data-src="assets/images/blog/explore-image-17.jpg"
-                                                    className="card-img-top"
-                                                    alt="card-img-top"
-                                                />
-                                            </a>
-                                        </div>
-                                        <div className="card-body">
-                                            <div className="card-header text-uppercase">
-                                                <a href="category-1.html" className="fs-6 card-header-title">
-                                                    history
-                                                </a>
-                                            </div>
-                                            <h5 className="fs-1 card-title ">
-                                                <a href="article-1.html" className="blog-title">
-                                                    Historic Gems: Discovering Ancient City Secrets
-                                                </a>
-                                            </h5>
-                                            <ul className="list-unstyled card-meta lead ">
-                                                <li>
-                                                    By{" "}
-                                                    <a href="author-1.html" className="blog-author fw-bold">
-                                                        Mike Aiden
-                                                    </a>
-                                                </li>
-                                                <li>
-                                                    January 05, <span className="dynamic-year"> </span>.
-                                                </li>
-                                            </ul>
-                                            <p className="card-text">
-                                                Unearth the mysteries of ancient cities with "Historic Gems,"
-                                                where each cobblestone and ruin tells tales of bygone eras.
-                                                Embark on a journey through time, unlocking...
-                                            </p>
-                                        </div>
-                                    </div>
-                                    {/* card-style-1 */}
-                                    <div
-                                        className="card card-style-1 mb-lg-30 md-mb-20 mb-10  wow fadeInUp"
-                                        data-wow-delay="0.3s"
-                                    >
-                                        <div className="card-image-wrapper">
-                                            <a href="article-1.html">
-                                                <img
-                                                    src="assets/images/placeholder.svg"
-                                                    data-src="assets/images/blog/explore-image-18.jpg"
-                                                    className="card-img-top"
-                                                    alt="lake"
-                                                />
-                                            </a>
-                                        </div>
-                                        <div className="card-body">
-                                            <div className="card-header text-uppercase">
-                                                <a href="#" className="fs-6 card-header-title">
-                                                    lake
-                                                </a>
-                                            </div>
-                                            <h5 className="fs-1 card-title ">
-                                                <a href="article-1.html" className="blog-title">
-                                                    Serene Waters: Exploring Lakeside Marvels
-                                                </a>
-                                            </h5>
-                                            <ul className="list-unstyled card-meta lead ">
-                                                <li>
-                                                    By{" "}
-                                                    <a href="author-1.html" className="blog-author fw-bold">
-                                                        Mike Aiden
-                                                    </a>
-                                                </li>
-                                                <li>
-                                                    January 04, <span className="dynamic-year"> </span>.
-                                                </li>
-                                            </ul>
-                                            <p className="card-text">
-                                                Exploring Lakeside Marvels invites you on a tranquil journey
-                                                through nature's beauty. Discover the captivating allure of
-                                                lakeside landscapes, where serenity and marvels...
-                                            </p>
-                                        </div>
-                                    </div>
-                                    {/* card-style-1 */}
-                                    <div
-                                        className="card card-style-1 mb-lg-30 md-mb-20 mb-10  wow fadeInUp"
-                                        data-wow-delay="0.3s"
-                                    >
-                                        <div className="card-image-wrapper">
-                                            <a href="article-1.html">
-                                                <img
-                                                    src="assets/images/placeholder.svg"
-                                                    data-src="assets/images/blog/explore-image-19.jpg"
-                                                    className="card-img-top"
-                                                    alt="forest"
-                                                />
-                                            </a>
-                                        </div>
-                                        <div className="card-body">
-                                            <div className="card-header text-uppercase">
-                                                <a href="#" className="fs-6 card-header-title">
-                                                    forest
-                                                </a>
-                                            </div>
-                                            <h5 className="fs-1 card-title ">
-                                                <a href="article-1.html" className="blog-title">
-                                                    Forest Dreams: Escaping into Nature's Embrace
-                                                </a>
-                                            </h5>
-                                            <ul className="list-unstyled card-meta lead ">
-                                                <li>
-                                                    By{" "}
-                                                    <a href="author-1.html" className="blog-author fw-bold">
-                                                        Mike Aiden
-                                                    </a>
-                                                </li>
-                                                <li>
-                                                    January 02, <span className="dynamic-year"> </span>.
-                                                </li>
-                                            </ul>
-                                            <p className="card-text">
-                                                Escaping into Nature's Embrace invites readers to immerse
-                                                themselves in the enchanting world of lush landscapes and
-                                                soothing whispers of the woods, fostering a tranquil...
-                                            </p>
-                                        </div>
-                                    </div>
-                                    {/* card-style-1 */}
-                                    <div
-                                        className="card card-style-1 mb-lg-30 md-mb-20 mb-10  wow fadeInUp"
-                                        data-wow-delay="0.3s"
-                                    >
-                                        <div className="card-image-wrapper">
-                                            <a href="article-1.html">
-                                                <img
-                                                    src="assets/images/placeholder.svg"
-                                                    data-src="assets/images/blog/explore-image-20.jpg"
-                                                    className="card-img-top"
-                                                    alt="sanctuary"
-                                                />
-                                            </a>
-                                        </div>
-                                        <div className="card-body">
-                                            <div className="card-header text-uppercase">
-                                                <a href="category-1.html" className="fs-6 card-header-title">
-                                                    forest
-                                                </a>
-                                            </div>
-                                            <h5 className="fs-1 card-title ">
-                                                <a href="#" className="blog-title">
-                                                    The Mystic Woods: Nature's Healing Sanctuary
-                                                </a>
-                                            </h5>
-                                            <ul className="list-unstyled card-meta lead ">
-                                                <li>
-                                                    By{" "}
-                                                    <a href="author-1.html" className="blog-author fw-bold">
-                                                        Mike Aiden
-                                                    </a>
-                                                </li>
-                                                <li>June 12, 2023</li>
-                                            </ul>
-                                            <p className="card-text">
-                                                Nature's Healing Sanctuary invites weary souls to immerse in
-                                                the enchanting embrace of ancient trees, where whispers of the
-                                                wind and rustling leaves orchestrate a symphony...
-                                            </p>
-                                        </div>
-                                    </div>
-                                    {/* card-style-1 */}
-                                    <div
-                                        className="card card-style-1 mb-lg-30 md-mb-20 mb-10  wow fadeInUp"
-                                        data-wow-delay="0.3s"
-                                    >
-                                        <div className="card-image-wrapper">
-                                            <a href="article-1.html">
-                                                <img
-                                                    src="assets/images/placeholder.svg"
-                                                    data-src="assets/images/blog/explore-image-21.jpg"
-                                                    className="card-img-top"
-                                                    alt="siracles"
-                                                />
-                                            </a>
-                                        </div>
-                                        <div className="card-body">
-                                            <div className="card-header text-uppercase">
-                                                <a href="category-1.html" className="fs-6 card-header-title">
-                                                    lake
-                                                </a>
-                                            </div>
-                                            <h5 className="fs-1 card-title ">
-                                                <a href="article-1.html" className="blog-title">
-                                                    Lakeside Wonders: Nature's Peaceful Miracles
-                                                </a>
-                                            </h5>
-                                            <ul className="list-unstyled card-meta lead ">
-                                                <li>
-                                                    By{" "}
-                                                    <a href="author-1.html" className="blog-author fw-bold">
-                                                        Mike Aiden
-                                                    </a>
-                                                </li>
-                                                <li>June 11, 2023</li>
-                                            </ul>
-                                            <p className="card-text">
-                                                Nature's Peaceful Miracles captivate with serene reflections,
-                                                gentle ripples, and harmonious symphony. A tranquil haven
-                                                where beauty meets tranquility, embracing...
-                                            </p>
-                                        </div>
-                                    </div>
-                                    {/* card-style-1 */}
+                                        )
+                                    })}
+                                 
                                 </div>
                                 <div
                                     className="load-more-btn d-flex justify-content-lg-end wow fadeInUp"
                                     data-wow-delay="0.4s"
                                 >
-                                    <a href="blog-1.html" className="btn btn-secondary">
+                                    <Link to="blog-1.html" className="btn btn-secondary">
                                         Load More
-                                    </a>
+                                    </Link>
                                 </div>
                             </div>
                             {/* col-8 */}
@@ -881,17 +401,25 @@ const home = () => {
                                     Make sure to subscribe to our newsletter and be first to get latest
                                     updates and news.
                                 </p>
-                                <form id="contactForm-05">
+                                <form onSubmit={handleSubmit(handleClick)} >
                                     <div className="contact-form d-flex flex-column gap-20">
                                         <div>
-                                            <input
-                                                type="email"
-                                                className="form-control"
+                                            <Controller
+                                                control={control}
                                                 name="email"
-                                                placeholder="Your email address"
-                                                required
+                                                rules={{ required: "Email is required" }}
+                                                render={({ field }) => (
+                                                    <input
+                                                        {...field}
+                                                        type="email"
+                                                        className="form-control"
+                                                    />
+                                                )}
+
+
                                             />
                                         </div>
+                                        {errors && errors.email && <div>Enter a valid email</div>}
                                         <div className="text-center">
                                             <button type="submit" className="btn btn-xl btn-primary">
                                                 Subscribe
@@ -911,7 +439,7 @@ const home = () => {
                                     online presence.
                                 </p>
                                 <div className="social-icons d-flex flex-wrap align-items-center gap-20">
-                                    <a href="https://www.facebook.com/">
+                                    <Link to="https://www.facebook.com/">
                                         <span className="text-white">
                                             <svg
                                                 width={10}
@@ -923,8 +451,8 @@ const home = () => {
                                                 <path d="M9.13046 2.63679V0.036944C9.13046 0.036944 6.47179 0.0117188 6.29118 0.0117188C5.08995 0.0117188 3.36232 1.37817 3.36232 2.92941C3.36232 4.67665 3.36232 5.71267 3.36232 5.71267H0.873047V8.66395H3.32872V15.9876H6.2352V8.63036H8.80428L9.13046 5.74627H6.2688C6.2688 5.74627 6.2688 3.97383 6.2688 3.62803C6.2688 3.11981 6.65242 2.62141 7.22643 2.62141C7.60864 2.62141 9.13046 2.63679 9.13046 2.63679Z" />
                                             </svg>
                                         </span>
-                                    </a>
-                                    <a href="https://www.instagram.com/">
+                                    </Link>
+                                    <Link to="https://www.instagram.com/">
                                         <span className="text-white">
                                             <svg
                                                 width={16}
@@ -938,8 +466,8 @@ const home = () => {
                                                 <path d="M12.982 3.68044C12.982 4.06125 12.6726 4.37069 12.2918 4.37069C11.911 4.37069 11.6016 4.06125 11.6016 3.68044C11.6016 3.29963 11.911 2.99023 12.2918 2.99023C12.6726 2.99023 12.982 3.29823 12.982 3.68044Z" />
                                             </svg>
                                         </span>
-                                    </a>
-                                    <a href="#">
+                                    </Link>
+                                    <Link to="#">
                                         <span className="text-white">
                                             <svg
                                                 width={18}
@@ -951,8 +479,8 @@ const home = () => {
                                                 <path d="M14.4105 0.0820312H3.591C1.89275 0.0820312 0.503906 1.47084 0.503906 3.16909V8.83366C0.503906 10.5319 1.89275 11.9207 3.591 11.9207H14.4105C16.1087 11.9207 17.4975 10.5319 17.4975 8.83366V3.16909C17.4975 1.47084 16.1087 0.0820312 14.4105 0.0820312ZM9.47816 7.67723L6.84188 9.30826V6.04617V2.78408L9.47816 4.41514L12.1144 6.04617L9.47816 7.67723Z" />
                                             </svg>
                                         </span>
-                                    </a>
-                                    <a href="https://twitter.com/">
+                                    </Link>
+                                    <Link to="https://twitter.com/">
                                         <span className="text-white">
                                             <svg
                                                 width={16}
@@ -964,8 +492,8 @@ const home = () => {
                                                 <path d="M15.8092 15.98H11.1569L6.89801 9.78339L1.56807 15.98H0.19043L6.28619 8.89157L0.19043 0.0195312H4.84276L8.87486 5.88989L13.9234 0.0195312H15.301L9.48808 6.77751L15.8092 15.98ZM11.8079 14.9929H13.9234L4.18054 1.05696H2.06508L11.8079 14.9929Z" />
                                             </svg>
                                         </span>
-                                    </a>
-                                    <a href="https://www.pinterest.com/">
+                                    </Link>
+                                    <Link to="https://www.pinterest.com/">
                                         <span className="text-white">
                                             <svg
                                                 width={14}
@@ -977,8 +505,8 @@ const home = () => {
                                                 <path d="M4.21932 8.5049C4.21932 8.5049 3.5417 6.42445 4.33972 5.28762C5.13774 4.15079 5.81536 4.0052 6.68619 4.22361C7.55701 4.44201 7.77542 5.57882 7.58081 6.54625C7.38761 7.51367 6.8794 9.23153 6.8556 9.49753C6.8318 9.76354 6.7828 10.5378 7.53322 10.8528C8.28364 11.1678 9.49327 10.78 10.1219 9.49753C10.7505 8.2151 10.9927 6.49724 10.8961 5.84483C10.7995 5.19101 10.7029 3.57118 8.76664 2.84456C6.83039 2.11794 5.29595 2.83617 4.92074 3.06718C4.36073 3.41159 3.30089 4.1956 2.86688 5.23583C2.59668 5.88405 2.49729 6.63306 2.56449 7.18467C2.64009 7.80629 2.9607 8.45591 3.2267 8.73452C3.49271 9.01313 3.3961 9.30292 3.3597 9.52132C3.3233 9.73973 3.2421 10.3445 3.0335 10.57C2.82349 10.7954 2.37967 10.8247 2.20187 10.7365C2.02406 10.6483 1.18826 10.2116 0.695443 9.35893C0.18163 8.46711 -0.0367782 7.08387 0.325831 5.29462C0.688441 3.50398 2.18787 1.89954 3.78251 1.10292C5.36875 0.310501 7.28401 -0.0871181 9.07466 0.429495C10.8653 0.946109 12.4445 1.92612 13.3154 3.81337C14.1862 5.70062 13.8236 8.14369 13.412 9.28192C13.0004 10.4188 12.2583 11.718 10.8555 12.5076C9.45266 13.2986 8.22623 13.2818 7.82302 13.1852C7.41981 13.0886 6.48459 12.7988 6.06458 12.3298C6.06458 12.3298 5.46816 14.6525 5.22596 15.2811C4.98375 15.9097 4.56934 16.9387 4.20533 17.3251C3.84272 17.7115 3.67332 17.846 3.33451 17.797C2.9957 17.748 2.8025 17.4455 2.7423 16.5383C2.68209 15.6311 3.12869 13.0228 3.3065 12.264C3.4857 11.5052 4.13112 8.86051 4.21932 8.5049Z" />
                                             </svg>
                                         </span>
-                                    </a>
-                                    <a href="#">
+                                    </Link>
+                                    <Link to="#">
                                         <span className="text-white">
                                             <svg
                                                 width={17}
@@ -992,7 +520,7 @@ const home = () => {
                                                 <path d="M4.56523 4.4804C5.27928 3.76636 5.27928 2.60864 4.56523 1.8946C3.85119 1.18055 2.69347 1.18055 1.97943 1.8946C1.26538 2.60864 1.26538 3.76636 1.97943 4.4804C2.69347 5.19445 3.85119 5.19445 4.56523 4.4804Z" />
                                             </svg>
                                         </span>
-                                    </a>
+                                    </Link>
                                 </div>
                                 {/* social-icons */}
                             </div>
@@ -1008,4 +536,4 @@ const home = () => {
     )
 }
 
-export default home
+export default Home

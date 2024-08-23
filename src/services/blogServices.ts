@@ -11,8 +11,7 @@ import ApiResponse from "../resources/entity/IApiResponse";
 export const CreateBlog = async (
   BlogData: IBlogSchema,
   token:string
-): Promise<ApiResponse> => {
-    // const useUser = useSelector((state:RootState) => state.root.user?.token)
+): Promise<ApiResponse> => {   
   const { data } = await axios.post(endpoints.Blog.CREATE_BLOG, BlogData, {
     headers: {
       "Content-Type": "application/json",
@@ -42,8 +41,15 @@ export const UploadToImagekit = async (
 export const GetBlog = async (
     BlogId: number
   ): Promise<ApiResponse> => {
-      // const useUser = useSelector((state:RootState) => state.root.user?.token)
     const { data } = await axios.get(`${endpoints.Blog.GET_BLOG}?BlogId=${BlogId}`);
+    console.log(data);
+    return data;
+  };
+
+
+  export const GetAllBlogs = async (
+  ): Promise<ApiResponse> => {
+    const { data } = await axios.get(`${endpoints.Blog.GET_ALL_BLOGS}`);
     console.log(data);
     return data;
   };

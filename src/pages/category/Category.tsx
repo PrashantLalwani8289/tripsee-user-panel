@@ -1,10 +1,12 @@
-import { useParams } from "react-router-dom"
+import { Link, useParams } from "react-router-dom"
 import DarkThemeButton from "../../components/dark-theme-button"
 import Footer from "../../components/footer"
 import Header from "../../components/header"
 import OffCanvasMenu from "../../components/OffCanvasMenu"
 import OffCanvasMobileMenu from "../../components/OffCanvasMobileMenu"
 import OffCanvasSearch from "../../components/OffCanvasSearch"
+import CTASection from "../../components/ctaSection/CTASection"
+import { ROUTES } from "../../constants/routes"
 
 
 const Category = () => {
@@ -17,7 +19,7 @@ const Category = () => {
             <OffCanvasMobileMenu />
             <OffCanvasSearch />
             <DarkThemeButton />
-            <div
+            <div 
                 className="main"
                 data-bs-spy="scroll"
                 data-bs-target="#navContentmenu"
@@ -31,7 +33,7 @@ const Category = () => {
                             <nav aria-label="breadcrumb ">
                                 <ol className="breadcrumb mb-100">
                                     <li className="breadcrumb-item breadcrumb-style-3">
-                                        <a href="index.html">Home</a>
+                                        <Link to={ROUTES.HOME}>Home</Link>
                                     </li>
                                     <li
                                         className="breadcrumb-item breadcrumb-style-3 active"
@@ -51,12 +53,8 @@ const Category = () => {
                                 </div>
                             </div>
                         </div>
-                        {/* container */}
-                        {/* <div class="category-title category-title-style-1">                                
-          </div>   */}
-                        {/* category-title */}
+
                     </div>
-                    {/* category-wrapper */}
                 </section>
                 {/*Banner Section ======================*/}
                 {/*Blog Section ======================*/}
@@ -72,34 +70,34 @@ const Category = () => {
                                         <div className="row align-items-center  justify-content-center">
                                             <div className="col-lg-6">
                                                 <div className="card-image-wrapper">
-                                                    <a href="article-1.html">
+                                                    <Link to="article-1.html">
                                                         <img
                                                             src="assets/images/placeholder.svg"
                                                             data-src="assets/images/categories/category-1.jpg"
                                                             className="card-img-top"
                                                             alt="camping"
                                                         />
-                                                    </a>
+                                                    </Link>
                                                 </div>
                                             </div>
                                             {/* col-6 */}
                                             <div className="col-lg-6">
                                                 <div className="card-body">
                                                     <div className="card-header text-uppercase">
-                                                        <a href="category-2.html">camping</a>
+                                                        <Link to="category-2.html">camping</Link>
                                                     </div>
                                                     <h2 className="fs-2 card-title">
-                                                        <a href="blog-2.html" className="blog-title">
+                                                        <Link to="blog-2.html" className="blog-title">
                                                             Whispers of the Wilderness: A Camping Enthusiast's
                                                             Journal
-                                                        </a>
+                                                        </Link>
                                                     </h2>
                                                     <ul className="list-unstyled card-meta lead  small">
                                                         <li>
                                                             By{" "}
-                                                            <a className="fw-bold" href="author-1.html">
+                                                            <Link className="fw-bold" to="author-1.html">
                                                                 Mike Aiden
-                                                            </a>
+                                                            </Link>
                                                         </li>
                                                         <li>
                                                             January 25, <span className="dynamic-year"> </span>.
@@ -125,7 +123,7 @@ const Category = () => {
                                         <div className="row align-items-center  justify-content-center">
                                             <div className="col-lg-6">
                                                 <div className="card-image-wrapper">
-                                                    <a href="article-1.html">
+                                                    <Link to="article-1.html">
                                                         {" "}
                                                         <img
                                                             src="assets/images/placeholder.svg"
@@ -133,26 +131,26 @@ const Category = () => {
                                                             className="card-img-top"
                                                             alt="nature"
                                                         />
-                                                    </a>
+                                                    </Link>
                                                 </div>
                                             </div>
                                             {/* col-6 */}
                                             <div className="col-lg-6">
                                                 <div className="card-body">
                                                     <div className="card-header text-uppercase">
-                                                        <a href="category-1.html">Beach</a>
+                                                        <Link to="category-1.html">Beach</Link>
                                                     </div>
                                                     <h2 className="fs-2 card-title">
-                                                        <a href="article-1.html" className="blog-title">
+                                                        <Link to="article-1.html" className="blog-title">
                                                             Outdoor Oasis: Crafting Camping Experiences Together
-                                                        </a>
+                                                        </Link>
                                                     </h2>
                                                     <ul className="list-unstyled card-meta lead  small">
                                                         <li>
                                                             By{" "}
-                                                            <a className="fw-bold" href="author-1.html">
+                                                            <Link className="fw-bold" to="author-1.html">
                                                                 Mike Aiden
-                                                            </a>
+                                                            </Link>
                                                         </li>
                                                         <li>
                                                             January 23, <span className="dynamic-year"> </span>.
@@ -178,33 +176,33 @@ const Category = () => {
                                         <div className="row align-items-center  justify-content-center">
                                             <div className="col-lg-6">
                                                 <div className="card-image-wrapper">
-                                                    <a href="article-1.html">
+                                                    <Link to="article-1.html">
                                                         <img
                                                             src="assets/images/placeholder.svg"
                                                             data-src="assets/images/categories/category-3.jpg"
                                                             className="card-img-top"
                                                             alt="img-top"
                                                         />
-                                                    </a>
+                                                    </Link>
                                                 </div>
                                             </div>
                                             {/* col-6 */}
                                             <div className="col-lg-6">
                                                 <div className="card-body">
                                                     <div className="card-header text-uppercase">
-                                                        <a href="category-1.html">camping</a>
+                                                        <Link to="category-1.html">camping</Link>
                                                     </div>
                                                     <h2 className="fs-2 card-title">
-                                                        <a href="article-1.html" className="blog-title">
+                                                        <Link to="article-1.html" className="blog-title">
                                                             Wilderness Wonders: Expert Tips for Epic Camping
-                                                        </a>
+                                                        </Link>
                                                     </h2>
                                                     <ul className="list-unstyled card-meta lead  small">
                                                         <li>
                                                             By{" "}
-                                                            <a className="fw-bold" href="author-1.html">
+                                                            <Link className="fw-bold" to="author-1.html">
                                                                 Mike Aiden
-                                                            </a>
+                                                            </Link>
                                                         </li>
                                                         <li>
                                                             January 22, <span className="dynamic-year"> </span>.
@@ -230,33 +228,33 @@ const Category = () => {
                                         <div className="row align-items-center  justify-content-center">
                                             <div className="col-lg-6">
                                                 <div className="card-image-wrapper">
-                                                    <a href="article-1.html">
+                                                    <Link to="article-1.html">
                                                         <img
                                                             src="assets/images/placeholder.svg"
                                                             data-src="assets/images/categories/category-4.jpg"
                                                             className="card-img-top"
                                                             alt="camping"
                                                         />
-                                                    </a>
+                                                    </Link>
                                                 </div>
                                             </div>
                                             {/* col-6 */}
                                             <div className="col-lg-6">
                                                 <div className="card-body">
                                                     <div className="card-header text-uppercase">
-                                                        <a href="category-1.html">camping</a>
+                                                        <Link to="category-1.html">camping</Link>
                                                     </div>
                                                     <h2 className="fs-2 card-title">
-                                                        <a href="article-1.html" className="blog-title">
+                                                        <Link to="article-1.html" className="blog-title">
                                                             Epic Trails: manual Unforgettable outdoor Adventures
-                                                        </a>
+                                                        </Link>
                                                     </h2>
                                                     <ul className="list-unstyled card-meta lead  small">
                                                         <li>
                                                             By{" "}
-                                                            <a className="fw-bold" href="author-1.html">
+                                                            <Link className="fw-bold" to="author-1.html">
                                                                 Mike Aiden
-                                                            </a>
+                                                            </Link>
                                                         </li>
                                                         <li>
                                                             January 21, <span className="dynamic-year"> </span>.
@@ -282,34 +280,34 @@ const Category = () => {
                                         <div className="row align-items-center  justify-content-center">
                                             <div className="col-lg-6">
                                                 <div className="card-image-wrapper">
-                                                    <a href="article-1.html">
+                                                    <Link to="article-1.html">
                                                         <img
                                                             src="assets/images/placeholder.svg"
                                                             data-src="assets/images/categories/category-5.jpg"
                                                             className="card-img-top"
                                                             alt="Night"
                                                         />
-                                                    </a>
+                                                    </Link>
                                                 </div>
                                             </div>
                                             {/* col-6 */}
                                             <div className="col-lg-6">
                                                 <div className="card-body">
                                                     <div className="card-header text-uppercase">
-                                                        <a href="category-1.html">camping</a>
+                                                        <Link to="category-1.html">camping</Link>
                                                     </div>
                                                     <h2 className="fs-2 card-title">
-                                                        <a href="article-1.html" className="blog-title">
+                                                        <Link to="article-1.html" className="blog-title">
                                                             Sleeping Under Stars: A Guide to Night time Camping
                                                             Delights
-                                                        </a>
+                                                        </Link>
                                                     </h2>
                                                     <ul className="list-unstyled card-meta lead  small">
                                                         <li>
                                                             By{" "}
-                                                            <a className="fw-bold" href="author-1.html">
+                                                            <Link className="fw-bold" to="author-1.html">
                                                                 Mike Aiden
-                                                            </a>
+                                                            </Link>
                                                         </li>
                                                         <li>
                                                             January 19, <span className="dynamic-year"> </span>.
@@ -335,33 +333,33 @@ const Category = () => {
                                         <div className="row align-items-center  justify-content-center">
                                             <div className="col-lg-6">
                                                 <div className="card-image-wrapper">
-                                                    <a href="article-1.html">
+                                                    <Link to="article-1.html">
                                                         <img
                                                             src="assets/images/placeholder.svg"
                                                             data-src="assets/images/categories/category-6.jpg"
                                                             className="card-img-top"
                                                             alt="img-top"
                                                         />
-                                                    </a>
+                                                    </Link>
                                                 </div>
                                             </div>
                                             {/* col-6 */}
                                             <div className="col-lg-6">
                                                 <div className="card-body">
                                                     <div className="card-header text-uppercase">
-                                                        <a href="category-1.html">camping</a>
+                                                        <Link to="category-1.html">camping</Link>
                                                     </div>
                                                     <h2 className="fs-2 card-title">
-                                                        <a href="article-1.html" className="blog-title">
+                                                        <Link to="article-1.html" className="blog-title">
                                                             Tent Tales: Creating Lifetime Memories Under the Stars
-                                                        </a>
+                                                        </Link>
                                                     </h2>
                                                     <ul className="list-unstyled card-meta lead  small">
                                                         <li>
                                                             By{" "}
-                                                            <a className="fw-bold" href="author-1.html">
+                                                            <Link className="fw-bold" to="author-1.html">
                                                                 Mike Aiden
-                                                            </a>
+                                                            </Link>
                                                         </li>
                                                         <li>
                                                             January 18, <span className="dynamic-year"> </span>.
@@ -387,33 +385,33 @@ const Category = () => {
                                         <div className="row align-items-center  justify-content-center">
                                             <div className="col-lg-6">
                                                 <div className="card-image-wrapper">
-                                                    <a href="article-1.html">
+                                                    <Link to="article-1.html">
                                                         <img
                                                             src="assets/images/placeholder.svg"
                                                             data-src="assets/images/categories/category-7.jpg"
                                                             className="card-img-top"
                                                             alt="camping"
                                                         />
-                                                    </a>
+                                                    </Link>
                                                 </div>
                                             </div>
                                             {/* col-6 */}
                                             <div className="col-lg-6">
                                                 <div className="card-body">
                                                     <div className="card-header text-uppercase">
-                                                        <a href="category-1.html">camping</a>
+                                                        <Link to="category-1.html">camping</Link>
                                                     </div>
                                                     <h2 className="fs-2 card-title">
-                                                        <a href="article-1.html" className="blog-title">
+                                                        <Link to="article-1.html" className="blog-title">
                                                             Serenity Seekers: Finding Peace in Nature's Embrace
-                                                        </a>
+                                                        </Link>
                                                     </h2>
                                                     <ul className="list-unstyled card-meta lead  small">
                                                         <li>
                                                             By{" "}
-                                                            <a className="fw-bold" href="author-1.html">
+                                                            <Link className="fw-bold" to="author-1.html">
                                                                 Mike Aiden
-                                                            </a>
+                                                            </Link>
                                                         </li>
                                                         <li>
                                                             January 17, <span className="dynamic-year"> </span>.
@@ -439,7 +437,7 @@ const Category = () => {
                                         <div className="row align-items-center  justify-content-center">
                                             <div className="col-lg-6">
                                                 <div className="card-image-wrapper">
-                                                    <a href="blog-2.html">
+                                                    <Link to="blog-2.html">
                                                         {" "}
                                                         <img
                                                             src="assets/images/placeholder.svg"
@@ -447,26 +445,26 @@ const Category = () => {
                                                             className="card-img-top"
                                                             alt="Embrace"
                                                         />
-                                                    </a>
+                                                    </Link>
                                                 </div>
                                             </div>
                                             {/* col-6 */}
                                             <div className="col-lg-6">
                                                 <div className="card-body">
                                                     <div className="card-header text-uppercase">
-                                                        <a href="category-2.html">camping</a>
+                                                        <Link to="category-2.html">camping</Link>
                                                     </div>
                                                     <h2 className="fs-2 card-title">
-                                                        <a href="blog-2.html" className="blog-title">
+                                                        <Link to="blog-2.html" className="blog-title">
                                                             Campfire Chronicles: Stories from Nature's Cozy Embrace
-                                                        </a>
+                                                        </Link>
                                                     </h2>
                                                     <ul className="list-unstyled card-meta lead  small">
                                                         <li>
                                                             By{" "}
-                                                            <a className="fw-bold" href="author-1.html">
+                                                            <Link className="fw-bold" to="author-1.html">
                                                                 Mike Aiden
-                                                            </a>
+                                                            </Link>
                                                         </li>
                                                         <li>
                                                             January 15, <span className="dynamic-year"> </span>.
@@ -492,33 +490,33 @@ const Category = () => {
                                         <div className="row align-items-center  justify-content-center">
                                             <div className="col-lg-6">
                                                 <div className="card-image-wrapper">
-                                                    <a href="article-1.html">
+                                                    <Link to="article-1.html">
                                                         <img
                                                             src="assets/images/placeholder.svg"
                                                             data-src="assets/images/categories/category-9.jpg"
                                                             className="card-img-top"
                                                             alt="Heights"
                                                         />
-                                                    </a>
+                                                    </Link>
                                                 </div>
                                             </div>
                                             {/* col-6 */}
                                             <div className="col-lg-6">
                                                 <div className="card-body">
                                                     <div className="card-header text-uppercase">
-                                                        <a href="category-1.html">camping</a>
+                                                        <Link to="category-1.html">camping</Link>
                                                     </div>
                                                     <h2 className="fs-2 card-title">
-                                                        <a href="article-1.html" className="blog-title">
+                                                        <Link to="article-1.html" className="blog-title">
                                                             Peak Pursuits: Scaling Heights in the Camping World
-                                                        </a>
+                                                        </Link>
                                                     </h2>
                                                     <ul className="list-unstyled card-meta lead  small">
                                                         <li>
                                                             By{" "}
-                                                            <a className="fw-bold" href="author-1.html">
+                                                            <Link className="fw-bold" to="author-1.html">
                                                                 Mike Aiden
-                                                            </a>
+                                                            </Link>
                                                         </li>
                                                         <li>
                                                             January 14, <span className="dynamic-year"> </span>.
@@ -544,34 +542,34 @@ const Category = () => {
                                         <div className="row align-items-center  justify-content-center">
                                             <div className="col-lg-6">
                                                 <div className="card-image-wrapper">
-                                                    <a href="article-1.html">
+                                                    <Link to="article-1.html">
                                                         <img
                                                             src="assets/images/placeholder.svg"
                                                             data-src="assets/images/categories/category-10.jpg"
                                                             className="card-img-top"
                                                             alt="Navigating"
                                                         />
-                                                    </a>
+                                                    </Link>
                                                 </div>
                                             </div>
                                             {/* col-6 */}
                                             <div className="col-lg-6">
                                                 <div className="card-body">
                                                     <div className="card-header text-uppercase">
-                                                        <a href="category-1.html">camping</a>
+                                                        <Link to="category-1.html">camping</Link>
                                                     </div>
                                                     <h2 className="fs-2 card-title">
-                                                        <a href="article-1.html" className="blog-title">
+                                                        <Link to="article-1.html" className="blog-title">
                                                             Survival Strategies: Navigating the Challenges of
                                                             Camping
-                                                        </a>
+                                                        </Link>
                                                     </h2>
                                                     <ul className="list-unstyled card-meta lead  small">
                                                         <li>
                                                             By{" "}
-                                                            <a className="fw-bold" href="author-1.html">
+                                                            <Link className="fw-bold" to="author-1.html">
                                                                 Mike Aiden
-                                                            </a>
+                                                            </Link>
                                                         </li>
                                                         <li>
                                                             January 12, <span className="dynamic-year"> </span>.
@@ -592,9 +590,9 @@ const Category = () => {
                                     {/* card card-style-5*/}
                                 </div>
                                 <div className="load-more-btn wow fadeInUp" data-wow-delay="0.4s">
-                                    <a href="blog-1.html" className="btn btn-secondary">
+                                    <Link to="blog-1.html" className="btn btn-secondary">
                                         Load More
-                                    </a>
+                                    </Link>
                                 </div>
                                 {/* d-flex flex-column */}
                             </div>
@@ -604,32 +602,7 @@ const Category = () => {
                 </section>
                 {/*Blog Section ======================*/}
                 {/*CTA Section ======================*/}
-                <section className="section-cta wow fadeInUp" data-wow-delay="0.4s">
-                    <div className="container">
-                        <div className="cta-area pt-lg-60 pb-lg-90 pt-30 pb-30">
-                            <div className="col-lg-6">
-                                <div className="cta-content pl-lg-100">
-                                    <p className="fs-6 text-white mb-10">Keep in Touch</p>
-                                    <h3 className=" fs-3 text-white  mb-30 ">Explore the world</h3>
-                                    <form>
-                                        <div className="form-group d-flex gap-30">
-                                            <input
-                                                type="email"
-                                                className="form-control"
-                                                name="email"
-                                                placeholder="Your email address"
-                                                required
-                                            />
-                                            <button type="submit" className="btn btn-secondary">
-                                                Subscribe
-                                            </button>
-                                        </div>
-                                    </form>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </section>
+                <CTASection />
                 {/*CTA Section ======================*/}
             </div>
             <Footer />

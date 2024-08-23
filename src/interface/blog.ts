@@ -4,7 +4,7 @@ export interface Blog {
     title: string;
     introduction: string;
     category: 'Technology' | 'Health' | 'Travel' | 'Education' | 'Finance' | 'other';
-    mainImage?: string | null;
+    mainImage?: string ;
     photos: string[];
     tips?: string | null;
     adventure: string;

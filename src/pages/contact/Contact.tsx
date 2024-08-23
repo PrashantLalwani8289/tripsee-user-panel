@@ -4,6 +4,7 @@ import DarkThemeButton from '../../components/dark-theme-button'
 import OffCanvasMenu from '../../components/OffCanvasMenu'
 import OffCanvasMobileMenu from '../../components/OffCanvasMobileMenu'
 import OffCanvasSearch from '../../components/OffCanvasSearch'
+import CTASection from '../../components/ctaSection/CTASection'
 
 const Contact = () => {
     return (
@@ -290,36 +291,7 @@ const Contact = () => {
                 </div>
                 {/*Add banner ======================*/}
                 {/*CTA Section ======================*/}
-                <section
-                    className="section-cta wow fadeInUp"
-                    data-bs-theme="light"
-                    data-wow-delay="0.4s"
-                >
-                    <div className="container">
-                        <div className="cta-area pt-lg-60 pb-lg-90 pt-30 pb-30">
-                            <div className="col-xl-6">
-                                <div className="cta-content pl-lg-100">
-                                    <p className="fs-6 text-white mb-10">Keep in Touch</p>
-                                    <h3 className=" fs-3 text-white  mb-30 ">Explore the world</h3>
-                                    <form>
-                                        <div className="form-group d-flex gap-30">
-                                            <input
-                                                type="email"
-                                                className="form-control"
-                                                name="email"
-                                                placeholder="Your email address"
-                                                required
-                                            />
-                                            <button type="submit" className="btn">
-                                                Subscribe
-                                            </button>
-                                        </div>
-                                    </form>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </section>
+                <CTASection />
                 {/*CTA Section ======================*/}
             </div>
 
