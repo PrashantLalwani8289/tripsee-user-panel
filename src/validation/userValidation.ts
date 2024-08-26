@@ -56,3 +56,12 @@ export const signInSchema = () =>
     yup.object().shape({
       email: yup.string().required()
     })
+
+
+   export const contactValidation = () => yup.object().shape({
+      firstname: yup.string().required('First name is required'),
+      lastname: yup.string().required('Last name is required'),
+      email: yup.string().email('Invalid email address').required('Email is required'),
+      subject: yup.string().required('Subject is required'),
+      message: yup.string().required('Message is required'),
+    });

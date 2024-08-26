@@ -9,6 +9,7 @@ import { Link } from 'react-router-dom'
 import { useEffect, useState } from 'react'
 import { Blog } from '../../interface/blog'
 import { GetAllBlogs } from '../../services/blogServices'
+import { ROUTES } from '../../constants/routes'
 
 const Blogs = () => {
     const [blogs, setBlogs] = useState<Blog[]>([])
@@ -46,7 +47,7 @@ const Blogs = () => {
                         <div className="container">
                             <nav aria-label="breadcrumb-nav">
                                 <ol className="breadcrumb breadcrumb-style-2 my-20 ">
-                                    <li className="breadcrumb-item"><Link to="index.html">Home</Link></li>
+                                    <li className="breadcrumb-item"><Link to={ROUTES.HOME}>Home</Link></li>
                                     <li className="breadcrumb-item breadcrumb-item-style-2 active"
                                         aria-current="page">Blogs</li>
                                 </ol>
@@ -160,14 +161,14 @@ const Blogs = () => {
                                             <div className="col-md-6" key={index}>
                                                 <div className="card card-style-2 card-border mb-lg-40 mb-20  wow fadeInUp" data-wow-delay="0.4s">
                                                     <div className="card-image-wrapper">
-                                                        <Link to="article-1.html"><img src={blog.mainImage} data-src={blog.mainImage} className="card-img-top" alt="Wonders" /></Link>
+                                                        <Link to={ROUTES.ARTICLE.replace(":articleId",String(blog.id))}><img src={blog.mainImage} data-src={blog.mainImage} className="card-img-top" alt="Wonders" /></Link>
                                                     </div>
 
                                                     <div className="card-body">
                                                         <div className="card-header text-uppercase">
-                                                            <Link to="category-3.html">{blog.category}</Link>
+                                                            <Link to={ROUTES.CATEGORY.replace(":categoryName", blog.category)}>{blog.category}</Link>
                                                         </div>
-                                                        <h5 className="fs-4 card-title"><Link to="article-1.html" className="blog-title">{blog.title}</Link></h5>
+                                                        <h5 className="fs-4 card-title"><Link to={ROUTES.ARTICLE.replace(":articleId",String(blog.id))} className="blog-title">{blog.title}</Link></h5>
                                                         <ul className="list-unstyled card-meta lead  small">
                                                             <li>By <Link to="author-1.html" className="blog-author fw-bold">Mike Aiden</Link></li>
                                                             <li>January 27, <span className="dynamic-year"> </span>.</li>

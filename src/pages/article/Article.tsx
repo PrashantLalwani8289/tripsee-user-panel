@@ -7,7 +7,7 @@ import OffCanvasMobileMenu from "../../components/OffCanvasMobileMenu"
 import OffCanvasSearch from "../../components/OffCanvasSearch"
 import { useEffect, useState } from "react"
 import { Blog } from "../../interface/blog"
-import { GetBlog } from "../../services/blogServices"
+import { GetAllBlogs, GetBlog } from "../../services/blogServices"
 import { toastMessageError } from "../../components/utilities/commonToast/CommonToastMessage"
 import { ROUTES } from "../../constants/routes"
 import FsLightbox from 'fslightbox-react';
@@ -33,11 +33,13 @@ const Article = () => {
     const [blog, setBlog] = useState<Blog>()
     const [loading, setLoading] = useState(false)
     const [toggler, setToggler] = useState(false);
+    const [blogs, setBlogs] = useState<Blog[]>([])
+    const [blogsLoading, setBlogsLoading] = useState<boolean>(true)
 
     const [mainSwiper, setMainSwiper] = useState<SwiperType | undefined>(undefined);
     const [thumbSwiper, setThumbSwiper] = useState<SwiperType | undefined>(undefined);
     const BlogData = async () => {
-        setLoading(true)
+        setLoading(true)    
         const response = await GetBlog(articleId as unknown as number)
         if (response.success && response.data) {
             setBlog(response.data as Blog)
@@ -49,9 +51,23 @@ const Article = () => {
             navigate(ROUTES.BLOGS)
         }
     }
-    useEffect(() => {
-        console.log("herererererereere in use ");
 
+    const getAllBlogs = async () => {
+        setBlogsLoading(true)
+        const response = await GetAllBlogs()
+        if (response.success && response.data) {
+            setBlogs(response.data as Blog[])
+            setBlogsLoading(false)
+        }
+        else {
+            console.error(response.message)
+            setBlogsLoading(false)
+        }
+
+    }
+
+    useEffect(() => {
+        getAllBlogs()
         BlogData()
     }, [])
     return (
@@ -120,7 +136,7 @@ const Article = () => {
                                         <div className="author-details mb-lg-60 mb-40">
                                             <p className="text-end mb-0 ">Written by</p>
                                             <h6 className="text-end">
-                                                <Link to="author-1.html" className="author-name">
+                                                <Link to={ROUTES.AUTHOR.replace(":authorId", String(blog?.user_id))} className="author-name">
                                                     {/* //todo */}
                                                     Mike Aiden
                                                 </Link>
@@ -607,7 +623,7 @@ const Article = () => {
                                             {blog?.destinationGuides}
                                         </p>
                                         <div className="google-map pb-40">
-                                            <MapComponent latitude={26.9124} longitude={75.7873}/>
+                                            <MapComponent latitude={26.9124} longitude={75.7873} />
                                         </div>
                                         <h3
                                             id="travelchallenges"
@@ -640,179 +656,47 @@ const Article = () => {
                                             <h4 className="fs-1 mb-40">Featured Article</h4>
                                             <div className="d-flex flex-column gap-3 gap-xl-30">
                                                 {/* mini-card-style */}
-                                                <div
-                                                    className="mini-card-style wow fadeInUp"
-                                                    data-wow-delay="0.4s"
-                                                >
-                                                    <div className="card-image-wrapper">
-                                                        <Link to="article-1.html">
-                                                            <img
-                                                                src="assets/images/placeholder.svg"
-                                                                data-src="assets/images/feature-images/feature-image-1.jpg"
-                                                                className="card-img-top"
-                                                                alt="Breakfast"
-                                                            />{" "}
-                                                        </Link>
-                                                    </div>
-                                                    <div className="card-body">
-                                                        <h5 className="card-title lead fw-extrabold mb-0">
-                                                            <Link to="article-1.html" className="blog-title">
-                                                                Quick and Easy Flaky Pastry for Tasty Breakfast
-                                                            </Link>
-                                                        </h5>
-                                                        <ul className="list-unstyled card-meta-style-2 mb-0 extra-small">
-                                                            <li>
-                                                                By{" "}
-                                                                <Link to="author-1.html" className="fw-bold">
-                                                                    Mike Aiden
-                                                                </Link>
-                                                            </li>
-                                                            <li>
-                                                                January 27, <span className="dynamic-year"> </span>.
-                                                            </li>
-                                                        </ul>
-                                                    </div>
-                                                </div>
-                                                {/* mini-card-style */}
-                                                <div
-                                                    className="mini-card-style wow fadeInUp"
-                                                    data-wow-delay="0.4s"
-                                                >
-                                                    <div className="card-image-wrapper">
-                                                        <Link to="article-1.html">
-                                                            {" "}
-                                                            <img
-                                                                src="assets/images/placeholder.svg"
-                                                                data-src="assets/images/feature-images/feature-image-7.jpg"
-                                                                className="card-img-top"
-                                                                alt="Stories"
-                                                            />{" "}
-                                                        </Link>
-                                                    </div>
-                                                    <div className="card-body">
-                                                        <h5 className="card-title lead fw-extrabold mb-0">
-                                                            <Link to="article-1.html" className="blog-title">
-                                                                Footprints in the Wilderness: Hiking Stories
-                                                            </Link>
-                                                        </h5>
-                                                        <ul className="list-unstyled card-meta-style-2 mb-0 extra-small">
-                                                            <li>
-                                                                By{" "}
-                                                                <Link to="author-1.html" className="fw-bold">
-                                                                    Mike Aiden
-                                                                </Link>
-                                                            </li>
-                                                            <li>
-                                                                January 25, <span className="dynamic-year"> </span>.
-                                                            </li>
-                                                        </ul>
-                                                    </div>
-                                                </div>
-                                                {/* mini-card-style */}
-                                                <div
-                                                    className="mini-card-style wow fadeInUp"
-                                                    data-wow-delay="0.4s"
-                                                >
-                                                    <div className="card-image-wrapper">
-                                                        <Link to="article-1.html">
-                                                            {" "}
-                                                            <img
-                                                                src="assets/images/placeholder.svg"
-                                                                data-src="assets/images/feature-images/feature-image-3.jpg"
-                                                                className="card-img-top"
-                                                                alt="Stories"
-                                                            />{" "}
-                                                        </Link>
-                                                    </div>
-                                                    <div className="card-body">
-                                                        <h5 className="card-title lead fw-extrabold mb-0">
-                                                            <Link to="article-1.html" className="blog-title">
-                                                                Lost Treasures: Top 10 Ancient City Sites
-                                                            </Link>
-                                                        </h5>
-                                                        <ul className="list-unstyled card-meta-style-2 mb-0 extra-small">
-                                                            <li>
-                                                                By{" "}
-                                                                <Link to="author-1.html" className="fw-bold">
-                                                                    Mike Aiden
-                                                                </Link>
-                                                            </li>
-                                                            <li>
-                                                                January 13, <span className="dynamic-year"> </span>.
-                                                            </li>
-                                                        </ul>
-                                                    </div>
-                                                </div>
-                                                {/* mini-card-style */}
-                                                <div
-                                                    className="mini-card-style wow fadeInUp"
-                                                    data-wow-delay="0.4s"
-                                                >
-                                                    <div className="card-image-wrapper">
-                                                        <Link to="article-1.html">
-                                                            {" "}
-                                                            <img
-                                                                src="assets/images/placeholder.svg"
-                                                                data-src="assets/images/feature-images/feature-image-4.jpg"
-                                                                className="card-img-top"
-                                                                alt="Stories"
-                                                            />{" "}
-                                                        </Link>
-                                                    </div>
-                                                    <div className="card-body">
-                                                        <h5 className="card-title lead fw-extrabold mb-0">
-                                                            <Link to="article-1.html" className="blog-title">
-                                                                Beyond Shores: Discovering Idyllic Lake Paradises
-                                                            </Link>
-                                                        </h5>
-                                                        <ul className="list-unstyled card-meta-style-2 mb-0 extra-small">
-                                                            <li>
-                                                                By{" "}
-                                                                <Link to="author-1.html" className="fw-bold">
-                                                                    Mike Aiden
-                                                                </Link>
-                                                            </li>
-                                                            <li>
-                                                                January 12, <span className="dynamic-year"> </span>.
-                                                            </li>
-                                                        </ul>
-                                                    </div>
-                                                </div>
-                                                {/* mini-card-style */}
-                                                <div
-                                                    className="mini-card-style wow fadeInUp"
-                                                    data-wow-delay="0.4s"
-                                                >
-                                                    <div className="card-image-wrapper">
-                                                        <Link to="article-1.html">
-                                                            {" "}
-                                                            <img
-                                                                src="assets/images/placeholder.svg"
-                                                                data-src="assets/images/feature-images/feature-image-5.jpg"
-                                                                className="card-img-top"
-                                                                alt="Stories"
-                                                            />{" "}
-                                                        </Link>
-                                                    </div>
-                                                    <div className="card-body">
-                                                        <h5 className="card-title lead fw-extrabold mb-0">
-                                                            <Link to="article-1.html" className="blog-title">
-                                                                Seaside Serenity: Beachside Beauty Uncovered
-                                                            </Link>
-                                                        </h5>
-                                                        <ul className="list-unstyled card-meta-style-2 mb-0 extra-small">
-                                                            <li>
-                                                                By{" "}
-                                                                <Link to="author-1.html" className="fw-bold">
-                                                                    Mike Aiden
-                                                                </Link>
-                                                            </li>
-                                                            <li>
-                                                                January 04, <span className="dynamic-year"> </span>.
-                                                            </li>
-                                                        </ul>
-                                                    </div>
-                                                </div>
+                                                {blogs && !blogsLoading && (
+                                                    blogs.slice(0, 4).map((blog, index) => {
+                                                        return (
+                                                            <div
+                                                                className="mini-card-style wow fadeInUp"
+                                                                data-wow-delay="0.4s"
+                                                                key={index}
+                                                            >
+                                                                <div className="card-image-wrapper">
+                                                                    <Link to={ROUTES.ARTICLE.replace(":articleId", String(blog.id))}>
+                                                                        <img
+                                                                            src={blog.mainImage}
+                                                                            data-src={blog.mainImage}
+                                                                            className="card-img-top"
+                                                                            alt="Breakfast"
+                                                                        />{" "}
+                                                                    </Link>
+                                                                </div>
+                                                                <div className="card-body">
+                                                                    <h5 className="card-title lead fw-extrabold mb-0">
+                                                                        <Link to={ROUTES.ARTICLE.replace(":articleId", String(blog.id))} className="blog-title">
+                                                                            {blog.title}
+                                                                        </Link>
+                                                                    </h5>
+                                                                    <ul className="list-unstyled card-meta-style-2 mb-0 extra-small">
+                                                                        <li>
+                                                                            By{" "}
+                                                                            <Link to={ROUTES.AUTHOR.replace(":authorId", String(blog.user_id))} className="fw-bold">
+                                                                                Mike Aiden
+                                                                            </Link>
+                                                                        </li>
+                                                                        <li>
+                                                                            January 27, <span className="dynamic-year"> </span>.
+                                                                        </li>
+                                                                    </ul>
+                                                                </div>
+                                                            </div>
+                                                        )
+                                                    })
+                                                )}
+
                                             </div>
                                         </div>
                                         {/* widget */}
@@ -1220,138 +1104,57 @@ const Article = () => {
                     <div className="container">
                         <p className=" fs-1 fw-bold mb-lg-40 mb-30">You Might Also Like</p>
                         <div className="row custom-row-gap">
-                            <div className="col-lg-4">
-                                {/* single card */}
-                                <div
-                                    className="card card-style-2 card-border mb-lg-40 mb-20 wow fadeInUp"
-                                    data-wow-delay="0.4s"
-                                >
-                                    <div className="card-image-wrapper">
-                                        <Link to="article-1.html">
-                                            <img
-                                                src="assets/images/placeholder.svg"
-                                                data-src="assets/images/blog/explore-image-21.jpg"
-                                                className="card-img-top"
-                                                alt="Lake"
-                                            />
-                                        </Link>
-                                    </div>
-                                    <div className="card-body">
-                                        <div className="card-header text-uppercase">
-                                            <Link to="category-1.html"> Lake</Link>
+                            {blogs && !blogsLoading && (
+                                blogs.slice(4, 7).map((blog, index) => {
+                                    return (
+                                        <div className="col-lg-4" key={index}>
+
+                                            {/* single card */}
+                                            <div
+                                                className="card card-style-2 card-border mb-lg-40 mb-20 wow fadeInUp"
+                                                data-wow-delay="0.4s"
+                                            >
+                                                <div className="card-image-wrapper">
+                                                    <Link to={ROUTES.ARTICLE.replace(":articleId", String(blog.id))}>
+                                                        <img
+                                                            src={blog.mainImage}
+                                                            data-src={blog.mainImage}
+                                                            className="card-img-top"
+                                                            alt="Lake"
+                                                        />
+                                                    </Link>
+                                                </div>
+                                                <div className="card-body">
+                                                    <div className="card-header text-uppercase">
+                                                        <Link to={ROUTES.CATEGORY.replace(":categoryName", blog.category)}> Lake</Link>
+                                                    </div>
+                                                    <h5 className="fs-4 card-title">
+                                                        <Link to={ROUTES.ARTICLE.replace(":articleId", String(blog.id))} className="blog-title">
+                                                            Lakeside Wonders: Nature's Peaceful Miracles
+                                                        </Link>
+                                                    </h5>
+                                                    <ul className="list-unstyled card-meta lead  small">
+                                                        <li>
+                                                            By{" "}
+                                                            <Link to={ROUTES.AUTHOR.replace(":authorId", String(blog.user_id))} className="blog-author fw-bold">
+                                                                Mike Aiden
+                                                            </Link>
+                                                        </li>
+                                                        <li>
+                                                            January 27, <span className="dynamic-year"> </span>.
+                                                        </li>
+                                                    </ul>
+                                                    <p className="card-text small">
+                                                        Nature Peaceful Miracle captivate with serene reflection, gentle
+                                                        ripples, and harmonious symphony. A tranquil haven where beauty
+                                                        meets tranquility...
+                                                    </p>
+                                                </div>
+                                            </div>
                                         </div>
-                                        <h5 className="fs-4 card-title">
-                                            <Link to="article-1.html" className="blog-title">
-                                                Lakeside Wonders: Nature's Peaceful Miracles
-                                            </Link>
-                                        </h5>
-                                        <ul className="list-unstyled card-meta lead  small">
-                                            <li>
-                                                By{" "}
-                                                <Link to="author-1.html" className="blog-author fw-bold">
-                                                    Mike Aiden
-                                                </Link>
-                                            </li>
-                                            <li>
-                                                January 27, <span className="dynamic-year"> </span>.
-                                            </li>
-                                        </ul>
-                                        <p className="card-text small">
-                                            Nature Peaceful Miracle captivate with serene reflection, gentle
-                                            ripples, and harmonious symphony. A tranquil haven where beauty
-                                            meets tranquility...
-                                        </p>
-                                    </div>
-                                </div>
-                            </div>
-                            <div className="col-lg-4">
-                                <div
-                                    className="card card-style-2 card-border mb-lg-40 mb-20 wow fadeInUp"
-                                    data-wow-delay="0.4s"
-                                >
-                                    <div className="card-image-wrapper">
-                                        <Link to="blog-3.html">
-                                            {" "}
-                                            <img
-                                                src="assets/images/placeholder.svg"
-                                                data-src="assets/images/blog/explore-image-30.jpg"
-                                                className="card-img-top"
-                                                alt="Forest"
-                                            />
-                                        </Link>
-                                    </div>
-                                    <div className="card-body">
-                                        <div className="card-header text-uppercase">
-                                            <Link to="category-1.html">Forest</Link>
-                                        </div>
-                                        <h5 className="fs-4 card-title">
-                                            <Link to="article-1.html" className="blog-title">
-                                                The Mystic Woods: Nature's Healing Sanctuary
-                                            </Link>
-                                        </h5>
-                                        <ul className="list-unstyled card-meta lead  small">
-                                            <li>
-                                                By{" "}
-                                                <Link to="author-1.html" className="blog-author fw-bold">
-                                                    Mike Aiden
-                                                </Link>
-                                            </li>
-                                            <li>
-                                                January 23, <span className="dynamic-year"> </span>.
-                                            </li>
-                                        </ul>
-                                        <p className="card-text small">
-                                            Nature's Healing Sanctuary invite weary souls to immerse in the
-                                            embrace ancient tree, where whispers of the wind and rustling
-                                            leaves orchestrate...
-                                        </p>
-                                    </div>
-                                </div>
-                            </div>
-                            <div className="col-lg-4">
-                                <div
-                                    className="card card-style-2 card-border mb-lg-40 mb-20 wow fadeInUp"
-                                    data-wow-delay="0.4s"
-                                >
-                                    <div className="card-image-wrapper">
-                                        <Link to="blog-7.html">
-                                            {" "}
-                                            <img
-                                                src="assets/images/placeholder.svg"
-                                                data-src="assets/images/blog/explore-image-47.jpg"
-                                                className="card-img-top"
-                                                alt="img-top"
-                                            />
-                                        </Link>
-                                    </div>
-                                    <div className="card-body">
-                                        <div className="card-header text-uppercase">
-                                            <Link to="category-1.html">Beach</Link>
-                                        </div>
-                                        <h5 className="fs-4 card-title">
-                                            <Link to="article-1.html" className="blog-title">
-                                                Seaside Serenity: Beachside Beauty Uncovered
-                                            </Link>
-                                        </h5>
-                                        <ul className="list-unstyled card-meta lead  small">
-                                            <li>
-                                                By{" "}
-                                                <Link to="author-1.html" className="blog-author fw-bold">
-                                                    Mike Aiden
-                                                </Link>
-                                            </li>
-                                            <li>
-                                                January 23, <span className="dynamic-year"> </span>.
-                                            </li>
-                                        </ul>
-                                        <p className="card-text small">
-                                            Beachside Beauty Uncovered invites you to a tranquil escape,
-                                            where the rhythmic waves meet the golden shore. Discover
-                                            serenity in the embrace...
-                                        </p>
-                                    </div>
-                                </div>
-                            </div>
+                                    )
+                                })
+                            )}
                         </div>
                     </div>
                 </section>

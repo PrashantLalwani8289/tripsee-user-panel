@@ -2,12 +2,20 @@ import { Controller, useForm } from "react-hook-form"
 import { ctaSection } from "../../interface/extra";
 import { ctaValidation } from "../../validation/userValidation";
 import { yupResolver } from "@hookform/resolvers/yup";
+import { Subscribe } from "../../services/userServices";
+import { toastMessageError, toastMessageSuccess } from "../utilities/commonToast/CommonToastMessage";
 const CTASection = () => {
     const { control, handleSubmit, formState: { errors }, } = useForm<ctaSection>({mode: "onChange",
         resolver: yupResolver(ctaValidation())});
 
-    const handleClick = ( data  : ctaSection) =>{
-        console.log(data);
+    const handleClick = async( data  : ctaSection) =>{
+        const response = await Subscribe(data);
+        if(response.success){
+            toastMessageSuccess(response.message)
+        }
+        else{
+            toastMessageError(response.message)
+        }
     }
     return (
         <section className="section-cta wow fadeInUp" data-bs-theme="light" data-wow-delay="0.4s">

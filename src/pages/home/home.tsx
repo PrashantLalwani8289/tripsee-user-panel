@@ -4,8 +4,6 @@ import DarkThemeButton from '../../components/dark-theme-button'
 import OffCanvasMenu from '../../components/OffCanvasMenu'
 import OffCanvasMobileMenu from '../../components/OffCanvasMobileMenu'
 import OffCanvasSearch from '../../components/OffCanvasSearch'
-import { Swiper, SwiperSlide } from 'swiper/react';
-import { Navigation } from 'swiper/modules';
 import 'swiper/css';
 import 'swiper/css/pagination';
 import 'swiper/css/effect-fade';
@@ -18,8 +16,9 @@ import { ctaValidation } from '../../validation/userValidation'
 import { GetAllBlogs } from '../../services/blogServices'
 import { useEffect, useState } from 'react'
 import { Blog } from '../../interface/blog'
+import HeroSlider from '../../components/HeroSlider'
 const Home = () => {
-    const Catogories = ["Beach", "Camping", "Hiking", "Desert", "Forest", "LongDrives", "FamilyTrips"]
+    // const Catogories = ["Beach", "Camping", "Hiking", "Desert", "Forest", "LongDrives", "FamilyTrips"]
     const [blogs, setBlogs] = useState<Blog[]>([])
     const [blogsLoading, setBlogsLoading] = useState<boolean>(true)
     const { control, handleSubmit, formState: { errors } } = useForm<ctaSection>({
@@ -64,58 +63,8 @@ const Home = () => {
                 data-bs-smooth-scroll="true"
             >
                 {/*Hero Section ======================*/}
-                <section className="section-hero hero-1 position-relative overlay">
-                    <div className="hero-wrapper mx-auto position-relative parallax">
-                        <div className="container">
-                            <div className="hero-inner-text position-relative text-center mb-5 mb-xxl-70 ">
-                                <h1
-                                    id="text-anim"
-                                    className="display-2 lh-1 font-family-style-1 text-white exp-text-animate-1"
-                                >
-                                    Your Adventure
-                                </h1>
-                                <h2 className="display-1 lh-1 font-family-style-2 text-white exp-text-animate-1">
-                                    begin here
-                                </h2>
-                            </div>
-                            <div className="card-swiper-wrapper position-relative wow fadeInUp" data-wow-delay="0.3s">
-                                <Swiper
-                                    modules={[Navigation]}
-                                    // pagination={{ clickable: true }}
-                                    spaceBetween={3}
-                                    slidesPerView={5}
-                                    loop={true} // Enables infinite loop
-                                >
-                                    {
-                                        Catogories.map((catogory, index) => {
-                                            return (
-                                                <SwiperSlide key={index}>
-                                                    <div className="card card-style-18">
-                                                        <div className="card-image-wrapper">
-                                                            <Link to={ROUTES.CATEGORY.replace(":categoryName", catogory)}>
-                                                                <img src={`assets/images/card/hiking.jpg`} className="card-img-top" alt={catogory} />
-                                                            </Link>
-                                                        </div>
-                                                        <div className="card-body text-center">
-                                                            <Link to={`category-${index + 1}.html`}>
-                                                                <p className="small mb-0 fw-extrabold text-white text-uppercase">{catogory}</p>
-                                                            </Link>
-                                                        </div>
-                                                    </div>
-                                                </SwiperSlide>
-                                            )
-                                        })
-                                    }
-                                </Swiper>
-                            </div>
+                <HeroSlider/>
 
-                            {/* <div */}
-                        </div>
-                    </div>
-                    {/* hero-wrapper */}
-                </section>
-                {/*Hero Section ======================*/}
-                {/*Blog Section ======================*/}
                 <section className="section-blog py-4 py-sm-5 py-md-60 py-lg-100">
                     <div className="container">
                         <div className="row custom-row-gap">

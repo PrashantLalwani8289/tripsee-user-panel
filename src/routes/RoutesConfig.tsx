@@ -18,6 +18,7 @@ import Error from "../pages/error/Error";
 import Contact from "../pages/contact/Contact";
 import Article from "../pages/article/Article";
 import Category from "../pages/category/Category";
+import Author from "../pages/author/Author";
 // const home = lazy(() => import("../pages/home/home"));
 // const Login = lazy(() => import("../pages/Login"));
 // const Signup = lazy(() => import("../pages/Signup"));
@@ -89,6 +90,12 @@ const RoutesConfig: React.FC<RoutesConfigProps> = ({ isAuthenticated }) => {
                 path={ROUTES.CATEGORY}
                 element={
                     <PublicRoutes isAuthenticated={isAuthenticated} element={<Category />} />
+                }
+            />
+            <Route
+                path={ROUTES.AUTHOR}
+                element={
+                    <PublicRoutes isAuthenticated={isAuthenticated} element={<Author/>} />
                 }
             />
             <Route

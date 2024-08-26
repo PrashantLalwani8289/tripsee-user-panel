@@ -5,8 +5,28 @@ import OffCanvasMenu from '../../components/OffCanvasMenu'
 import OffCanvasMobileMenu from '../../components/OffCanvasMobileMenu'
 import OffCanvasSearch from '../../components/OffCanvasSearch'
 import CTASection from '../../components/ctaSection/CTASection'
+import { Controller, useForm } from 'react-hook-form'
+import { yupResolver } from '@hookform/resolvers/yup'
+import { contactValidation } from '../../validation/userValidation'
+import { ContactFormValues } from '../../interface/extra'
+import { ContactUs } from '../../services/userServices'
+import { toastMessageError, toastMessageSuccess } from '../../components/utilities/commonToast/CommonToastMessage'
 
 const Contact = () => {
+    const { handleSubmit, control, formState: { errors } } = useForm<ContactFormValues>({
+        resolver: yupResolver(contactValidation()),
+    });
+
+    const onSubmit = async(data : ContactFormValues) => {
+        const response = await ContactUs(data)
+
+        if(response.success){
+            toastMessageSuccess(response.message)
+        }
+        else{
+            toastMessageError(response.message)
+        }
+    };
     return (
         <div className='page'>
             <Header />
@@ -20,7 +40,7 @@ const Contact = () => {
                 data-bs-target="#navContentmenu"
                 data-bs-root-margin="0px 0px -50%"
                 data-bs-smooth-scroll="true"
-                style={{marginTop:"7.5rem"}}
+                style={{ marginTop: "7.5rem" }}
             >
                 {/*breadcrumb Section ======================*/}
                 <div className="section-breadcrumb pb-30">
@@ -63,7 +83,7 @@ const Contact = () => {
                                     </p>
                                     <div className="contact-from-area fix-width-post-content">
                                         <h5 className="mb-20 title-style-2">Get in Touch</h5>
-                                        <form id="contactForm" className="contact-from">
+                                        <form id="contactForm" className="contact-form" onSubmit={handleSubmit(onSubmit)}>
                                             <div className="row">
                                                 <div className="col-lg-6">
                                                     <div className="form-group">
@@ -85,13 +105,19 @@ const Contact = () => {
                                                                 />
                                                             </svg>
                                                         </label>
-                                                        <input
-                                                            type="text"
-                                                            name="InputName"
-                                                            className="form-control"
-                                                            id="firstname"
-                                                            required
+                                                        <Controller
+                                                            name="firstname"
+                                                            control={control}
+                                                            render={({ field }) => (
+                                                                <input
+                                                                    type="text"
+                                                                    className={`form-control ${errors.firstname ? 'is-invalid' : ''}`}
+                                                                    id="firstname"
+                                                                    {...field}
+                                                                />
+                                                            )}
                                                         />
+                                                        {errors && errors.firstname && <div className="invalid-feedback">{errors.firstname.message}</div>}
                                                     </div>
                                                 </div>
                                                 <div className="col-lg-6">
@@ -114,13 +140,19 @@ const Contact = () => {
                                                                 />
                                                             </svg>
                                                         </label>
-                                                        <input
-                                                            type="text"
-                                                            name="last-name"
-                                                            className="form-control"
-                                                            id="lastname"
-                                                            required
+                                                        <Controller
+                                                            name="lastname"
+                                                            control={control}
+                                                            render={({ field }) => (
+                                                                <input
+                                                                    type="text"
+                                                                    className={`form-control ${errors.lastname ? 'is-invalid' : ''}`}
+                                                                    id="lastname"
+                                                                    {...field}
+                                                                />
+                                                            )}
                                                         />
+                                                        {errors.lastname && <div className="invalid-feedback">{errors.lastname.message}</div>}
                                                     </div>
                                                 </div>
                                             </div>
@@ -143,32 +175,51 @@ const Contact = () => {
                                                         />
                                                     </svg>
                                                 </label>
-                                                <input
-                                                    type="email"
-                                                    name="InputEmail"
-                                                    className="form-control"
-                                                    id="email"
-                                                    required
+                                                <Controller
+                                                    name="email"
+                                                    control={control}
+                                                    render={({ field }) => (
+                                                        <input
+                                                            type="email"
+                                                            className={`form-control ${errors.email ? 'is-invalid' : ''}`}
+                                                            id="email"
+                                                            {...field}
+                                                        />
+                                                    )}
                                                 />
+                                                {errors.email && <div className="invalid-feedback">{errors.email.message}</div>}
                                             </div>
                                             <div className="form-group">
                                                 <label htmlFor="subject">Subject</label>
-                                                <input
-                                                    type="text"
+                                                <Controller
                                                     name="subject"
-                                                    className="form-control"
-                                                    id="subject"
-                                                    required
+                                                    control={control}
+                                                    render={({ field }) => (
+                                                        <input
+                                                            type="text"
+                                                            className={`form-control ${errors.subject ? 'is-invalid' : ''}`}
+                                                            id="subject"
+                                                            {...field}
+                                                        />
+                                                    )}
                                                 />
+                                                {errors.subject && <div className="invalid-feedback">{errors.subject.message}</div>}
                                             </div>
                                             <div className="form-group">
                                                 <label htmlFor="message">Your Message</label>
-                                                <textarea
-                                                    className="form-control"
-                                                    rows={3}
-                                                    id="message"
-                                                    defaultValue={""}
+                                                <Controller
+                                                    name="message"
+                                                    control={control}
+                                                    render={({ field }) => (
+                                                        <textarea
+                                                            className={`form-control ${errors.message ? 'is-invalid' : ''}`}
+                                                            rows={3}
+                                                            id="message"
+                                                            {...field}
+                                                        />
+                                                    )}
                                                 />
+                                                {errors.message && <div className="invalid-feedback">{errors.message.message}</div>}
                                             </div>
                                             <button
                                                 type="submit"
@@ -225,35 +276,35 @@ const Contact = () => {
                                         <div className="author-information-area">
                                             <h5 className="title mb-30">Information</h5>
                                             <div className="single-info">
-                                                <span className="information-icon">
+                                                {/* <span className="information-icon">
                                                     <img
                                                         src="assets/images/placeholder.svg"
                                                         data-src="assets/images/phone.png"
                                                         alt="phone"
                                                     />
-                                                </span>
+                                                </span> */}
                                                 <a href="tel:+14842989691">+14842989691</a>
                                             </div>
                                             <div className="single-info">
-                                                <span className="information-icon">
+                                                {/* <span className="information-icon">
                                                     <img
                                                         src="assets/images/placeholder.svg"
                                                         data-src="assets/images/mail.png"
                                                         alt="phone"
                                                     />
-                                                </span>
+                                                </span> */}
                                                 <a href="mailto:contact@exploreist.com">
                                                     contact@exploreist.com
                                                 </a>
                                             </div>
                                             <div className="single-info">
-                                                <span className="information-icon">
+                                                {/* <span className="information-icon">
                                                     <img
                                                         src="assets/images/placeholder.svg"
                                                         data-src="assets/images/location.png"
                                                         alt="phone"
                                                     />
-                                                </span>
+                                                </span> */}
                                                 <address className="text-start">
                                                     132, My Street, Kingston,New York 12401.
                                                 </address>
