@@ -1,3 +1,5 @@
+import { Controller as ControllerForForm, useForm } from "react-hook-form"
+import Heart from "react-animated-heart";
 import { Link, useNavigate, useParams } from "react-router-dom"
 import DarkThemeButton from "../../components/dark-theme-button"
 import Footer from "../../components/footer"
@@ -6,9 +8,9 @@ import OffCanvasMenu from "../../components/OffCanvasMenu"
 import OffCanvasMobileMenu from "../../components/OffCanvasMobileMenu"
 import OffCanvasSearch from "../../components/OffCanvasSearch"
 import { useEffect, useState } from "react"
-import { Blog } from "../../interface/blog"
-import { GetAllBlogs, GetBlog } from "../../services/blogServices"
-import { toastMessageError } from "../../components/utilities/commonToast/CommonToastMessage"
+import { Blog, CommentSchema } from "../../interface/blog"
+import { GetAllBlogs, GetBlog, Reacted, SubmitComment } from "../../services/blogServices"
+import { toastMessageError, toastMessageSuccess } from '../../components/utilities/commonToast/CommonToastMessage';
 import { ROUTES } from "../../constants/routes"
 import FsLightbox from 'fslightbox-react';
 import { Swiper, SwiperSlide } from 'swiper/react';
@@ -19,6 +21,10 @@ import { Navigation } from "swiper/modules"
 import { Swiper as SwiperType } from 'swiper/types';
 import MapComponent from "../../components/mapComponent/MapComponent"
 import CTASection from "../../components/ctaSection/CTASection"
+import { yupResolver } from "@hookform/resolvers/yup";
+import { commentValidation } from '../../validation/userValidation';
+import { useSelector } from "react-redux";
+import { RootState } from "../../State Management/Store/Store";
 // import 'swiper/swiper-bundle.min.css';
 // import 'swiper/swiper.min.css';
 
@@ -26,10 +32,12 @@ SwiperCore.use([Navigation, Pagination, Controller]);
 
 
 const Article = () => {
+    const token = useSelector((state: RootState) => state.root.user?.token)
     const { articleId } = useParams();
     console.log(articleId)
     const navigate = useNavigate()
 
+    const [isClick, setClick] = useState(false);
     const [blog, setBlog] = useState<Blog>()
     const [loading, setLoading] = useState(false)
     const [toggler, setToggler] = useState(false);
@@ -38,18 +46,28 @@ const Article = () => {
 
     const [mainSwiper, setMainSwiper] = useState<SwiperType | undefined>(undefined);
     const [thumbSwiper, setThumbSwiper] = useState<SwiperType | undefined>(undefined);
+
+    const { control, handleSubmit, formState: { errors }, setValue} = useForm<CommentSchema>({mode: "onChange",
+        resolver: yupResolver(commentValidation())});
+
     const BlogData = async () => {
-        setLoading(true)    
+        setLoading(true)
         const response = await GetBlog(articleId as unknown as number)
         if (response.success && response.data) {
             setBlog(response.data as Blog)
             setLoading(false)
+            setValue("blog_id", blog?.id as number)
         }
         else {
             toastMessageError("Unable to fetch the data")
             setLoading(false)
             navigate(ROUTES.BLOGS)
         }
+    }
+
+    const handleClick = async () => {
+        await Reacted();    
+        setClick(!isClick)
     }
 
     const getAllBlogs = async () => {
@@ -70,6 +88,20 @@ const Article = () => {
         getAllBlogs()
         BlogData()
     }, [])
+
+
+    const handleCommentSubmit = async(data : CommentSchema) => {
+        console.log(data)
+        const response = await SubmitComment(data, token as string);
+        if(response && response.success){
+            toastMessageSuccess("Comment submitted successfully")
+            setValue("text", "")
+        }
+        else{
+            toastMessageError("Unable to submit comment")
+        }
+    }
+
     return (
         <div className="page">
             <Header />
@@ -174,6 +206,8 @@ const Article = () => {
                                                     <path d="M15.8092 15.98H11.1569L6.89801 9.78339L1.56807 15.98H0.19043L6.28619 8.89157L0.19043 0.0195312H4.84276L8.87486 5.88989L13.9234 0.0195312H15.301L9.48808 6.77751L15.8092 15.98ZM11.8079 14.9929H13.9234L4.18054 1.05696H2.06508L11.8079 14.9929Z" />
                                                 </svg>
                                             </Link>
+                                            <Heart isClick={isClick} onClick={handleClick} />
+
                                         </div>
                                     </div>
                                 </div>
@@ -1003,95 +1037,28 @@ const Article = () => {
                                         </div>
                                     </div>
                                 </div>
+
                                 {/* comment from */}
                                 <div className="comment-form-wrapper">
                                     <p className="fs-2 fw-bold article-post-heading mb-lg-40 mb-20">
                                         Join the discussion
                                     </p>
-                                    <form className="comment-from">
+                                    <form className="comment-from" onSubmit={handleSubmit(handleCommentSubmit)}>
                                         <div className="row">
                                             <div className="col-md-6">
-                                                <label htmlFor="Comment">Comments</label>
-                                                <textarea
-                                                    className="form-control"
-                                                    id="Comment"
-                                                    rows={5}
-                                                    defaultValue={""}
+                                                <ControllerForForm
+                                                    control={control}
+                                                    name="text"
+                                                    rules={{ required: "comment is required" }}
+                                                    render={({ field }) => <input {...field} type="text" className="form-control" />}
+                                                    defaultValue=""
                                                 />
                                             </div>
-                                            <div className="col-md-6">
-                                                <div className="form-group">
-                                                    <label htmlFor="name">
-                                                        Name{" "}
-                                                        <svg
-                                                            width={10}
-                                                            height={10}
-                                                            viewBox="0 0 10 10"
-                                                            fill="none"
-                                                            xmlns="http://www.w3.org/2000/svg"
-                                                        >
-                                                            <path
-                                                                d="M5 1V9M8 2L2 8M9 5H1M8 8L2 2"
-                                                                stroke="#4C9BB3"
-                                                                strokeWidth="0.8"
-                                                                strokeLinecap="round"
-                                                                strokeLinejoin="round"
-                                                            />
-                                                        </svg>
-                                                    </label>
-                                                    <input
-                                                        type="email"
-                                                        className="form-control"
-                                                        id="name"
-                                                        required
-                                                    />
-                                                </div>
-                                                <div className="form-group">
-                                                    <label htmlFor="email">
-                                                        Email{" "}
-                                                        <svg
-                                                            width={10}
-                                                            height={10}
-                                                            viewBox="0 0 10 10"
-                                                            fill="none"
-                                                            xmlns="http://www.w3.org/2000/svg"
-                                                        >
-                                                            <path
-                                                                d="M5 1V9M8 2L2 8M9 5H1M8 8L2 2"
-                                                                stroke="#4C9BB3"
-                                                                strokeWidth="0.8"
-                                                                strokeLinecap="round"
-                                                                strokeLinejoin="round"
-                                                            />
-                                                        </svg>
-                                                    </label>
-                                                    <input
-                                                        type="email"
-                                                        className="form-control"
-                                                        id="email"
-                                                        required
-                                                    />
-                                                </div>
-                                                <div className="form-group">
-                                                    <label htmlFor="website">Website</label>
-                                                    <input type="text" className="form-control" id="website" />
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div className="form-check mb-lg-40 mb-20">
-                                            <input
-                                                type="checkbox"
-                                                className="form-check-input"
-                                                id="Check1"
-                                            />
-                                            <label className="form-check-label" htmlFor="Check1">
-                                                Save my name, email, and website in this browser for the next
-                                                time I comment.{" "}
-                                            </label>
                                         </div>
                                         <button type="submit" className="btn btn-primary">
-                                            Submit Comments
+                                            Submit Comment
                                         </button>
+                                            {errors && errors.text && <div ></div>}
                                     </form>
                                 </div>
                             </div>

@@ -2,6 +2,7 @@ import axios from "axios";
 import endpoints from "../constants/endpoints";
 import { IBlogSchema } from "../interface/userInterface";
 import ApiResponse from "../resources/entity/IApiResponse";
+import { CommentSchema } from "../interface/blog";
 // import { useSelector } from 'react-redux'
 // import { RootState } from "../State Management/Store/Store";
 
@@ -53,3 +54,24 @@ export const GetBlog = async (
     console.log(data);
     return data;
   };
+
+  export const Reacted = async (
+  )=> {
+    const { data } = await axios.get(`${endpoints.Blog.HANDLE_REACTION}`);
+    console.log(data);
+  };
+
+
+  export const SubmitComment = async (
+    commentData : CommentSchema,
+    token : string
+  ): Promise<ApiResponse> => {
+    const { data } = await axios.post(`${endpoints.Blog.ADD_COMMENT}`, commentData, {
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${token ? token : ""}`
+      },
+    });
+    console.log(data);
+    return data;
+  }

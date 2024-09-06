@@ -19,3 +19,10 @@ export interface Blog {
     created_ts: string | null;  // ISO format date string
     updated_ts: string | null;  // ISO format date string
 }
+
+
+export interface CommentSchema {
+    blog_id : number;
+    text : string
+    parent_id?: number; 
+}

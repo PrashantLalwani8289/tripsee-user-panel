@@ -81,7 +81,7 @@ const HeroSlider: React.FC = () => {
                     <Swiper
                         className="hero-thumbs-slider"
                         spaceBetween={10}
-                        slidesPerView={3}
+                        slidesPerView={3.5}
                         loop={true}
                         watchSlidesProgress
                         modules={[Thumbs]}

@@ -16,6 +16,8 @@ export default {
         CREATE_BLOG:`${URL}/blog/create-blog`,
         GET_BLOG:`${URL}/blog/get-blog`,
         GET_ALL_BLOGS:`${URL}/blog/get-all-blogs`,
+        HANDLE_REACTION:`${URL}/blog/reaction`,
+        ADD_COMMENT:`${URL}/blog/add-comment`,
         
     },
     Subscribe:{

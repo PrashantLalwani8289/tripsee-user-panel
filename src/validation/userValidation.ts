@@ -65,3 +65,9 @@ export const signInSchema = () =>
       subject: yup.string().required('Subject is required'),
       message: yup.string().required('Message is required'),
     });
+
+    export const commentValidation = () => yup.object().shape({
+      blog_id : yup.number().required(),
+      text: yup.string().required('Content is required'),
+      parent_id: yup.number().optional()
+    })
