@@ -2,7 +2,7 @@ import axios from "axios";
 import endpoints from "../constants/endpoints";
 import { IBlogSchema } from "../interface/userInterface";
 import ApiResponse from "../resources/entity/IApiResponse";
-import { CommentSchema } from "../interface/blog";
+import { CommentSchema, LikeSchema } from "../interface/blog";
 // import { useSelector } from 'react-redux'
 // import { RootState } from "../State Management/Store/Store";
 
@@ -56,9 +56,17 @@ export const GetBlog = async (
   };
 
   export const Reacted = async (
+    likeData : LikeSchema,
+    token : string
   )=> {
-    const { data } = await axios.get(`${endpoints.Blog.HANDLE_REACTION}`);
+    const { data } = await axios.post(`${endpoints.Blog.HANDLE_REACTION}`,likeData, {
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${token ? token : ""}`
+      },
+    });
     console.log(data);
+    return data;
   };
 
 
@@ -72,6 +80,14 @@ export const GetBlog = async (
         "Authorization": `Bearer ${token ? token : ""}`
       },
     });
+    console.log(data);
+    return data;
+  }
+
+  export const GetAllComments = async(
+    blogId : number
+  ): Promise<ApiResponse> => {
+    const { data } = await axios.get(`${endpoints.Blog.GET_ALL_COMMENTS}?blog_id=${blogId}`);
     console.log(data);
     return data;
   }

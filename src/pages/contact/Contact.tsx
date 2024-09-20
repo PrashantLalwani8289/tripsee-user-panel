@@ -11,6 +11,8 @@ import { contactValidation } from '../../validation/userValidation'
 import { ContactFormValues } from '../../interface/extra'
 import { ContactUs } from '../../services/userServices'
 import { toastMessageError, toastMessageSuccess } from '../../components/utilities/commonToast/CommonToastMessage'
+import { Link } from 'react-router-dom'
+import { ROUTES } from '../../constants/routes'
 
 const Contact = () => {
     const { handleSubmit, control, formState: { errors } } = useForm<ContactFormValues>({
@@ -48,7 +50,7 @@ const Contact = () => {
                         <nav aria-label="breadcrumb-nav">
                             <ol className="breadcrumb breadcrumb-style-2 mt-20 mb-0 ">
                                 <li className="breadcrumb-item breadcrumb-item-style-2">
-                                    <a href="index.html">Home</a>
+                                    <Link to={ROUTES.HOME}>Home</Link>
                                 </li>
                                 <li
                                     className="breadcrumb-item breadcrumb-item-style-2 active"
@@ -253,24 +255,24 @@ const Contact = () => {
                                         <div className="author-socials-area">
                                             <h5 className="title mb-20">Follow me</h5>
                                             <div className="author-socials">
-                                                <a href="https://www.facebook.com/" className="facebook">
+                                                <Link to="https://www.facebook.com/" className="facebook">
                                                     <i className="fab fa-facebook-f" />
-                                                </a>
-                                                <a href="https://www.instagram.com/" className="instagram">
+                                                </Link>
+                                                <Link to="https://www.instagram.com/" className="instagram">
                                                     <i className="fab fa-instagram" />
-                                                </a>
-                                                <a href="https://www.linkedin.com/" className="linkedin">
+                                                </Link>
+                                                <Link to="https://www.linkedin.com/" className="linkedin">
                                                     <i className="fa-brands fa-linkedin-in" />
-                                                </a>
-                                                <a href="https://www.youtube.com/" className="youtube">
+                                                </Link>
+                                                <Link to="https://www.youtube.com/" className="youtube">
                                                     <i className="fa-brands fa-youtube" />
-                                                </a>
-                                                <a href="https://www.pinterest.com/" className="pinterest">
+                                                </Link>
+                                                <Link to="https://www.pinterest.com/" className="pinterest">
                                                     <i className="fab fa-pinterest-p" />
-                                                </a>
-                                                <a href="https://www.youtube.com/" className="youtube">
+                                                </Link>
+                                                <Link to="https://www.youtube.com/" className="youtube">
                                                     <i className="fa-brands fa-youtube" />
-                                                </a>
+                                                </Link>
                                             </div>
                                         </div>
                                         <div className="author-information-area">
@@ -283,7 +285,7 @@ const Contact = () => {
                                                         alt="phone"
                                                     />
                                                 </span> */}
-                                                <a href="tel:+14842989691">+14842989691</a>
+                                                <Link to="tel:+14842989691">+14842989691</Link>
                                             </div>
                                             <div className="single-info">
                                                 {/* <span className="information-icon">
@@ -293,9 +295,9 @@ const Contact = () => {
                                                         alt="phone"
                                                     />
                                                 </span> */}
-                                                <a href="mailto:contact@exploreist.com">
+                                                <Link to="mailto:contact@exploreist.com">
                                                     contact@exploreist.com
-                                                </a>
+                                                </Link>
                                             </div>
                                             <div className="single-info">
                                                 {/* <span className="information-icon">
@@ -328,13 +330,13 @@ const Contact = () => {
                         <div className="row justify-content-center">
                             <div className="col-md-8">
                                 <div className="add-banner">
-                                    <a href="#">
+                                    <Link to="#">
                                         <img
                                             src="assets/images/add-02.png"
                                             alt="add-image"
                                             className="border-rarius-14"
                                         />
-                                    </a>
+                                    </Link>
                                 </div>
                             </div>
                         </div>

@@ -21,8 +21,24 @@ export interface Blog {
 }
 
 
+export interface LikeSchema {
+    blog_id : number;
+    user_id : number;
+}
+
 export interface CommentSchema {
     blog_id : number;
     text : string
     parent_id?: number; 
+}
+
+export interface IComment {
+    id: number;
+    user_id: number;
+    blog_id: number;
+    user_name: string;
+    text: string;
+    created_ts: string; 
+    updated_ts: string;  
+    parent_id: number | null;
 }

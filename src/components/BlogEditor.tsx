@@ -159,16 +159,17 @@ const BlogEditor: React.FC = () => {
                       <Controller
                         name="category"
                         control={control}
-                        defaultValue="other"
+                        defaultValue="Beach"
                         render={({ field }) => (
+                          // "Beach", "Camping", "Hiking", "Desert", "Forest", "LongDrives", "FamilyTrips"
                           <select {...field} className="form-control">
                             <option value="">Select Category</option>
-                            <option value="Technology">Technology</option>
-                            <option value="Health">Health</option>
-                            <option value="Travel">Travel</option>
-                            <option value="Education">Education</option>
-                            <option value="Finance">Finance</option>
-                            <option value="other">Other</option>
+                            <option value="Camping">Camping</option>
+                            <option value="Hiking">Hiking</option>
+                            <option value="Desert">Desert</option>
+                            <option value="Forest">Forest</option>
+                            <option value="LongDrives">LongDrives</option>
+                            <option value="FamilyTrips">FamilyTrips</option>
                           </select>
                         )}
                       />

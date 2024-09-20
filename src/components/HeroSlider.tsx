@@ -6,6 +6,7 @@ import 'swiper/css/pagination';
 import 'swiper/css/thumbs';
 import { Navigation, Pagination, Thumbs } from 'swiper/modules';
 import { Swiper, SwiperSlide } from 'swiper/react';
+import { ROUTES } from '../constants/routes';
 
 
 
@@ -90,38 +91,38 @@ const HeroSlider: React.FC = () => {
                         <SwiperSlide className="swiper-slide hero-5-thumbs">
                             <img src="assets/images/heroes/lake.jpg" alt="lake" />
                             <div className="catagory-item">
-                                <Link to="category-1.html" className="catagory">LAKE</Link>
+                                <Link to={ROUTES.CATEGORY.replace(":categoryName","LAKE")} className="catagory">LAKE</Link>
                             </div>
                         </SwiperSlide>
 
                         <SwiperSlide className="swiper-slide hero-5-thumbs">
                             <img src="assets/images/heroes/camping.jpg" alt="camping" />
                             <div className="catagory-item">
-                                <Link to="category-1.html" className="catagory">CAMPING</Link>
+                                <Link to={ROUTES.CATEGORY.replace(":categoryName","CAMPING")} className="catagory">CAMPING</Link>
                             </div>
                         </SwiperSlide>
 
                         <SwiperSlide className="swiper-slide hero-5-thumbs">
                             <img src="assets/images/heroes/hiking.jpg" alt="hiking" />
                             <div className="catagory-item">
-                                <Link to="category-1.html" className="catagory">HIKING</Link>
+                                <Link to={ROUTES.CATEGORY.replace(":categoryName","HIKING")} className="catagory">HIKING</Link>
                             </div>
                         </SwiperSlide>
 
                         <SwiperSlide className="swiper-slide hero-5-thumbs">
                             <img src="assets/images/heroes/beach.jpg" alt="beach" />
                             <div className="catagory-item">
-                                <Link to="category-1.html" className="catagory">BEACH</Link>
+                                <Link to={ROUTES.CATEGORY.replace(":categoryName","BEACH")} className="catagory">BEACH</Link>
                             </div>
                         </SwiperSlide>
 
                         <SwiperSlide className="swiper-slide hero-5-thumbs">
                             <img src="assets/images/heroes/desert.jpg" alt="desert" />
                             <div className="catagory-item">
-                                <Link to="category-1.html" className="catagory">DESERT</Link>
+                                <Link to={ROUTES.CATEGORY.replace(":categoryName","DESERT")} className="catagory">DESERT</Link>
                             </div>
                         </SwiperSlide>
-                    </Swiper>
+                    </Swiper>   
                 </div>
             </div>
         </section>

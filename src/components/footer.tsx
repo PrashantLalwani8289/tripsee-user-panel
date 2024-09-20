@@ -139,7 +139,7 @@ const footer = () => {
                                 <p className="mb-0 lead">A product of</p>
                                 <Link
                                     className="footer-logo"
-                                    to="index.html"
+                                    to={ROUTES.HOME}
                                     aria-label="nav-brands"
                                 >
                                     Tripsee

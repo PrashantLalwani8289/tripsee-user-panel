@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom"
 
 const OffCanvasMenu = () => {
     return (
@@ -19,18 +20,18 @@ const OffCanvasMenu = () => {
                 <div className="author-about mb-40 ">
                     <div className="text-center">
                         <div className="author-iamge">
-                            <a href="author-1.html">
+                            <Link to="author-1.html">
                                 <img
                                     src="assets/images/placeholder.svg"
                                     data-src="assets/images/about-image-1.png"
                                     alt="author-iamge"
                                 />
-                            </a>
+                            </Link>
                         </div>
                         <h5>
-                            <a className="author-name" href="author-1.html">
+                            <Link className="author-name" to="author-1.html">
                                 Mike Aiden
-                            </a>
+                            </Link>
                         </h5>
                         <p className=" text-center">
                             I’m a intrepid travel blogger, weaves tales of exploration and
@@ -43,22 +44,22 @@ const OffCanvasMenu = () => {
                     <h4 className="offcanvas-title mb-30">Follow Me</h4>
                     {/* author-socials */}
                     <div className="author-socials mb-30">
-                        <a href="https://www.facebook.com/" className="facebook">
+                        <Link to="https://www.facebook.com/" className="facebook">
                             <i className="fab fa-facebook-f" />
-                        </a>
-                        <a href="https://www.instagram.com/" className="instagram">
+                        </Link>
+                        <Link to="https://www.instagram.com/" className="instagram">
                             <i className="fab fa-instagram" />
-                        </a>
-                        <a href="https://www.linkedin.com/" className="linkedin">
+                        </Link>
+                        <Link to="https://www.linkedin.com/" className="linkedin">
                             <i className="fa-brands fa-linkedin-in" />
-                        </a>
-                        <a href="https://www.youtube.com/" className="youtube">
+                        </Link>
+                        <Link to="https://www.youtube.com/" className="youtube">
                             <i className="fab fa-youtube" />
-                        </a>
-                        <a href="https://www.pinterest.com/" className="pinterest">
+                        </Link>
+                        <Link to="https://www.pinterest.com/" className="pinterest">
                             <i className="fab fa-pinterest-p" />
-                        </a>
-                        <a href="https://twitter.com/" className="twitter">
+                        </Link>
+                        <Link to="https://twitter.com/" className="twitter">
                             <svg
                                 width={16}
                                 height={14}
@@ -68,7 +69,7 @@ const OffCanvasMenu = () => {
                             >
                                 <path d="M15.8092 15.98H11.1569L6.89801 9.78339L1.56807 15.98H0.19043L6.28619 8.89157L0.19043 0.0195312H4.84276L8.87486 5.88989L13.9234 0.0195312H15.301L9.48808 6.77751L15.8092 15.98ZM11.8079 14.9929H13.9234L4.18054 1.05696H2.06508L11.8079 14.9929Z" />
                             </svg>
-                        </a>
+                        </Link>
                     </div>
                 </div>
                 {/* sidebar-gallery */}
@@ -222,30 +223,30 @@ const OffCanvasMenu = () => {
                 <div className="catagory mb-30">
                     <h3 className="offcanvas-title  mb-40">Category</h3>
                     <div className="catagory-tag">
-                        <a href="category-1.html">
+                        <Link to="category-1.html">
                             Hiking <span className="catagory-count">10</span>
-                        </a>
-                        <a href="category-1.html">
+                        </Link>
+                        <Link to="category-1.html">
                             Camping <span className="catagory-count">08</span>
-                        </a>
-                        <a href="category-1.html">
+                        </Link>
+                        <Link to="category-1.html">
                             Desert <span className="catagory-count">12</span>
-                        </a>
-                        <a href="category-1.html">
+                        </Link>
+                        <Link to="category-1.html">
                             Beach <span className="catagory-count">22</span>
-                        </a>
-                        <a href="category-1.html">
+                        </Link>
+                        <Link to="category-1.html">
                             Forest <span className="catagory-count">15</span>
-                        </a>
-                        <a href="category-1.html">
+                        </Link>
+                        <Link to="category-1.html">
                             Ancient <span className="catagory-count">07</span>
-                        </a>
-                        <a href="category-1.html">
+                        </Link>
+                        <Link to="category-1.html">
                             City <span className="catagory-count">18</span>
-                        </a>
-                        <a href="category-1.html">
+                        </Link>
+                        <Link to="category-1.html">
                             Lake <span className="catagory-count">09</span>
-                        </a>
+                        </Link>
                     </div>
                 </div>
             </div>

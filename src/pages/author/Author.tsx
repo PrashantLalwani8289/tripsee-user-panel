@@ -72,7 +72,7 @@ const Author = () => {
                             <nav aria-label="breadcrumb-nav">
                                 <ol className="breadcrumb breadcrumb-style-2 mt-20 mb-0 ">
                                     <li className="breadcrumb-item breadcrumb-item-style-2">
-                                        <Link to="index.html">Home</Link>
+                                        <Link to={ROUTES.HOME}>Home</Link>
                                     </li>
                                     <li
                                         className="breadcrumb-item breadcrumb-item-style-2 active"

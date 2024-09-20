@@ -27,7 +27,7 @@ export interface userData{
 
 export interface IBlogSchema{
     title: string;
-    category: 'Technology' | 'Health' | 'Travel' | 'Education' | 'Finance' | 'other';
+    category: "Beach"| "Camping"| "Hiking"| "Desert"| "Forest"| "LongDrives"| "FamilyTrips";
     mainImage: string;
     introduction: string;
     photos: string[];

@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom"
 
 const OffCanvasSearch = () => {
     return (
@@ -45,36 +46,36 @@ const OffCanvasSearch = () => {
                         Recent Searches
                     </h2>
                     <div className="search-tag mb-lg-60 mb-40">
-                        <a href="#">
+                        <Link to="#">
                             Hike Highs: Elevate Your Spirit with Nature{" "}
                             <span>
                                 <i className="fa-light fa-xmark" />{" "}
                             </span>
-                        </a>
-                        <a href="#">
+                        </Link>
+                        <Link to="#">
                             Sun, Sand, and Serenity: Beach Bliss{" "}
                             <span>
                                 <i className="fa-light fa-xmark" />{" "}
                             </span>
-                        </a>
-                        <a href="#">
+                        </Link>
+                        <Link to="#">
                             Secret Lakes: Hidden Gems of Natural Beauty{" "}
                             <span>
                                 <i className="fa-light fa-xmark" />{" "}
                             </span>
-                        </a>
-                        <a href="#">
+                        </Link>
+                        <Link to="#">
                             Tent Talks: Outdoor Adventures Unleashed{" "}
                             <span>
                                 <i className="fa-light fa-xmark" />{" "}
                             </span>
-                        </a>
-                        <a href="#">
+                        </Link>
+                        <Link to="#">
                             Beyond Shores: Discovering Idyllic Lake Paradises{" "}
                             <span>
                                 <i className="fa-light fa-xmark" />{" "}
                             </span>
-                        </a>
+                        </Link>
                     </div>
                     <h2 className="modal-post-title text-start mb-lg-40 mb-30">
                         Recent Searches
@@ -84,27 +85,27 @@ const OffCanvasSearch = () => {
                             {/* mini-card-style */}
                             <div className="mini-card-style mb-lg-40 mb-30">
                                 <div className="card-image-wrapper">
-                                    <a href="article-1.html">
+                                    <Link to="article-1.html">
                                         <img
                                             src="assets/images/placeholder.svg"
                                             data-src="assets/images/feature-images/feature-image-1.jpg"
                                             className="card-img-top"
                                             alt="Breakfast"
                                         />{" "}
-                                    </a>
+                                    </Link>
                                 </div>
                                 <div className="card-body">
                                     <h5 className="card-title lead fw-extrabold mb-0">
-                                        <a href="article-1.html" className="blog-title">
+                                        <Link to="article-1.html" className="blog-title">
                                             Quick and Easy Flaky Pastry for Tasty Breakfast
-                                        </a>
+                                        </Link>
                                     </h5>
                                     <ul className="list-unstyled card-meta-style-2 mb-0 extra-small">
                                         <li>
                                             By{" "}
-                                            <a href="author-1.html" className="fw-bold">
+                                            <Link to="author-1.html" className="fw-bold">
                                                 Mike Aiden
-                                            </a>
+                                            </Link>
                                         </li>
                                         <li>
                                             January 27, <span className="dynamic-year"> </span>.
@@ -115,7 +116,7 @@ const OffCanvasSearch = () => {
                             {/* mini-card-style */}
                             <div className="mini-card-style mb-lg-40 mb-30">
                                 <div className="card-image-wrapper">
-                                    <a href="article-1.html">
+                                    <Link to="article-1.html">
                                         {" "}
                                         <img
                                             src="assets/images/placeholder.svg"
@@ -123,20 +124,20 @@ const OffCanvasSearch = () => {
                                             className="card-img-top"
                                             alt="Stories"
                                         />{" "}
-                                    </a>
+                                    </Link>
                                 </div>
                                 <div className="card-body">
                                     <h5 className="card-title lead fw-extrabold mb-0">
-                                        <a href="article-1.html" className="blog-title">
+                                        <Link to="article-1.html" className="blog-title">
                                             Footprints in the Wilderness: Hiking Stories
-                                        </a>
+                                        </Link>
                                     </h5>
                                     <ul className="list-unstyled card-meta-style-2 mb-0 extra-small">
                                         <li>
                                             By{" "}
-                                            <a href="author-1.html" className="fw-bold">
+                                            <Link to="author-1.html" className="fw-bold">
                                                 Mike Aiden
-                                            </a>
+                                            </Link>
                                         </li>
                                         <li>
                                             January 25, <span className="dynamic-year"> </span>.
@@ -149,7 +150,7 @@ const OffCanvasSearch = () => {
                             {/* mini-card-style */}
                             <div className="mini-card-style mb-lg-40 mb-30">
                                 <div className="card-image-wrapper">
-                                    <a href="article-1.html">
+                                    <Link to="article-1.html">
                                         {" "}
                                         <img
                                             src="assets/images/placeholder.svg"
@@ -157,20 +158,20 @@ const OffCanvasSearch = () => {
                                             className="card-img-top"
                                             alt="Stories"
                                         />{" "}
-                                    </a>
+                                    </Link>
                                 </div>
                                 <div className="card-body">
                                     <h5 className="card-title lead fw-extrabold mb-0">
-                                        <a href="article-1.html" className="blog-title">
+                                        <Link to="article-1.html" className="blog-title">
                                             Lost Treasures: Top 10 Ancient City Sites
-                                        </a>
+                                        </Link>
                                     </h5>
                                     <ul className="list-unstyled card-meta-style-2 mb-0 extra-small">
                                         <li>
                                             By{" "}
-                                            <a href="author-1.html" className="fw-bold">
+                                            <Link to="author-1.html" className="fw-bold">
                                                 Mike Aiden
-                                            </a>
+                                            </Link>
                                         </li>
                                         <li>
                                             January 07, <span className="dynamic-year"> </span>.
@@ -181,7 +182,7 @@ const OffCanvasSearch = () => {
                             {/* mini-card-style */}
                             <div className="mini-card-style mb-lg-40 mb-30">
                                 <div className="card-image-wrapper">
-                                    <a href="article-1.html">
+                                    <Link to="article-1.html">
                                         {" "}
                                         <img
                                             src="assets/images/placeholder.svg"
@@ -189,20 +190,20 @@ const OffCanvasSearch = () => {
                                             className="card-img-top"
                                             alt="Stories"
                                         />{" "}
-                                    </a>
+                                    </Link>
                                 </div>
                                 <div className="card-body">
                                     <h5 className="card-title lead fw-extrabold mb-0">
-                                        <a href="article-1.html" className="blog-title">
+                                        <Link to="article-1.html" className="blog-title">
                                             Beyond Shores: Discovering Idyllic Lake Paradises
-                                        </a>
+                                        </Link>
                                     </h5>
                                     <ul className="list-unstyled card-meta-style-2 mb-0 extra-small">
                                         <li>
                                             By{" "}
-                                            <a href="author-1.html" className="fw-bold">
+                                            <Link to="author-1.html" className="fw-bold">
                                                 Mike Aiden
-                                            </a>
+                                            </Link>
                                         </li>
                                         <li>
                                             January 18, <span className="dynamic-year"> </span>.
@@ -215,7 +216,7 @@ const OffCanvasSearch = () => {
                             {/* mini-card-style */}
                             <div className="mini-card-style mb-lg-40 mb-30">
                                 <div className="card-image-wrapper">
-                                    <a href="article-1.html">
+                                    <Link to="article-1.html">
                                         {" "}
                                         <img
                                             src="assets/images/placeholder.svg"
@@ -223,20 +224,20 @@ const OffCanvasSearch = () => {
                                             className="card-img-top"
                                             alt="Stories"
                                         />{" "}
-                                    </a>
+                                    </Link>
                                 </div>
                                 <div className="card-body">
                                     <h5 className="card-title lead fw-extrabold mb-0">
-                                        <a href="article-1.html" className="blog-title">
+                                        <Link to="article-1.html" className="blog-title">
                                             Seaside Serenity: Beachside Beauty Uncovered
-                                        </a>
+                                        </Link>
                                     </h5>
                                     <ul className="list-unstyled card-meta-style-2 mb-0 extra-small">
                                         <li>
                                             By{" "}
-                                            <a href="author-1.html" className="fw-bold">
+                                            <Link to="author-1.html" className="fw-bold">
                                                 Mike Aiden
-                                            </a>
+                                            </Link>
                                         </li>
                                         <li>
                                             January 15, <span className="dynamic-year"> </span>.
@@ -247,7 +248,7 @@ const OffCanvasSearch = () => {
                             {/* mini-card-style */}
                             <div className="mini-card-style mb-lg-40 mb-30">
                                 <div className="card-image-wrapper">
-                                    <a href="article-1.html">
+                                    <Link to="article-1.html">
                                         {" "}
                                         <img
                                             src="assets/images/placeholder.svg"
@@ -255,20 +256,20 @@ const OffCanvasSearch = () => {
                                             className="card-img-top"
                                             alt="Stories"
                                         />{" "}
-                                    </a>
+                                    </Link>
                                 </div>
                                 <div className="card-body">
                                     <h5 className="card-title lead fw-extrabold mb-0">
-                                        <a href="article-1.html" className="blog-title">
+                                        <Link to="article-1.html" className="blog-title">
                                             Lost Treasures: Top 10 Ancient City Sites
-                                        </a>
+                                        </Link>
                                     </h5>
                                     <ul className="list-unstyled card-meta-style-2 mb-0 extra-small">
                                         <li>
                                             By{" "}
-                                            <a href="author-1.html" className="fw-bold">
+                                            <Link to="author-1.html" className="fw-bold">
                                                 Mike Aiden
-                                            </a>
+                                            </Link>
                                         </li>
                                         <li>
                                             February 07, <span className="dynamic-year"> </span>.

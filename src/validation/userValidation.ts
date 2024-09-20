@@ -23,7 +23,7 @@ export const signInSchema = () =>
       category: yup
         .string()
         .oneOf(
-          ["Technology", "Health", "Travel", "Education", "Finance", "other"],
+          ["Beach", "Camping", "Hiking", "Desert", "Forest", "LongDrives", "FamilyTrips"],
           "Invalid category"
         )
         .required("Category is required"),

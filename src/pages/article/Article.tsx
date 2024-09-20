@@ -8,8 +8,8 @@ import OffCanvasMenu from "../../components/OffCanvasMenu"
 import OffCanvasMobileMenu from "../../components/OffCanvasMobileMenu"
 import OffCanvasSearch from "../../components/OffCanvasSearch"
 import { useEffect, useState } from "react"
-import { Blog, CommentSchema } from "../../interface/blog"
-import { GetAllBlogs, GetBlog, Reacted, SubmitComment } from "../../services/blogServices"
+import { Blog, CommentSchema, IComment, LikeSchema } from "../../interface/blog"
+import { GetAllBlogs, GetAllComments, GetBlog, Reacted, SubmitComment } from "../../services/blogServices"
 import { toastMessageError, toastMessageSuccess } from '../../components/utilities/commonToast/CommonToastMessage';
 import { ROUTES } from "../../constants/routes"
 import FsLightbox from 'fslightbox-react';
@@ -19,12 +19,13 @@ import { Pagination } from "swiper/modules"
 import { Controller } from "swiper/modules"
 import { Navigation } from "swiper/modules"
 import { Swiper as SwiperType } from 'swiper/types';
-import MapComponent from "../../components/mapComponent/MapComponent"
 import CTASection from "../../components/ctaSection/CTASection"
 import { yupResolver } from "@hookform/resolvers/yup";
 import { commentValidation } from '../../validation/userValidation';
 import { useSelector } from "react-redux";
 import { RootState } from "../../State Management/Store/Store";
+import MyMap from "../../components/mapComponent/NewMap";
+import Category from "../../components/category/Category";
 // import 'swiper/swiper-bundle.min.css';
 // import 'swiper/swiper.min.css';
 
@@ -34,22 +35,31 @@ SwiperCore.use([Navigation, Pagination, Controller]);
 const Article = () => {
     const token = useSelector((state: RootState) => state.root.user?.token)
     const { articleId } = useParams();
-    console.log(articleId)
     const navigate = useNavigate()
-
     const [isClick, setClick] = useState(false);
     const [blog, setBlog] = useState<Blog>()
     const [loading, setLoading] = useState(false)
     const [toggler, setToggler] = useState(false);
     const [blogs, setBlogs] = useState<Blog[]>([])
     const [blogsLoading, setBlogsLoading] = useState<boolean>(true)
+    const [comments, setComments] = useState<IComment[]>([])
+    const [commentsLoading, setCommentsLoading] = useState<boolean>(true)
+    const [replyingTo, setReplyingTo] = useState<number>();
 
     const [mainSwiper, setMainSwiper] = useState<SwiperType | undefined>(undefined);
     const [thumbSwiper, setThumbSwiper] = useState<SwiperType | undefined>(undefined);
 
-    const { control, handleSubmit, formState: { errors }, setValue} = useForm<CommentSchema>({mode: "onChange",
-        resolver: yupResolver(commentValidation())});
+    const { control, handleSubmit, formState: { errors }, setValue } = useForm<CommentSchema>({
+        mode: "onChange",
+        resolver: yupResolver(commentValidation())
+    });
+    const { control : replyControl, handleSubmit : replyHandleSumit, formState: { errors: replyErrors }, setValue : replySetValue } = useForm<CommentSchema>({
+        mode: "onChange",
+        resolver: yupResolver(commentValidation())
+    });
 
+    setValue("blog_id",articleId as unknown as number)
+    replySetValue("blog_id",articleId as unknown as number)
     const BlogData = async () => {
         setLoading(true)
         const response = await GetBlog(articleId as unknown as number)
@@ -64,10 +74,29 @@ const Article = () => {
             navigate(ROUTES.BLOGS)
         }
     }
+    const CommentData = async () => {
+        setCommentsLoading(true)
+        const response = await GetAllComments(articleId as unknown as number)
+        if (response.success && response.data) {
+            setComments(response.data as IComment[])
+            setCommentsLoading(false)
+        }
+        else {
+            console.error(response.message)
+            setCommentsLoading(false)
+        }
+    }
 
     const handleClick = async () => {
-        await Reacted();    
-        setClick(!isClick)
+        const response = await Reacted({ blog_id: blog?.id, user_id: blog?.user_id } as LikeSchema, token as string);
+        if (response.success) {
+            toastMessageSuccess(response.message)
+            setClick(!isClick)
+        }
+        else {
+            toastMessageError(response.message)
+        }
+        console.log(response);
     }
 
     const getAllBlogs = async () => {
@@ -87,21 +116,38 @@ const Article = () => {
     useEffect(() => {
         getAllBlogs()
         BlogData()
+        CommentData()
     }, [])
 
-
-    const handleCommentSubmit = async(data : CommentSchema) => {
-        console.log(data)
+    const handleReplySubmit = async (data: CommentSchema) => {  
+        data.parent_id = replyingTo;
         const response = await SubmitComment(data, token as string);
-        if(response && response.success){
+        if (response && response.success) {
+            toastMessageSuccess("replied successfully")
+            replySetValue("text", "")
+        }
+        else {
+            toastMessageError("Unable to submit reply")
+        }
+
+    }
+    const handleCommentSubmit = async (data: CommentSchema) => {
+        console.log(data)
+
+
+        const response = await SubmitComment(data, token as string);
+        if (response && response.success) {
             toastMessageSuccess("Comment submitted successfully")
             setValue("text", "")
         }
-        else{
+        else {
             toastMessageError("Unable to submit comment")
         }
+
     }
 
+
+    console.log(replyErrors);
     return (
         <div className="page">
             <Header />
@@ -143,7 +189,7 @@ const Article = () => {
                                             {blog?.title}
                                         </h2>
                                         <div className="d-flex gap-20 flex-wrap justify-content-center">
-                                            <span className="text-white">3 Comments</span>
+                                            <span className="text-white">{comments.length > 0 ? comments.length : "-"} Comments</span>
                                             <span className="text-white">
                                                 January 12, <span className="dynamic-year"> </span>.
                                             </span>
@@ -657,8 +703,9 @@ const Article = () => {
                                             {blog?.destinationGuides}
                                         </p>
                                         <div className="google-map pb-40">
-                                            <MapComponent latitude={26.9124} longitude={75.7873} />
+                                            <MyMap center={[blog?.latitude as number, blog?.longitude as number]} zoom={3} pinCoordinates={[blog?.latitude as number, blog?.longitude as number]} />
                                         </div>
+                                        {/* <MapChart /> */}
                                         <h3
                                             id="travelchallenges"
                                             className="article-post-heading mb-lg-20"
@@ -831,26 +878,7 @@ const Article = () => {
                                             </div>
                                             {/* social-icons */}
                                         </div>
-                                        <div className="catagory">
-                                            <h3 className="mb-40">Category</h3>
-                                            <div className="catagory-tag">
-                                                <Link to="category-1.html">
-                                                    HIKING <span className="catagory-count">10</span>
-                                                </Link>
-                                                <Link to="category-1.html">
-                                                    CAMPING <span className="catagory-count">20</span>
-                                                </Link>
-                                                <Link to="category-1.html">
-                                                    FOREST <span className="catagory-count">18</span>
-                                                </Link>
-                                                <Link to="category-1.html">
-                                                    DESERT <span className="catagory-count">14</span>
-                                                </Link>
-                                                <Link to="category-1.html">
-                                                    MARINE <span className="catagory-count">45</span>
-                                                </Link>
-                                            </div>
-                                        </div>
+                                        <Category/>
                                         <div
                                             className="add-iamge d-none d-xl-block wow fadeInUp"
                                             data-wow-delay="0.4s"
@@ -932,109 +960,86 @@ const Article = () => {
                                 {/* Main Comment */}
                                 <div className="comments-wrapper pb-lg-60 pb-30">
                                     <p className="fs-2 fw-bold article-post-heading mb-lg-40 mb-20">
-                                        3 Comments
+                                        {comments.length} Comments
                                     </p>
                                     {/* Main Comment */}
                                     <div className="comment">
                                         {/* Main to Comment */}
-                                        <div className="main-comment mb-30">
-                                            <div className="d-flex gap-20">
-                                                <div className="comment-iamge">
-                                                    <img
-                                                        src="assets/images/placeholder.svg"
-                                                        data-src="assets/images/man-02.jpg"
-                                                        alt="image"
-                                                    />
+                                        {!commentsLoading && comments && comments.map((comment, index) => {
+                                            return (
+                                                <div className="main-comment mb-30" key={index}>
+                                                    <div className="d-flex gap-20">
+                                                        <div className="comment-image">
+                                                            <img
+                                                                src="assets/images/placeholder.svg"
+                                                                data-src="assets/images/man-02.jpg"
+                                                                alt="image"
+                                                            />
+                                                        </div>
+                                                        <div className="comment-content">
+                                                            <h5>
+                                                                <Link
+                                                                    to={ROUTES.AUTHOR.replace(":authorId", String(comment.user_id))}
+                                                                    className="comment-name"
+                                                                >
+                                                                    {comment.user_name.slice(0, 14) + "..."}{" "}
+                                                                    <span>
+                                                                        {blog?.user_id === comment.user_id ? "(Author)" : ""}
+                                                                    </span>
+                                                                </Link>
+                                                            </h5>
+                                                            <span className="timestamp">
+                                                                January 12, <span className="dynamic-year"></span>. at 10am
+                                                            </span>
+                                                            <p>{comment.text}</p>
+                                                            <button
+                                                                type="button"
+                                                                className={`btn btn-reply ${replyingTo === index ? "d-none" : "d-block"}`}
+                                                                onClick={() => {
+                                                                    replySetValue("text", "")
+                                                                    setReplyingTo(index)
+                                                                } 
+                                                            } 
+                                                            >
+                                                                Reply
+                                                            </button>
+                                                        </div>
+                                                    </div>
+
+                                                    {/* Conditionally render the reply form if this comment is the one being replied to */}
+                                                    {replyingTo === index && (
+                                                        <div className="reply mb-30 mt-2">
+                                                            <div className="d-flex gap-20">
+                                                                <form className="comment-form" onSubmit={replyHandleSumit(handleReplySubmit)}>
+                                                                    <div className="row">
+                                                                        <div className="col-md-16">
+                                                                            <ControllerForForm
+                                                                                control={replyControl}
+                                                                                name="text"
+                                                                                rules={{ required: "text is required" }}
+                                                                                render={({ field }) => (
+                                                                                    <input
+                                                                                        {...field}
+                                                                                        type="text"
+                                                                                        className="form-control"
+                                                                                    />
+                                                                                )}
+                                                                            />
+                                                                        </div>
+                                                                    </div>
+                                                                    <button type="submit" className="btn btn-primary mt-2">
+                                                                        Submit reply
+                                                                    </button>
+                                                                    {replyErrors && replyErrors.text && <div>{replyErrors.text.message}</div>}
+                                                                </form>
+                                                            </div>
+                                                        </div>
+                                                    )}
                                                 </div>
-                                                <div className="comment-content">
-                                                    <h5>
-                                                        <Link to="#" className="comment-name">
-                                                            Liam Adams
-                                                        </Link>
-                                                    </h5>
-                                                    <span className="timestamp">
-                                                        January 12, <span className="dynamic-year"> </span>. at
-                                                        10am
-                                                    </span>
-                                                    <p>
-                                                        Your vivid descriptions and captivating storytelling make
-                                                        me feel like I'm right there, exploring each destination
-                                                        alongside you. Your travel blog is a constant source of
-                                                        inspiration for my own adventures. Keep the amazing
-                                                        content coming!
-                                                    </p>
-                                                    <button type="submit" className="btn btn-reply">
-                                                        Reply
-                                                    </button>
-                                                </div>
-                                            </div>
-                                        </div>
+                                            );
+                                        })}
                                         {/* Reply to Comment */}
-                                        <div className="reply mb-30">
-                                            <div className="d-flex gap-20">
-                                                <div className="comment-iamge">
-                                                    <img
-                                                        src="assets/images/placeholder.svg"
-                                                        data-src="assets/images/about-image-1.png"
-                                                        alt="image"
-                                                    />
-                                                </div>
-                                                <div className="comment-content">
-                                                    <h5>
-                                                        <Link to="#" className="comment-name">
-                                                            Liam Adams <span>(Author)</span>
-                                                        </Link>
-                                                    </h5>
-                                                    <span className="timestamp">
-                                                        January 12, <span className="dynamic-year"> </span>. at
-                                                        10am
-                                                    </span>
-                                                    <p>
-                                                        Thank you so much for your kind words! It warms my heart
-                                                        to know that my travel tales inspire your own adventures.
-                                                        Your support means the world, and I'm thrilled to continue
-                                                        sharing the journey with you. Stay tuned for more exciting
-                                                        experiences ahead
-                                                    </p>
-                                                    <button type="submit" className="btn btn-reply">
-                                                        Reply
-                                                    </button>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        {/* Main to Comment */}
-                                        <div className="main-comment mb-30">
-                                            <div className="d-flex gap-20">
-                                                <div className="comment-iamge">
-                                                    <img
-                                                        src="assets/images/placeholder.svg"
-                                                        data-src="assets/images/man-03.jpg"
-                                                        alt="image"
-                                                    />
-                                                </div>
-                                                <div className="comment-content">
-                                                    <h5>
-                                                        <Link to="#" className="comment-name">
-                                                            Mike Aiden
-                                                        </Link>
-                                                    </h5>
-                                                    <span className="timestamp">
-                                                        January 12, <span className="dynamic-year"> </span>. at
-                                                        10am
-                                                    </span>
-                                                    <p>
-                                                        Your vivid descriptions and captivating storytelling make
-                                                        me feel like I'm right there, exploring each destination
-                                                        alongside you. Your travel blog is a constant source of
-                                                        inspiration for my own adventures. Keep the amazing
-                                                        content coming!
-                                                    </p>
-                                                    <button type="submit" className="btn btn-reply">
-                                                        Reply
-                                                    </button>
-                                                </div>
-                                            </div>
-                                        </div>
+
                                     </div>
                                 </div>
 
@@ -1058,7 +1063,7 @@ const Article = () => {
                                         <button type="submit" className="btn btn-primary">
                                             Submit Comment
                                         </button>
-                                            {errors && errors.text && <div ></div>}
+                                        {errors && errors.text && <div >{errors.text.message}</div>}
                                     </form>
                                 </div>
                             </div>
