@@ -1,4 +1,4 @@
-import React from "react";
+
 const UserWhiteIcon = (props: { className?: string }) => {
   const { className } = props;
   return (

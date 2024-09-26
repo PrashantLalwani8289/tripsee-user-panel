@@ -1,4 +1,4 @@
-import React from "react";
+
 const SettingsIcon = (props: { className?: string }) => {
 	const { className } = props;
 	return (

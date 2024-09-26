@@ -1,4 +1,3 @@
-import React from "react";
 const EditIcon = (props: { className?: string }) => {
 	const { className } = props;
 	return (

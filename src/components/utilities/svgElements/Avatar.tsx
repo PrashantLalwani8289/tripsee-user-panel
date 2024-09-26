@@ -1,4 +1,3 @@
-import React from "react";
 const Avatar = (props: { className?: string }) => {
   const { className } = props;
   return (

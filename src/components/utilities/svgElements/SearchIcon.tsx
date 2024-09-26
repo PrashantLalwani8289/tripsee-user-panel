@@ -1,4 +1,4 @@
-import React from "react";
+
 const SearchIcon = (props: { className?: string }) => {
   const { className } = props;
   return (
