@@ -1,6 +1,6 @@
 
 
-const URL = "http://localhost:3002/api/v1"
+const URL = "http://13.127.131.122/api/v1"
 
 
 export default {

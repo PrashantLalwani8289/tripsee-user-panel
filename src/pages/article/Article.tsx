@@ -43,23 +43,30 @@ const Article = () => {
     const [blogs, setBlogs] = useState<Blog[]>([])
     const [blogsLoading, setBlogsLoading] = useState<boolean>(true)
     const [comments, setComments] = useState<IComment[]>([])
+    const [replies, setReplies] = useState<IComment[]>([])
+    const [repliesLoading, setRepliesLoading] = useState<boolean>(false);
+    const [emptyReplies, setEmptyReplies] = useState<boolean>(false);
     const [commentsLoading, setCommentsLoading] = useState<boolean>(true)
     const [replyingTo, setReplyingTo] = useState<number>();
+    const [viewReplyCommentIndex, setViewReplyCommentIndex] = useState<number>(-1);
+    const [viewReplyCommentId, setViewReplyCommentId] = useState<number>(-1);
+    const [commentIdForReply, setCommentIdForReply] = useState(-1);
 
     const [mainSwiper, setMainSwiper] = useState<SwiperType | undefined>(undefined);
     const [thumbSwiper, setThumbSwiper] = useState<SwiperType | undefined>(undefined);
+
 
     const { control, handleSubmit, formState: { errors }, setValue } = useForm<CommentSchema>({
         mode: "onChange",
         resolver: yupResolver(commentValidation())
     });
-    const { control : replyControl, handleSubmit : replyHandleSumit, formState: { errors: replyErrors }, setValue : replySetValue } = useForm<CommentSchema>({
+    const { control: replyControl, handleSubmit: replyHandleSumit, formState: { errors: replyErrors }, setValue: replySetValue } = useForm<CommentSchema>({
         mode: "onChange",
         resolver: yupResolver(commentValidation())
     });
 
-    setValue("blog_id",articleId as unknown as number)
-    replySetValue("blog_id",articleId as unknown as number)
+    setValue("blog_id", articleId as unknown as number)
+    replySetValue("blog_id", articleId as unknown as number)
     const BlogData = async () => {
         setLoading(true)
         const response = await GetBlog(articleId as unknown as number)
@@ -76,7 +83,7 @@ const Article = () => {
     }
     const CommentData = async () => {
         setCommentsLoading(true)
-        const response = await GetAllComments(articleId as unknown as number)
+        const response = await GetAllComments(articleId as unknown as number, -1);
         if (response.success && response.data) {
             setComments(response.data as IComment[])
             setCommentsLoading(false)
@@ -85,6 +92,29 @@ const Article = () => {
             console.error(response.message)
             setCommentsLoading(false)
         }
+    }
+
+    const replyData = async (comment_id: number) => {
+        setRepliesLoading(true);
+        console.log(comment_id, "is here")
+        const response = await GetAllComments(articleId as unknown as number, comment_id as unknown as number);
+        if(response.success && response.data && response.data.length == 0){
+            setEmptyReplies(true);  
+            setReplies([]);
+            setRepliesLoading(false);
+            return;
+        }
+        if (response.success && response.data) {
+            setEmptyReplies(false);
+            setReplies(response.data as IComment[])
+            console.log(response.data);
+
+        }
+        else {
+            console.error(response.message)
+        }
+        setRepliesLoading(false);
+
     }
 
     const handleClick = async () => {
@@ -119,11 +149,17 @@ const Article = () => {
         CommentData()
     }, [])
 
-    const handleReplySubmit = async (data: CommentSchema) => {  
-        data.parent_id = replyingTo;
+    const handleReplySubmit = async (data: CommentSchema) => {
+        console.log("comment id for reply", commentIdForReply);
+        data.parent_id = commentIdForReply;
         const response = await SubmitComment(data, token as string);
+        setReplyingTo(-1);
         if (response && response.success) {
             toastMessageSuccess("replied successfully")
+            if(commentIdForReply === viewReplyCommentId){
+                setEmptyReplies(false)
+                setReplies((prevState)=> [ response.data as IComment,...prevState])
+            }
             replySetValue("text", "")
         }
         else {
@@ -138,6 +174,7 @@ const Article = () => {
         const response = await SubmitComment(data, token as string);
         if (response && response.success) {
             toastMessageSuccess("Comment submitted successfully")
+            setComments((prevState)=> [ response.data as IComment, ...prevState])
             setValue("text", "")
         }
         else {
@@ -878,7 +915,7 @@ const Article = () => {
                                             </div>
                                             {/* social-icons */}
                                         </div>
-                                        <Category/>
+                                        <Category />
                                         <div
                                             className="add-iamge d-none d-xl-block wow fadeInUp"
                                             data-wow-delay="0.4s"
@@ -992,17 +1029,31 @@ const Article = () => {
                                                                 January 12, <span className="dynamic-year"></span>. at 10am
                                                             </span>
                                                             <p>{comment.text}</p>
-                                                            <button
-                                                                type="button"
-                                                                className={`btn btn-reply ${replyingTo === index ? "d-none" : "d-block"}`}
-                                                                onClick={() => {
-                                                                    replySetValue("text", "")
-                                                                    setReplyingTo(index)
-                                                                } 
-                                                            } 
-                                                            >
-                                                                Reply
-                                                            </button>
+                                                            <div className="container" style={{ display: "flex", gap: "10px" }}>
+                                                                <button
+                                                                    type="button"
+                                                                    className={`btn btn-reply ${replyingTo === index ? "d-none" : "d-block"}`}
+                                                                    onClick={() => {
+                                                                        replySetValue("text", "")
+                                                                        setReplyingTo(index)
+                                                                        setCommentIdForReply(comment.id);
+                                                                    }
+                                                                    }
+                                                                >
+                                                                    Reply
+                                                                </button>
+                                                                <button
+                                                                    type="button"
+                                                                    className={`btn btn-reply ${replyingTo === index ? "d-none" : "d-block"}`}
+                                                                    onClick={() => {
+                                                                        replyData(comment.id)
+                                                                        setViewReplyCommentId(comment.id)
+                                                                        setViewReplyCommentIndex(index)
+                                                                    }}
+                                                                >
+                                                                    view replies
+                                                                </button>
+                                                            </div>
                                                         </div>
                                                     </div>
 
@@ -1034,6 +1085,62 @@ const Article = () => {
                                                                 </form>
                                                             </div>
                                                         </div>
+                                                    )}
+                                                    {viewReplyCommentIndex == index && replies.length > 0  && !repliesLoading && (
+                                                        emptyReplies ? (
+                                                            <div  className="reply mb-30 mt-5">
+                                                                    <div className="d-flex gap-20">
+                                                                        {/* <div className="comment-image">
+                                                                            <img
+                                                                                src="assets/images/placeholder.svg"
+                                                                                data-src="assets/images/about-image-1.png"
+                                                                                alt="image"
+                                                                            />
+                                                                        </div> */}
+                                                                        <div className="comment-content">
+                                                                            {/* <h5>
+                                                                                <a href="#" className="comment-name">
+                                                                                    {reply.user_name} {reply.user_id == blog?.user_id ? <span>(Author)</span> : ""}
+                                                                                </a>
+                                                                            </h5> */}
+                                                                            {/* <span className="timestamp">
+                                                                                January 12, <span className="dynamic-year"></span>. at 10am
+                                                                            </span> */}
+                                                                            <p>
+                                                                                {"No data found"}
+                                                                            </p>    
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                        ) :
+                                                        replies.map((reply, indexi) => {
+                                                            return (
+                                                                <div key={indexi} className="reply mb-30 mt-5">
+                                                                    <div className="d-flex gap-20">
+                                                                        <div className="comment-image">
+                                                                            <img
+                                                                                src="assets/images/placeholder.svg"
+                                                                                data-src="assets/images/about-image-1.png"
+                                                                                alt="image"
+                                                                            />
+                                                                        </div>
+                                                                        <div className="comment-content">
+                                                                            <h5>
+                                                                                <a href="#" className="comment-name">
+                                                                                {reply.user_name.slice(0, 14) + "..."}{" "}{reply.user_id == blog?.user_id ? <span>(Author)</span> : ""}
+                                                                                </a>
+                                                                            </h5>
+                                                                            <span className="timestamp">
+                                                                                January 12, <span className="dynamic-year"></span>. at 10am
+                                                                            </span>
+                                                                            <p>
+                                                                                {reply.text}
+                                                                            </p>    
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            )
+                                                        })
                                                     )}
                                                 </div>
                                             );

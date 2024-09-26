@@ -85,9 +85,10 @@ export const GetBlog = async (
   }
 
   export const GetAllComments = async(
-    blogId : number
+    blogId : number,
+    commentId?: number,
   ): Promise<ApiResponse> => {
-    const { data } = await axios.get(`${endpoints.Blog.GET_ALL_COMMENTS}?blog_id=${blogId}`);
+    const { data } = await axios.get(`${endpoints.Blog.GET_ALL_COMMENTS}?blog_id=${blogId}&comment_id=${commentId ? commentId : -1}`);
     console.log(data);
     return data;
   }
