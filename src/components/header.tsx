@@ -1,11 +1,17 @@
-import { Link } from "react-router-dom"
-import "../App.css"
-import { ROUTES } from "../constants/routes"
+import { Link, useLocation } from "react-router-dom";
+import "../App.css";
+import { ROUTES } from "../constants/routes";
 
-const header = () => {
-    const Catogories = ['Technology', 'Health', 'Travel', 'Education', 'Finance']
+const Header = () => {
+    // const categories = ['Technology', 'Health', 'Travel', 'Education', 'Finance'];
+    const categories = ["Beach", "Camping", "Hiking", "Desert", "Forest", "LongDrives", "FamilyTrips"]
+    const location = useLocation(); // Get the current route path
+
+    // Function to check if a route is active
+    const isActive = (path : string) => location.pathname.includes(path);
+
     return (
-        <header className="section-header header-1 section-header-style-6 sticky-navbar drop-shadow  py-0">
+        <header className="section-header header-1 section-header-style-6 sticky-navbar drop-shadow py-0 zindex-dropdown">
             <div className="container">
                 <nav className="navbar navbar-expand-xl hover-menu">
                     <div className="d-flex w-100 justify-content-between align-items-center">
@@ -20,7 +26,7 @@ const header = () => {
                                 alt="logo-white"
                             />
                             <img
-                                src="assets/images/logo-white.png"
+                                src="assets/images/logo-dark.png"
                                 className="logo-dark"
                                 alt="logo-dark"
                             />
@@ -34,8 +40,6 @@ const header = () => {
                             aria-expanded="false"
                             aria-label="Toggle navigation"
                         >
-                            {/* <span class="navbar-toggler-icon"></span>		 */}
-                            {/* <img src="assets/images/placeholder.svg" data-src="assets/images/header-menu.png" alt="menu"> */}
                             <span className="menu-icon">
                                 <svg
                                     width={24}
@@ -55,9 +59,9 @@ const header = () => {
                         <div className="d-none d-xl-block">
                             <div className="d-flex gap-70 align-items-center">
                                 <ul className="gap-20 navbar-nav mb-2 me-2 mb-lg-0">
-                                    <li className="nav-item dropdown">
+                                    <li className="nav-item dropdown ">
                                         <Link
-                                            className="nav-link d-flex gap-2 align-items-center"
+                                            className={`dark-mode dark-mode nav-link d-flex gap-2 align-items-center ${isActive(ROUTES.HOME) ? 'active' : ''} `}
                                             to={ROUTES.HOME}
                                         >
                                             Home
@@ -65,36 +69,31 @@ const header = () => {
                                     </li>
                                     <li className="nav-item dropdown">
                                         <Link
-                                            className="nav-link active d-flex gap-2 align-items-center"
+                                            className={`dark-mode nav-link d-flex gap-2 align-items-center ${isActive(ROUTES.BLOGS) ? 'active' : ''}`}
                                             to={ROUTES.BLOGS}
-
                                         >
                                             Blog
                                         </Link>
                                     </li>
                                     <li className="nav-item dropdown">
                                         <Link
-                                            className="nav-link d-flex gap-2 align-items-center"
+                                            className={`dark-mode nav-link d-flex gap-2 align-items-center ${isActive(ROUTES.ABOUT) ? 'active' : ''}`}
                                             to={ROUTES.ABOUT}
                                         >
                                             About
-
                                         </Link>
-
                                     </li>
                                     <li className="nav-item dropdown">
                                         <Link
-                                            className="nav-link d-flex gap-2 align-items-center"
+                                            className={`dark-mode nav-link d-flex gap-2 align-items-center ${isActive(ROUTES.CONTACT) ? 'active' : ''}`}
                                             to={ROUTES.CONTACT}
                                         >
                                             Contact
                                         </Link>
-
                                     </li>
                                     <li className="nav-item dropdown">
                                         <Link
-                                            className="nav-link d-flex gap-2 align-items-center"
-                                            aria-current="page"
+                                            className="dark-mode nav-link d-flex gap-2 align-items-center"
                                             to="article-1.html"
                                             aria-label="nav-links"
                                             data-bs-toggle="dropdown"
@@ -118,22 +117,22 @@ const header = () => {
                                             </span>
                                         </Link>
                                         <ul className="dropdown-menu">
-                                            {
-                                                Catogories.map((category, index) => {
-                                                    return (
-                                                        <li key={index}>
-                                                            <Link className="dropdown-item" to={ROUTES.CATEGORY.replace(":categoryName",category)} aria-label="single-pages">
-                                                                {category}
-                                                            </Link>
-                                                        </li>
-                                                    )
-                                                })
-                                            }
+                                            {categories.map((category, index) => (
+                                                <li key={index}>
+                                                    <Link
+                                                        className={`dropdown-item ${isActive(ROUTES.CATEGORY.replace(":categoryName", category)) ? 'active' : ''}`}
+                                                        to={ROUTES.CATEGORY.replace(":categoryName", category)}
+                                                        aria-label="single-pages"
+                                                    >
+                                                        {category}
+                                                    </Link>
+                                                </li>
+                                            ))}
                                         </ul>
                                     </li>
                                 </ul>
                                 <div className="d-flex align-items-center gap-20">
-                                    {/* serch-icon */}
+                                    {/* search-icon */}
                                     <a
                                         className="serch-icon-style-2"
                                         data-bs-toggle="offcanvas"
@@ -186,8 +185,7 @@ const header = () => {
                 </nav>
             </div>
         </header>
+    );
+};
 
-    )
-}
-
-export default header
+export default Header;

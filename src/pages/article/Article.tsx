@@ -142,12 +142,18 @@ const Article = () => {
         }
 
     }
-
+    const ScrollToTop = () => {
+        window.scrollTo({
+      top: 0,
+      behavior: 'smooth', // Enable smooth scrolling
+    });
+    };
     useEffect(() => {
         getAllBlogs()
         BlogData()
         CommentData()
-    }, [])
+        ScrollToTop()
+    }, [articleId])
 
     const handleReplySubmit = async (data: CommentSchema) => {
         console.log("comment id for reply", commentIdForReply);
@@ -626,8 +632,7 @@ const Article = () => {
                                             untamed brown bear roam freely, eagles soar overhead, and moose
                                             graze by the shores—a captivating envvcounter with Alaska's wild
                                             residents. Lake Clark, a haven for outdoor enthusiasts,
-                                            concludesss as a realm of unspoiled wilderness. From kayaking
-                                            pristine waters to know summiting majestic peaks, it's an
+                                                pristine waters to know summiting majestic peaks, it's an
                                             untamed adventure etched in enduring memories.
                                         </p>
                                         <h6
@@ -1044,7 +1049,7 @@ const Article = () => {
                                                                 </button>
                                                                 <button
                                                                     type="button"
-                                                                    className={`btn btn-reply ${replyingTo === index ? "d-none" : "d-block"}`}
+                                                                    className={`btn btn-reply ${viewReplyCommentIndex === index ? "d-none" : "d-block"}`}
                                                                     onClick={() => {
                                                                         replyData(comment.id)
                                                                         setViewReplyCommentId(comment.id)
@@ -1133,7 +1138,7 @@ const Article = () => {
                                                                             <span className="timestamp">
                                                                                 January 12, <span className="dynamic-year"></span>. at 10am
                                                                             </span>
-                                                                            <p>
+                                                                            <p className="container">
                                                                                 {reply.text}
                                                                             </p>    
                                                                         </div>

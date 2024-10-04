@@ -28,6 +28,12 @@ const Home = () => {
     const handleClick = (data: ctaSection) => {
         console.log(data)
     }
+    const ScrollToTop = () => {
+        window.scrollTo({
+      top: 0,
+      behavior: 'smooth', // Enable smooth scrolling
+    });
+    };
 
     const getAllBlogs = async () => {
         setBlogsLoading(true)
@@ -44,6 +50,7 @@ const Home = () => {
     }
 
     useEffect(() => {
+        ScrollToTop()
         getAllBlogs()
     }, [])
 

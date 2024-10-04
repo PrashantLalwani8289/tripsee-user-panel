@@ -17,7 +17,12 @@ import { GetAllBlogs } from '../../services/blogServices'
 const About = () => {
     const [blogs, setBlogs] = useState<Blog[]>([])
     const [blogsLoading, setBlogsLoading] = useState<boolean>(true)
-
+    const ScrollToTop = () => {
+        window.scrollTo({
+      top: 0,
+      behavior: 'smooth', // Enable smooth scrolling
+    });
+    };
     const getAllBlogs = async () => {
         setBlogsLoading(true)
         const response = await GetAllBlogs()
@@ -34,6 +39,7 @@ const About = () => {
 
     useEffect(() => {
         getAllBlogs()
+        ScrollToTop()
     }, [])
     return (
         <div className='page'>

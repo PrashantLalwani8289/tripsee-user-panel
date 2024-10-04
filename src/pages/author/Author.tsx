@@ -39,11 +39,17 @@ const Author = () => {
             navigate(ROUTES.HOME)
         }
     }
-
+    const ScrollToTop = () => {
+          window.scrollTo({
+      top: 0,
+      behavior: 'smooth', // Enable smooth scrolling
+    });
+      };
 
     useEffect(() => {
         fetchAuthorData()
         fetchAuthorBlogs()
+        ScrollToTop()
     }, [authorId])
 
 

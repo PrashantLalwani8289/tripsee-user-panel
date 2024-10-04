@@ -55,6 +55,13 @@ export const GetBlog = async (
     return data;
   };
 
+  export const GetAllBlogsByCategory = async (
+    category:string
+  ): Promise<ApiResponse> => {
+    const { data } = await axios.get(`${endpoints.Blog.GET_ALL_BLOG_BY_CATEGORY}?category=${category}`);
+    console.log(data);
+    return data;
+  };
   export const Reacted = async (
     likeData : LikeSchema,
     token : string

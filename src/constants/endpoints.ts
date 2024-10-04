@@ -1,6 +1,7 @@
 
 
-const URL = "http://13.127.131.122/api/v1"
+// const URL = "http://13.127.131.122/api/v1"
+const URL = "http://127.0.0.1:3002/api/v1"
 
 
 export default {
@@ -15,6 +16,7 @@ export default {
     Blog:{
         CREATE_BLOG:`${URL}/blog/create-blog`,
         GET_BLOG:`${URL}/blog/get-blog`,
+        GET_ALL_BLOG_BY_CATEGORY:`${URL}/blog/get-blog-by-category`,
         GET_ALL_BLOGS:`${URL}/blog/get-all-blogs`,
         HANDLE_REACTION:`${URL}/blog/reaction`,
         ADD_COMMENT:`${URL}/blog/add-comment`,
