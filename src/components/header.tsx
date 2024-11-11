@@ -1,7 +1,8 @@
 import { Link, useLocation } from "react-router-dom";
 import "../App.css";
 import { ROUTES } from "../constants/routes";
-
+import darkImage from "../../public/assets/images/logo-dark.png"
+import lightImage from "../../public/assets/images/logo-white.png"
 const Header = () => {
     // const categories = ['Technology', 'Health', 'Travel', 'Education', 'Finance'];
     const categories = ["Beach", "Camping", "Hiking", "Desert", "Forest", "LongDrives", "FamilyTrips"]
@@ -21,12 +22,12 @@ const Header = () => {
                             aria-label="nav-brands"
                         >
                             <img
-                                src="assets/images/logo-white.png"
+                                src={lightImage}
                                 className="logo-light img-fluid"
                                 alt="logo-white"
                             />
                             <img
-                                src="assets/images/logo-dark.png"
+                                src={darkImage}
                                 className="logo-dark"
                                 alt="logo-dark"
                             />

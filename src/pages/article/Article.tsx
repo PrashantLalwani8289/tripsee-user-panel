@@ -51,7 +51,7 @@ const Article = () => {
     const [viewReplyCommentIndex, setViewReplyCommentIndex] = useState<number>(-1);
     const [viewReplyCommentId, setViewReplyCommentId] = useState<number>(-1);
     const [commentIdForReply, setCommentIdForReply] = useState(-1);
-
+    const [commentCount, setCommentCount] = useState(0);
     const [mainSwiper, setMainSwiper] = useState<SwiperType | undefined>(undefined);
     const [thumbSwiper, setThumbSwiper] = useState<SwiperType | undefined>(undefined);
 
@@ -84,8 +84,10 @@ const Article = () => {
     const CommentData = async () => {
         setCommentsLoading(true)
         const response = await GetAllComments(articleId as unknown as number, -1);
+        console.log('response:', response)
         if (response.success && response.data) {
-            setComments(response.data as IComment[])
+            setComments(response.data.comments as IComment[])
+            setCommentCount(response.data.totalCount);
             setCommentsLoading(false)
         }
         else {
@@ -232,7 +234,7 @@ const Article = () => {
                                             {blog?.title}
                                         </h2>
                                         <div className="d-flex gap-20 flex-wrap justify-content-center">
-                                            <span className="text-white">{comments.length > 0 ? comments.length : "-"} Comments</span>
+                                            <span className="text-white">{commentCount} Comments</span>
                                             <span className="text-white">
                                                 January 12, <span className="dynamic-year"> </span>.
                                             </span>
@@ -940,9 +942,9 @@ const Article = () => {
                         <div className="row">
                             <div className="col-xl-8">
                                 {/* mini-card-pagination-wrapper */}
-                                <div className="d-flex flex-lg-row flex-column gap-40 py-lg-100 py-md-60 py-30">
+                                <div className="d-flex flex-lg-row flex-column gap-40 py-lg-30 py-md-30 py-30">
                                     {/* card card-style-10 */}
-                                    <div className="card card-style-10 card-border">
+                                    {/* <div className="card card-style-10 card-border">
                                         <div className="d-flex align-items-center gap-lg-20 gap-10 ">
                                             <div className="card-image-wrapper-style-2 image-hover-effect-2">
                                                 <Link to="article-1.html">
@@ -968,10 +970,10 @@ const Article = () => {
                                                 </h5>
                                             </div>
                                         </div>
-                                    </div>
+                                    </div> */}
                                     {/* card card-style-10 */}
                                     {/* card card-style-10 */}
-                                    <div className="card card-style-10 card-border">
+                                    {/* <div className="card card-style-10 card-border">
                                         <div className="d-flex align-items-center gap-lg-20 gap-10 ">
                                             <div className="card-image-wrapper-style-2 image-hover-effect-2">
                                                 <Link to="article-1.html">
@@ -996,13 +998,13 @@ const Article = () => {
                                                 </h5>
                                             </div>
                                         </div>
-                                    </div>
+                                    </div> */}
                                     {/* card card-style-10 */}
                                 </div>
                                 {/* Main Comment */}
                                 <div className="comments-wrapper pb-lg-60 pb-30">
                                     <p className="fs-2 fw-bold article-post-heading mb-lg-40 mb-20">
-                                        {comments.length} Comments
+                                        {commentCount} Comments
                                     </p>
                                     {/* Main Comment */}
                                     <div className="comment">

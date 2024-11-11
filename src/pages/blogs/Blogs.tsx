@@ -10,8 +10,82 @@ import { useEffect, useState } from 'react'
 import { Blog } from '../../interface/blog'
 import { GetAllBlogs } from '../../services/blogServices'
 import { ROUTES } from '../../constants/routes'
+// import  {useRef } from 'react';
+import 'animate.css/animate.min.css';
+import { keyframes } from '@emotion/react';
 
+// import gsap from 'gsap';
+// import { ScrollTrigger } from 'gsap/ScrollTrigger';
+// import { useGSAP } from '@gsap/react';
+// import WOW from 'wowjs';
+
+
+// import WOW from 'wowjs'
+import { Reveal } from "react-awesome-reveal";
+
+// gsap.registerPlugin( ScrollTrigger);
 const Blogs = () => {
+    // const boxRef = useRef(null);
+    // const tadaAnimation = keyframes`
+    //   from {
+    //     transform: scale3d(1, 1, 1);
+    //   }
+    //   10%, 20% {
+    //     transform: scale3d(0.9, 0.9, 0.9) rotate3d(0, 0, 1, -3deg);
+    //   }
+    //   30%, 50%, 70%, 90% {
+    //     transform: scale3d(1.1, 1.1, 1.1) rotate3d(0, 0, 1, 3deg);
+    //   }
+    //   40%, 60%, 80% {
+    //     transform: scale3d(1.1, 1.1, 1.1) rotate3d(0, 0, 1, -3deg);
+    //   }
+    //   to {
+    //     transform: scale3d(1, 1, 1);
+    //   }
+    // `;
+    const backInLeft = keyframes`
+    0% {
+        transform: translateX(-2000px) scale(0.7);
+        opacity: 0.7;
+    }
+    80% {
+        transform: translateX(30px) scale(0.85);
+        opacity: 0.9;
+    }
+    100% {
+        transform: translateX(0) scale(1);
+        opacity: 1;
+    }
+    `;
+
+    const backInRight = keyframes`
+    0% {
+        transform: translateX(2000px) scale(0.7);
+        opacity: 0.7;
+    }
+    80% {
+        transform: translateX(-30px) scale(0.85);
+        opacity: 0.9;
+    }
+    100% {
+        transform: translateX(0) scale(1);
+        opacity: 1;
+    }
+    `;
+
+
+    // useEffect(() => {
+    //   new WOW.WOW().init();
+    // }, []);
+    // useEffect(() => {
+    //     // Apply GSAP animation to the box when it enters the viewport
+    //   gsap.fromTo(
+    //     boxRef.current,
+    //     { x: -200, opacity: 0 },
+    //     { x: 0, opacity: 1, duration: 1 }
+    //   );
+    // }, []);
+
     const [blogs, setBlogs] = useState<Blog[]>([])
     const [blogsLoading, setBlogsLoading] = useState<boolean>(true)
 
@@ -30,9 +104,9 @@ const Blogs = () => {
     }
     const ScrollToTop = () => {
         window.scrollTo({
-      top: 0,
-      behavior: 'smooth', // Enable smooth scrolling
-    });
+            top: 0,
+            behavior: 'smooth', // Enable smooth scrolling
+        });
     };
     useEffect(() => {
         ScrollToTop()
@@ -164,26 +238,30 @@ const Blogs = () => {
                                     {/* <!-- single card --> */}
                                     {blogs && !blogsLoading && blogs.map((blog, index) => {
                                         return (
-                                            <div className="col-md-6" key={index}>
-                                                <div className="card card-style-2 card-border mb-lg-40 mb-20  wow fadeInUp" data-wow-delay="0.4s">
-                                                    <div className="card-image-wrapper">
-                                                        <Link to={ROUTES.ARTICLE.replace(":articleId",String(blog.id))}><img src={blog.mainImage} data-src={blog.mainImage} className="card-img-top" alt="Wonders" /></Link>
-                                                    </div>
 
-                                                    <div className="card-body">
-                                                        <div className="card-header text-uppercase">
-                                                            <Link to={ROUTES.CATEGORY.replace(":categoryName", blog.category)}>{blog.category}</Link>
+                                            <div className="col-md-6" key={index} >
+                                                <Reveal keyframes={index % 2 === 0 ? backInLeft : backInRight} duration={1000} triggerOnce>
+                                                    <div className="card card-style-2 card-border mb-lg-40 mb-20  wow RevealInUp" data-wow-delay="0.4s">
+                                                        <div className="card-image-wrapper">
+                                                            <Link to={ROUTES.ARTICLE.replace(":articleId", String(blog.id))}><img src={blog.mainImage} data-src={blog.mainImage} className="card-img-top" alt="Wonders" /></Link>
                                                         </div>
-                                                        <h5 className="fs-4 card-title"><Link to={ROUTES.ARTICLE.replace(":articleId",String(blog.id))} className="blog-title">{blog.title}</Link></h5>
-                                                        <ul className="list-unstyled card-meta lead  small">
-                                                            <li>By <Link to="author-1.html" className="blog-author fw-bold">Mike Aiden</Link></li>
-                                                            <li>January 27, <span className="dynamic-year"> </span>.</li>
-                                                        </ul>
 
-                                                        <p className="card-text small">{blog.introduction.substring(0, 25)}...</p>
+                                                        <div className="card-body">
+                                                            <div className="card-header text-uppercase">
+                                                                <Link to={ROUTES.CATEGORY.replace(":categoryName", blog.category)}>{blog.category}</Link>
+                                                            </div>
+                                                            <h5 className="fs-4 card-title"><Link to={ROUTES.ARTICLE.replace(":articleId", String(blog.id))} className="blog-title">{blog.title}</Link></h5>
+                                                            <ul className="list-unstyled card-meta lead  small">
+                                                                <li>By <Link to="author-1.html" className="blog-author fw-bold">Mike Aiden</Link></li>
+                                                                <li>January 27, <span className="dynamic-year"> </span>.</li>
+                                                            </ul>
+
+                                                            <p className="card-text small">{blog.introduction.substring(0, 25)}...</p>
+                                                        </div>
                                                     </div>
-                                                </div>
+                                                </Reveal>
                                             </div>
+
                                         )
                                     })}
                                     <div className="load-more-btn mb-40 mb-lg-0 pt-20 wow fadeInUp" data-wow-delay="0.4s">
