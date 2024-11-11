@@ -17,6 +17,8 @@ import { GetAllBlogs } from '../../services/blogServices'
 import { useEffect, useState } from 'react'
 import { Blog } from '../../interface/blog'
 import HeroSlider from '../../components/HeroSlider'
+import Reveal from 'react-awesome-reveal'
+import { keyframes } from '@emotion/react'
 const Home = () => {
     // const Catogories = ["Beach", "Camping", "Hiking", "Desert", "Forest", "LongDrives", "FamilyTrips"]
     const [blogs, setBlogs] = useState<Blog[]>([])
@@ -55,6 +57,36 @@ const Home = () => {
     }, [])
 
 
+    const backInLeft = keyframes`
+    0% {
+        transform: translateX(-2000px) scale(0.7);
+        opacity: 0.7;
+    }
+    80% {
+        transform: translateX(30px) scale(0.85);
+        opacity: 0.9;
+    }
+    100% {
+        transform: translateX(0) scale(1);
+        opacity: 1;
+    }
+    `;
+
+    const backInRight = keyframes`
+    0% {
+        transform: translateX(2000px) scale(0.7);
+        opacity: 0.7;
+    }
+    80% {
+        transform: translateX(-30px) scale(0.85);
+        opacity: 0.9;
+    }
+    100% {
+        transform: translateX(0) scale(1);
+        opacity: 1;
+    }
+    `;
+
     return (
         <div className='page'>
             <Header />
@@ -86,6 +118,7 @@ const Home = () => {
                                                 {blogs && !blogsLoading && (
                                                     blogs.slice(0, 4).map((blog, index) => {
                                                         return (
+                                                            <Reveal keyframes={index % 2 === 0 ? backInLeft : backInRight} duration={750} triggerOnce>
                                                             <div
                                                                 className="mini-card-style wow fadeInUp"
                                                                 data-wow-delay="0.4s"
@@ -110,7 +143,7 @@ const Home = () => {
                                                                     <ul className="list-unstyled card-meta-style-2 mb-0 extra-small">
                                                                         <li>
                                                                             By{" "}
-                                                                            <Link to="author-1.html" className="fw-bold">
+                                                                            <Link to={ROUTES.AUTHOR.replace(":authorId", String(blog.user_id))} className="fw-bold">
                                                                                 Mike Aiden
                                                                             </Link>
                                                                         </li>
@@ -120,6 +153,7 @@ const Home = () => {
                                                                     </ul>
                                                                 </div>
                                                             </div>
+                                                            </Reveal>
                                                         )
                                                     })
                                                 )}
@@ -285,6 +319,7 @@ const Home = () => {
                                     {/* card-style-1 */}
                                     {blogs && !blogsLoading && blogs.slice(4).map((blog, index) => {
                                         return (
+                                            <Reveal keyframes={index % 2 === 0 ? backInLeft : backInRight} duration={750} triggerOnce>
                                             <div
                                                 className="card card-style-1 mb-lg-30 md-mb-20 mb-10  wow fadeInUp"
                                                 data-wow-delay="0.3s"
@@ -328,6 +363,7 @@ const Home = () => {
                                                     </p>
                                                 </div>
                                             </div>
+                                            </Reveal>
                                         )
                                     })}
                                  

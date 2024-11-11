@@ -55,6 +55,13 @@ export const GetBlog = async (
     return data;
   };
 
+  export const GetTop3Blogs = async (
+  ): Promise<ApiResponse> => {
+    const { data } = await axios.get(`${endpoints.Blog.GET_TOP_3_BLOGS}`);
+    console.log(data);
+    return data;
+  };
+
   export const GetAllBlogsByCategory = async (
     category:string
   ): Promise<ApiResponse> => {

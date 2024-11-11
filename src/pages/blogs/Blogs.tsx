@@ -8,7 +8,7 @@ import CTASection from '../../components/ctaSection/CTASection'
 import { Link } from 'react-router-dom'
 import { useEffect, useState } from 'react'
 import { Blog } from '../../interface/blog'
-import { GetAllBlogs } from '../../services/blogServices'
+import { GetAllBlogs, GetTop3Blogs } from '../../services/blogServices'
 import { ROUTES } from '../../constants/routes'
 // import  {useRef } from 'react';
 import 'animate.css/animate.min.css';
@@ -26,23 +26,23 @@ import { Reveal } from "react-awesome-reveal";
 // gsap.registerPlugin( ScrollTrigger);
 const Blogs = () => {
     // const boxRef = useRef(null);
-    // const tadaAnimation = keyframes`
-    //   from {
-    //     transform: scale3d(1, 1, 1);
-    //   }
-    //   10%, 20% {
-    //     transform: scale3d(0.9, 0.9, 0.9) rotate3d(0, 0, 1, -3deg);
-    //   }
-    //   30%, 50%, 70%, 90% {
-    //     transform: scale3d(1.1, 1.1, 1.1) rotate3d(0, 0, 1, 3deg);
-    //   }
-    //   40%, 60%, 80% {
-    //     transform: scale3d(1.1, 1.1, 1.1) rotate3d(0, 0, 1, -3deg);
-    //   }
-    //   to {
-    //     transform: scale3d(1, 1, 1);
-    //   }
-    // `;
+    const tadaAnimation = keyframes`
+      from {
+        transform: scale3d(1, 1, 1);
+      }
+      10%, 20% {
+        transform: scale3d(0.9, 0.9, 0.9) rotate3d(0, 0, 1, -3deg);
+      }
+      30%, 50%, 70%, 90% {
+        transform: scale3d(1.1, 1.1, 1.1) rotate3d(0, 0, 1, 3deg);
+      }
+      40%, 60%, 80% {
+        transform: scale3d(1.1, 1.1, 1.1) rotate3d(0, 0, 1, -3deg);
+      }
+      to {
+        transform: scale3d(1, 1, 1);
+      }
+    `;
     const backInLeft = keyframes`
     0% {
         transform: translateX(-2000px) scale(0.7);
@@ -87,7 +87,23 @@ const Blogs = () => {
     // }, []);
 
     const [blogs, setBlogs] = useState<Blog[]>([])
+    const [top3Blogs, setTop3Blogs] = useState<Blog[]>([])
     const [blogsLoading, setBlogsLoading] = useState<boolean>(true)
+
+
+    const gettop3blogs = async () => {
+        setBlogsLoading(true)
+        const response = await GetTop3Blogs()
+        if (response.success && response.data) {
+            setTop3Blogs(response.data as Blog[])
+            setBlogsLoading(false)
+        }
+        else {
+            console.error(response.message)
+            setBlogsLoading(false)
+        }
+
+    }
 
     const getAllBlogs = async () => {
         setBlogsLoading(true)
@@ -109,8 +125,12 @@ const Blogs = () => {
         });
     };
     useEffect(() => {
+        console.log("top3Blogs", top3Blogs)
+    }, [top3Blogs])
+    useEffect(() => {
         ScrollToTop()
         getAllBlogs()
+        gettop3blogs()
     }, [])
     return (
         <div className='page'>
@@ -147,78 +167,59 @@ const Blogs = () => {
                             <div className="row custom-row-gap">
                                 <div className="col-xxl-6  wow fadeInUp" data-wow-delay="0.4s">
                                     {/* <!-- single-card --> */}
-                                    <div className="card card-style-2 card-border mb-lg-40 mb-20">
-                                        <div className="card-image-wrapper card-image-wrapper-style-2 ">
-                                            <Link to="article-1.html"><img src="assets/images/placeholder.svg" data-src="assets/images/blog/explore-image-29.jpg" className="card-img-top" alt="Wonders" /></Link>
-                                        </div>
-
-                                        <div className="card-body">
-                                            <div className="card-header text-uppercase">
-                                                <Link to="category-2.html">Lake</Link>
+                                    {top3Blogs.length > 0 && <div className="card card-style-2 card-border mb-lg-40 mb-20">
+                                        <Reveal keyframes={tadaAnimation} duration={1000} triggerOnce>
+                                            <div className="card-image-wrapper card-image-wrapper-style-2 ">
+                                                <Link to={ROUTES.ARTICLE.replace(":articleId", String(top3Blogs[0].id))}><img src={top3Blogs[0].mainImage} data-src={top3Blogs[0].mainImage} className="card-img-top" alt="Wonders" /></Link>
                                             </div>
-                                            <h5 className="fs-4 card-title"><Link to="article-1.html" className="blog-title">Lakeside Wonders: Nature's sweet Peaceful Miracles</Link></h5>
 
-                                            <ul className="list-unstyled card-meta lead small">
-                                                <li>By <Link to="author-1.html" className="blog-author fw-bold">Mike Aiden</Link></li>
-                                                <li>January 28, <span className="dynamic-year"> </span>.</li>
-                                            </ul>
+                                            <div className="card-body">
+                                                <div className="card-header text-uppercase">
+                                                    <Link to={ROUTES.CATEGORY.replace(":categoryName", top3Blogs[0].category)}>{top3Blogs[0].category}</Link>
+                                                </div>
+                                                <h5 className="fs-4 card-title"><Link to={ROUTES.ARTICLE.replace(":articleId", String(top3Blogs[0].id))} className="blog-title">{top3Blogs[0].title}</Link></h5>
 
-                                            <p className="card-text small">NNature's Peaceful Miracles captivate with serene reflections, gentle captivate ripples, and harmonious symphony. A tranquil haven where symphony beauty meets Miracles captivate with serene reflections,  captivate with  embracing the soul...</p>
-                                        </div>
+                                                <ul className="list-unstyled card-meta lead small">
+                                                    <li>By <Link to={ROUTES.AUTHOR.replace(":authorId", String(top3Blogs[0].user_id))} className="fw-bold">
+                                                                                Mike Aiden
+                                                                            </Link></li>
+                                                    <li>January 28, <span className="dynamic-year"> </span>.</li>
+                                                </ul>
+
+                                                <p className="card-text small">{top3Blogs[0].introduction.substring(0, 25)}...</p>
+                                            </div>
+                                        </Reveal>
                                     </div>
+                                    }
                                 </div>
                                 <div className="col-xxl-6  wow fadeInUp" data-wow-delay="0.4s">
-                                    <div className="card card-style-6 align-items-center card-border mb-40 ">
-                                        {/* <!-- single-card --> */}
-                                        <div className="card-image-wrapper">
-                                            <Link to="blog-4.html"> <img src="assets/images/placeholder.svg" data-src="assets/images/blog/explore-image-24.jpg" className="card-img-top-2" alt="Historic" /> </Link>
-                                        </div>
+                                    {
+                                        top3Blogs.length > 0 && top3Blogs.slice(1).map((blog, index) => {
+                                            return (
+                                                <Reveal keyframes={backInRight} duration={1000} triggerOnce>
 
-                                        <div className="card-body p-0">
-                                            <h5 className="fs-4"> <Link to="blog-2.html" className="blog-title" > Historic Gems: Ancient City Secrets ancient cities </Link></h5>
+                                                <div className="card card-style-6 align-items-center card-border mb-40 " key={index}>
+                                                    {/* <!-- single-card --> */}
+                                                    <div className="card-image-wrapper">
+                                                        <Link to={ROUTES.ARTICLE.replace(":articleId", String(blog.id))}><img src={blog.mainImage} data-src={blog.mainImage} className="card-img-top" alt="Wonders" /></Link>
+                                                    </div>
 
-                                            <ul className="list-unstyled card-meta lead  small">
-                                                <li>By <Link to="author-1.html" className="fw-bold">Mike Aiden</Link></li>
-                                                <li>January 25, <span className="dynamic-year"> </span>.</li>
-                                            </ul>
+                                                    <div className="card-body p-0">
+                                                        <h5 className="fs-4"><Link to={ROUTES.CATEGORY.replace(":categoryName", blog.category)}>{blog.category}</Link></h5>
 
-                                            <p className="card-text d-lg-block d-none">Unearth the mysteries of ancient cities with "Historic Gems,"  of bygone eras. Embark on a journey...</p>
-                                        </div>
-                                    </div>
-                                    <div className="card card-style-6 align-items-center card-border mb-40" >
-                                        {/* <!-- single-card --> */}
-                                        <div className="card-image-wrapper">
-                                            <Link to="article-2.html"><img src="assets/images/placeholder.svg" data-src="assets/images/blog/explore-image-25.jpg" className="card-img-top-2" alt="secret" /></Link>
-                                        </div>
+                                                        <ul className="list-unstyled card-meta lead  small">
+                                                            <li>By <Link to={ROUTES.AUTHOR.replace(":authorId", String(blog.user_id))}  className="fw-bold">Mike Aiden</Link></li>
+                                                            <li>January 25, <span className="dynamic-year"> </span>.</li>
+                                                        </ul>
 
-                                        <div className="card-body p-0">
-                                            <h5 className="fs-4"> <Link to="article-2.html" className="blog-title" >The Mystic Woods: Nature's Healing Sanctuary</Link></h5>
+                                                        <p className="card-text d-lg-block d-none">{blog.introduction.substring(0, 25)}...</p>
+                                                    </div>
+                                                </div>
+                                                </Reveal>
 
-                                            <ul className="list-unstyled card-meta lead  small">
-                                                <li>By <Link to="author-1.html" className="fw-bold">Mike Aiden</Link></li>
-                                                <li>January 22, <span className="dynamic-year"> </span>.</li>
-                                            </ul>
-
-                                            <p className="card-text d-lg-block d-none">Unearth the mysteries of ancient cities with "Historic Gems,tales of bygone eras. Embark on a journey...</p>
-                                        </div>
-                                    </div>
-                                    <div className="card card-style-6 align-items-center card-border" >
-                                        {/* <!-- single-card --> */}
-                                        <div className="card-image-wrapper">
-                                            <Link to="article-2.html"><img src="assets/images/placeholder.svg" data-src="assets/images/blog/explore-image-26.jpg" className="card-img-top-2" alt="every" /></Link>
-                                        </div>
-
-                                        <div className="card-body p-0">
-                                            <h5 className="fs-4"> <Link to="article-2.html" className="blog-title" >Historic Gems: Discovering Ancient City Secrets</Link></h5>
-
-                                            <ul className="list-unstyled card-meta lead  small">
-                                                <li>By <Link to="author-1.html" className="fw-bold">Mike Aiden</Link></li>
-                                                <li>January 11, <span className="dynamic-year"> </span>.</li>
-                                            </ul>
-
-                                            <p className="card-text d-lg-block d-none">Unearth the mysteries of ancient cities with "Historic Gems," where each Embark on a journey...</p>
-                                        </div>
-                                    </div>
+                                            )
+                                        })
+                                    }
 
                                 </div>
                             </div>
@@ -252,7 +253,9 @@ const Blogs = () => {
                                                             </div>
                                                             <h5 className="fs-4 card-title"><Link to={ROUTES.ARTICLE.replace(":articleId", String(blog.id))} className="blog-title">{blog.title}</Link></h5>
                                                             <ul className="list-unstyled card-meta lead  small">
-                                                                <li>By <Link to="author-1.html" className="blog-author fw-bold">Mike Aiden</Link></li>
+                                                                <li>By <Link to={ROUTES.AUTHOR.replace(":authorId", String(blog.user_id))} className="fw-bold">
+                                                                                Mike Aiden
+                                                                            </Link></li>
                                                                 <li>January 27, <span className="dynamic-year"> </span>.</li>
                                                             </ul>
 

@@ -11,9 +11,40 @@ import { useEffect, useState } from "react"
 import { GetAllBlogsByCategory } from "../../services/blogServices"
 import { Blog } from "../../interface/blog"
 import { toastMessageError } from "../../components/utilities/commonToast/CommonToastMessage"
+import Reveal from "react-awesome-reveal"
+import { keyframes } from "@emotion/react"
 
 
 const Category = () => {
+    const backInLeft = keyframes`
+    0% {
+        transform: translateX(-2000px) scale(0.7);
+        opacity: 0.7;
+    }
+    80% {
+        transform: translateX(30px) scale(0.85);
+        opacity: 0.9;
+    }
+    100% {
+        transform: translateX(0) scale(1);
+        opacity: 1;
+    }
+    `;
+
+    const backInRight = keyframes`
+    0% {
+        transform: translateX(2000px) scale(0.7);
+        opacity: 0.7;
+    }
+    80% {
+        transform: translateX(-30px) scale(0.85);
+        opacity: 0.9;
+    }
+    100% {
+        transform: translateX(0) scale(1);
+        opacity: 1;
+    }
+    `;
     const { categoryName } = useParams<string>()
     const [blogs, setBlogs] = useState<Blog[]>([])
     const [totalBlogs, setTotalBlogs] = useState<number>(0);
@@ -93,6 +124,8 @@ const Category = () => {
                                 <div className="d-flex flex-column justify-content-center gap-lg-40 g gap-md-30 gap-10  mb-lg-60 mb-30">
                                     {!blogsLoading ? blogs.map((blog, index) => {
                                         return (
+                                            <Reveal keyframes={index % 2 === 0 ? backInLeft : backInRight} duration={1000} triggerOnce>
+
                                             <div
                                                 key={index}
                                                 className="card card-style-5 wow fadeInUp"
@@ -126,9 +159,9 @@ const Category = () => {
                                                             <ul className="list-unstyled card-meta lead  small">
                                                                 <li>
                                                                     By{" "}
-                                                                    <Link className="fw-bold" to="author-1.html">
-                                                                        Mike Aiden
-                                                                    </Link>
+                                                                    <Link to={ROUTES.AUTHOR.replace(":authorId", String(blog.user_id))} className="fw-bold">
+                                                                                Mike Aiden
+                                                                            </Link>
                                                                 </li>
                                                                 <li>
                                                                     January 23, <span className="dynamic-year"> </span>.
@@ -143,6 +176,8 @@ const Category = () => {
                                                 </div>
                                                 {/* row */}
                                             </div>
+                                            </Reveal>
+
                                         )
                                     }) :
                                         "Loading..."

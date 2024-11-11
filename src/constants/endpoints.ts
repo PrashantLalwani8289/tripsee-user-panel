@@ -18,6 +18,7 @@ export default {
         GET_BLOG:`${URL}/blog/get-blog`,
         GET_ALL_BLOG_BY_CATEGORY:`${URL}/blog/get-blog-by-category`,
         GET_ALL_BLOGS:`${URL}/blog/get-all-blogs`,
+        GET_TOP_3_BLOGS:`${URL}/blog/get-top-3-blogs`,
         HANDLE_REACTION:`${URL}/blog/reaction`,
         ADD_COMMENT:`${URL}/blog/add-comment`,
         GET_ALL_COMMENTS:`${URL}/blog/get-comments`
