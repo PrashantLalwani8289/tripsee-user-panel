@@ -26,6 +26,7 @@ export interface userData{
 }
 
 export interface IBlogSchema{
+    DestinationPlace:string;
     title: string;
     category: "Beach"| "Camping"| "Hiking"| "Desert"| "Forest"| "LongDrives"| "FamilyTrips";
     mainImage: string;

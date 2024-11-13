@@ -30,7 +30,7 @@ const BlogEditor: React.FC = () => {
 
   const handleImagesChange = async (files: FileList) => {
     console.log(files);
-    
+
     const demoFileList: string[] = [];
 
     for (let i = 0; i < files.length; i++) {
@@ -138,6 +138,43 @@ const BlogEditor: React.FC = () => {
                   <h5 className="mb-20 title-style-2">Let's start</h5>
                   <form className="contact-from" onSubmit={handleSubmit(handleClick)}>
                     <div className="form-group">
+                      <label htmlFor="DestinationPlace">Destination Place<sup
+                        style={{
+                          color: "#d83333",
+                          top: "-3px",
+                          fontSize: "14px",
+                          fontWeight: "500",
+                        }}
+                      >
+                        *
+                      </sup></label>
+                      <Controller
+                        name="DestinationPlace"
+                        control={control}
+                        defaultValue=""
+                        render={({ field }) => (
+                          <input
+                            {...field}
+                            type="text"
+                            className="form-control"
+                            placeholder="Destination"
+                          />
+                        )}
+                      />
+                      {errors.DestinationPlace && <p className="error">{errors.DestinationPlace.message}</p>}
+                    </div>
+
+                    <div className="form-group">
+                      <label htmlFor="title">Title<sup
+                        style={{
+                          color: "#d83333",
+                          top: "-3px",
+                          fontSize: "14px",
+                          fontWeight: "500",
+                        }}
+                      >
+                        *
+                      </sup></label>
                       <Controller
                         name="title"
                         control={control}
@@ -155,7 +192,16 @@ const BlogEditor: React.FC = () => {
                     </div>
 
                     <div className="form-group">
-                      <label htmlFor="category">Category</label>
+                      <label htmlFor="category">Category<sup
+                        style={{
+                          color: "#d83333",
+                          top: "-3px",
+                          fontSize: "14px",
+                          fontWeight: "500",
+                        }}
+                      >
+                        *
+                      </sup></label>
                       <Controller
                         name="category"
                         control={control}
@@ -177,7 +223,16 @@ const BlogEditor: React.FC = () => {
                     </div>
 
                     <div className="form-group">
-                      <label htmlFor="mainImage">Main Image</label>
+                      <label htmlFor="mainImage">Main Image<sup
+                        style={{
+                          color: "#d83333",
+                          top: "-3px",
+                          fontSize: "14px",
+                          fontWeight: "500",
+                        }}
+                      >
+                        *
+                      </sup></label>
                       <Controller
                         name="mainImage"
                         control={control}
@@ -199,7 +254,16 @@ const BlogEditor: React.FC = () => {
                     </div>
 
                     <div className="form-group">
-                      <label htmlFor="introduction">Introduction</label>
+                      <label htmlFor="introduction">Introduction<sup
+                        style={{
+                          color: "#d83333",
+                          top: "-3px",
+                          fontSize: "14px",
+                          fontWeight: "500",
+                        }}
+                      >
+                        *
+                      </sup></label>
                       <Controller
                         name="introduction"
                         control={control}
@@ -217,7 +281,16 @@ const BlogEditor: React.FC = () => {
                     </div>
 
                     <div className="form-group">
-                      <label htmlFor="photos">Photos</label>
+                      <label htmlFor="photos">Photos<sup
+                        style={{
+                          color: "#d83333",
+                          top: "-3px",
+                          fontSize: "14px",
+                          fontWeight: "500",
+                        }}
+                      >
+                        *
+                      </sup></label>
                       <Controller
                         name="photos"
                         control={control}
@@ -227,18 +300,18 @@ const BlogEditor: React.FC = () => {
                             type="file"
                             className="form-control"
                             multiple
-                            
+
                             accept="image/*"
                             placeholder="Upload your trip photos"
                             onChange={(e) => {
                               if (e && e.target && e.target.files) {
-                                if(e.target.files.length > 5){
+                                if (e.target.files.length > 5) {
                                   toastMessageError("Cannot select more than 5 Images")
                                 }
-                                else{
+                                else {
                                   handleImagesChange(e.target.files);
                                 }
-                                  
+
                               }
                             }}
                             onBlur={onBlur}
@@ -268,7 +341,16 @@ const BlogEditor: React.FC = () => {
                     </div>
 
                     <div className="form-group">
-                      <label htmlFor="adventure">Adventure</label>
+                      <label htmlFor="adventure">Adventure<sup
+                        style={{
+                          color: "#d83333",
+                          top: "-3px",
+                          fontSize: "14px",
+                          fontWeight: "500",
+                        }}
+                      >
+                        *
+                      </sup></label>
                       <Controller
                         name="adventure"
                         control={control}
@@ -358,7 +440,16 @@ const BlogEditor: React.FC = () => {
                     </div>
 
                     <div className="form-group">
-                      <label htmlFor="conclusion">Conclusion</label>
+                      <label htmlFor="conclusion">Conclusion<sup
+                        style={{
+                          color: "#d83333",
+                          top: "-3px",
+                          fontSize: "14px",
+                          fontWeight: "500",
+                        }}
+                      >
+                        *
+                      </sup></label>
                       <Controller
                         name="conclusion"
                         control={control}
@@ -376,7 +467,16 @@ const BlogEditor: React.FC = () => {
                     </div>
 
                     <div className="form-group">
-                      <label htmlFor="latitude">Latitude</label>
+                      <label htmlFor="latitude">Latitude<sup
+                        style={{
+                          color: "#d83333",
+                          top: "-3px",
+                          fontSize: "14px",
+                          fontWeight: "500",
+                        }}
+                      >
+                        *
+                      </sup></label>
                       <Controller
                         name="latitude"
                         control={control}
@@ -394,7 +494,16 @@ const BlogEditor: React.FC = () => {
                     </div>
 
                     <div className="form-group">
-                      <label htmlFor="longitude">Longitude</label>
+                      <label htmlFor="longitude">Longitude<sup
+                        style={{
+                          color: "#d83333",
+                          top: "-3px",
+                          fontSize: "14px",
+                          fontWeight: "500",
+                        }}
+                      >
+                        *
+                      </sup></label>
                       <Controller
                         name="longitude"
                         control={control}

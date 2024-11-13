@@ -67,7 +67,7 @@
 .error {
   color: #e74c3c; /* Red color for error text */
   font-size: 0.875rem; /* Slightly smaller font size for error messages */
-  margin-top: 0.25rem; /* Small space above the error message */
+  margin-top: -10px; 
 }
 
 .nav-item .dropdown-menu {

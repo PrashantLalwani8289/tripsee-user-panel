@@ -19,6 +19,7 @@ export const signInSchema = () =>
 
   export const BlogSchema = () =>
     yup.object().shape({
+      DestinationPlace: yup.string().required(),
       title: yup.string().required(),
       category: yup
         .string()
