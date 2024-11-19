@@ -1,32 +1,72 @@
 // BlogEditor.tsx
-import { yupResolver } from '@hookform/resolvers/yup';
-import React from 'react';
-import { Controller, useForm } from 'react-hook-form';
-import { useSelector } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
+import { yupResolver } from "@hookform/resolvers/yup";
+import React from "react";
+import { Controller, useForm } from "react-hook-form";
+import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import "../App.css";
-import { ROUTES } from '../constants/routes';
-import { IBlogSchema } from '../interface/userInterface';
-import { CreateBlog, UploadToImagekit } from '../services/blogServices';
-import { UploadImage } from '../services/userServices';
-import { RootState } from '../State Management/Store/Store';
-import { BlogSchema } from '../validation/userValidation';
-import { toastMessageError, toastMessageSuccess } from './utilities/commonToast/CommonToastMessage';
+import { ROUTES } from "../constants/routes";
+import { IBlogSchema } from "../interface/userInterface";
+import {
+  CreateBlog,
+  GetAiBlogs,
+  UploadToImagekit,
+} from "../services/blogServices";
+import { UploadImage } from "../services/userServices";
+import { RootState } from "../State Management/Store/Store";
+import { BlogSchema } from "../validation/userValidation";
+import {
+  toastMessageError,
+  toastMessageSuccess,
+} from "./utilities/commonToast/CommonToastMessage";
 const BlogEditor: React.FC = () => {
-  const token = useSelector((state: RootState) => state.root.user?.token)
-  const navigate = useNavigate()
-  const PublicKey = "public_E9EI0xKylhWQ6Zg8IuojaJTrvQw="
+  const token = useSelector((state: RootState) => state.root.user?.token);
+  const navigate = useNavigate();
+  const PublicKey = "public_E9EI0xKylhWQ6Zg8IuojaJTrvQw=";
 
   const {
     control,
     handleSubmit,
+    getValues,
+    reset,
     formState: { errors },
-    setValue
+    setValue,
   } = useForm<IBlogSchema>({
     mode: "onChange",
-    resolver: yupResolver(BlogSchema())
+    resolver: yupResolver(BlogSchema()),
   });
 
+  const handleBlogThrouthAI = async () => {
+    const data = getValues("DestinationPlace");
+    if (!data) {
+      toastMessageError("Please select a destination place");
+      return;
+    }
+    if (data.length < 3) {
+      toastMessageError("Please select a valid destination ");
+      return;
+    }
+    const response = await GetAiBlogs(data, token as string);
+    console.log(response.data);
+    if (response.success && response.data) {
+      reset({
+        DestinationPlace: data,
+        title: response.data.title,
+        introduction: response.data.introduction,
+        tips: response.data.tips,
+        adventure: response.data.adventure,
+        accomodationReview: response.data.accomodationReview,
+        destinationGuides: response.data.destinationGuides,
+        customerReview: response.data.customerReview,
+        travelChallenges: response.data.travelChallenges,
+        conclusion: response.data.conclusion,
+        latitude: response.data.latitude,
+        longitude: response.data.longitude,
+      });
+    } else {
+      toastMessageError(response.message);
+    }
+  };
 
   const handleImagesChange = async (files: FileList) => {
     console.log(files);
@@ -40,20 +80,24 @@ const BlogEditor: React.FC = () => {
         const reader = new FileReader(); // Create a new FileReader instance for each file
 
         reader.onloadend = async () => {
-          if (typeof reader.result === 'string') {
+          if (typeof reader.result === "string") {
             try {
               const authResponse = await UploadImage();
-              const { signature, expire, token } = authResponse.data as { signature: string; expire: string; token: string };
+              const { signature, expire, token } = authResponse.data as {
+                signature: string;
+                expire: string;
+                token: string;
+              };
               const base64 = reader.result;
               const date = new Date();
 
               const formData = new FormData();
-              formData.append('file', base64);
-              formData.append('publicKey', PublicKey as string);
-              formData.append('signature', signature);
-              formData.append('expire', expire);
-              formData.append('token', token);
-              formData.append('fileName', date.toISOString());
+              formData.append("file", base64);
+              formData.append("publicKey", PublicKey as string);
+              formData.append("signature", signature);
+              formData.append("expire", expire);
+              formData.append("token", token);
+              formData.append("fileName", date.toISOString());
 
               // Send the request to ImageKit
               const uploadResponse = await UploadToImagekit(formData);
@@ -64,37 +108,40 @@ const BlogEditor: React.FC = () => {
               setValue("photos", demoFileList);
               // Update the value after each upload
             } catch (error) {
-              console.error('Error uploading image:', error);
+              console.error("Error uploading image:", error);
             }
           }
         };
 
         reader.readAsDataURL(file); // Start reading the file
       }
-
     }
   };
   const handleImageChange = (file: File) => {
     const reader = new FileReader();
     reader.onloadend = async () => {
-      if (typeof reader.result === 'string') {
+      if (typeof reader.result === "string") {
         const authResponse = await UploadImage();
-        const { signature, expire, token } = authResponse.data as { signature: string; expire: string; token: string };
+        const { signature, expire, token } = authResponse.data as {
+          signature: string;
+          expire: string;
+          token: string;
+        };
         const base64 = reader.result;
         const date = new Date();
         const formData = new FormData();
-        formData.append('file', base64);
-        formData.append('publicKey', PublicKey as string);
-        formData.append('signature', signature);
-        formData.append('expire', expire);
-        formData.append('token', token);
-        formData.append('fileName', date.toISOString());
+        formData.append("file", base64);
+        formData.append("publicKey", PublicKey as string);
+        formData.append("signature", signature);
+        formData.append("expire", expire);
+        formData.append("token", token);
+        formData.append("fileName", date.toISOString());
 
         // Send the request to ImageKit
-        const uploadResponse = await UploadToImagekit(formData)
+        const uploadResponse = await UploadToImagekit(formData);
 
         const url = uploadResponse.data.url;
-        setValue('mainImage', url);
+        setValue("mainImage", url);
       }
     };
     if (file) {
@@ -103,21 +150,18 @@ const BlogEditor: React.FC = () => {
   };
 
   const handleClick = async (formData: IBlogSchema) => {
-    console.log(formData)
+    console.log(formData);
     const response = await CreateBlog(formData, token as string);
     if (response.success) {
-      navigate(ROUTES.BLOGS)
-      toastMessageSuccess(response.message)
+      navigate(ROUTES.BLOGS);
+      toastMessageSuccess(response.message);
     } else {
-      toastMessageError(response.message)
+      toastMessageError(response.message);
     }
   };
 
-
-
   return (
     <>
-
       <section className="section-blog pb-30 pb-md-60 pb-lg-90">
         <div className="container">
           <div className="row justify-content-between">
@@ -127,54 +171,97 @@ const BlogEditor: React.FC = () => {
                   Hey buddy,
                 </h5>
                 <p className="mb-30 fix-width-post-content">
-                  Welcome to our blog community! We're thrilled to have you here and can't wait to see the stories, insights, and experiences you'll share. Whether you’re passionate about travel, technology, health, or any other topic, this is the perfect place to express your ideas and connect with like-minded individuals.
+                  Welcome to our blog community! We're thrilled to have you here
+                  and can't wait to see the stories, insights, and experiences
+                  you'll share. Whether you’re passionate about travel,
+                  technology, health, or any other topic, this is the perfect
+                  place to express your ideas and connect with like-minded
+                  individuals.
                 </p>
                 <p className="mb-60 fix-width-post-content">
-                  Feel free to submit your own blog posts and become part of our vibrant community. Share your adventures, expertise, and thoughts with our readers, and engage in discussions that spark curiosity and inspire.
-
-                  Start creating and uploading your blogs below, and join us in building a space filled with valuable content and inspiring stories
+                  Feel free to submit your own blog posts and become part of our
+                  vibrant community. Share your adventures, expertise, and
+                  thoughts with our readers, and engage in discussions that
+                  spark curiosity and inspire. Start creating and uploading your
+                  blogs below, and join us in building a space filled with
+                  valuable content and inspiring stories
                 </p>
                 <div className="contact-from-area fix-width-post-content">
                   <h5 className="mb-20 title-style-2">Let's start</h5>
-                  <form className="contact-from" onSubmit={handleSubmit(handleClick)}>
+                  <form
+                    className="contact-from"
+                    onSubmit={handleSubmit(handleClick)}
+                  >
                     <div className="form-group">
-                      <label htmlFor="DestinationPlace">Destination Place<sup
+                      <label htmlFor="DestinationPlace">
+                        Destination
+                        <sup
+                          style={{
+                            color: "#d83333",
+                            top: "-3px",
+                            fontSize: "14px",
+                            fontWeight: "500",
+                          }}
+                        >
+                          *
+                        </sup>
+                      </label>
+                      <div
+                        className="container"
                         style={{
-                          color: "#d83333",
-                          top: "-3px",
-                          fontSize: "14px",
-                          fontWeight: "500",
+                          display: "flex",
+                          justifyContent: "center",
+                          alignItems: "center",
+                          gap: "10px", //
                         }}
                       >
-                        *
-                      </sup></label>
-                      <Controller
-                        name="DestinationPlace"
-                        control={control}
-                        defaultValue=""
-                        render={({ field }) => (
-                          <input
-                            {...field}
-                            type="text"
-                            className="form-control"
-                            placeholder="Destination"
-                          />
-                        )}
-                      />
-                      {errors.DestinationPlace && <p className="error">{errors.DestinationPlace.message}</p>}
+                        <Controller
+                          name="DestinationPlace"
+                          control={control}
+                          defaultValue=""
+                          render={({ field }) => (
+                            <input
+                              {...field}
+                              type="text"
+                              className="form-control"
+                              placeholder="Destination"
+                            />
+                          )}
+                        />
+                        <button
+                          type="button"
+                          onClick={handleBlogThrouthAI}
+                          className="btn btn-primary"
+                          style={{
+                            fontSize: "14px",
+                            top: "-10px",
+                            fontWeight: "500",
+                          }}
+                        >
+                          Create Blog Post through AI.
+                        </button>
+                      </div>
+                      {errors.DestinationPlace && (
+                        <p className="error">
+                          {errors.DestinationPlace.message}
+                        </p>
+                      )}
                     </div>
 
                     <div className="form-group">
-                      <label htmlFor="title">Title<sup
-                        style={{
-                          color: "#d83333",
-                          top: "-3px",
-                          fontSize: "14px",
-                          fontWeight: "500",
-                        }}
-                      >
-                        *
-                      </sup></label>
+                      <label htmlFor="title">
+                        Title
+                        <sup
+                          style={{
+                            color: "#d83333",
+                            top: "-3px",
+                            fontSize: "14px",
+                            fontWeight: "500",
+                          }}
+                        >
+                          *
+                        </sup>
+                      </label>
                       <Controller
                         name="title"
                         control={control}
@@ -188,20 +275,25 @@ const BlogEditor: React.FC = () => {
                           />
                         )}
                       />
-                      {errors.title && <p className="error">{errors.title.message}</p>}
+                      {errors.title && (
+                        <p className="error">{errors.title.message}</p>
+                      )}
                     </div>
 
                     <div className="form-group">
-                      <label htmlFor="category">Category<sup
-                        style={{
-                          color: "#d83333",
-                          top: "-3px",
-                          fontSize: "14px",
-                          fontWeight: "500",
-                        }}
-                      >
-                        *
-                      </sup></label>
+                      <label htmlFor="category">
+                        Category
+                        <sup
+                          style={{
+                            color: "#d83333",
+                            top: "-3px",
+                            fontSize: "14px",
+                            fontWeight: "500",
+                          }}
+                        >
+                          *
+                        </sup>
+                      </label>
                       <Controller
                         name="category"
                         control={control}
@@ -219,20 +311,25 @@ const BlogEditor: React.FC = () => {
                           </select>
                         )}
                       />
-                      {errors.category && <p className="error">{errors.category.message}</p>}
+                      {errors.category && (
+                        <p className="error">{errors.category.message}</p>
+                      )}
                     </div>
 
                     <div className="form-group">
-                      <label htmlFor="mainImage">Main Image<sup
-                        style={{
-                          color: "#d83333",
-                          top: "-3px",
-                          fontSize: "14px",
-                          fontWeight: "500",
-                        }}
-                      >
-                        *
-                      </sup></label>
+                      <label htmlFor="mainImage">
+                        Main Image
+                        <sup
+                          style={{
+                            color: "#d83333",
+                            top: "-3px",
+                            fontSize: "14px",
+                            fontWeight: "500",
+                          }}
+                        >
+                          *
+                        </sup>
+                      </label>
                       <Controller
                         name="mainImage"
                         control={control}
@@ -250,20 +347,25 @@ const BlogEditor: React.FC = () => {
                           />
                         )}
                       />
-                      {errors.mainImage && <p className="error">{errors.mainImage.message}</p>}
+                      {errors.mainImage && (
+                        <p className="error">{errors.mainImage.message}</p>
+                      )}
                     </div>
 
                     <div className="form-group">
-                      <label htmlFor="introduction">Introduction<sup
-                        style={{
-                          color: "#d83333",
-                          top: "-3px",
-                          fontSize: "14px",
-                          fontWeight: "500",
-                        }}
-                      >
-                        *
-                      </sup></label>
+                      <label htmlFor="introduction">
+                        Introduction
+                        <sup
+                          style={{
+                            color: "#d83333",
+                            top: "-3px",
+                            fontSize: "14px",
+                            fontWeight: "500",
+                          }}
+                        >
+                          *
+                        </sup>
+                      </label>
                       <Controller
                         name="introduction"
                         control={control}
@@ -277,20 +379,25 @@ const BlogEditor: React.FC = () => {
                           />
                         )}
                       />
-                      {errors.introduction && <p className="error">{errors.introduction.message}</p>}
+                      {errors.introduction && (
+                        <p className="error">{errors.introduction.message}</p>
+                      )}
                     </div>
 
                     <div className="form-group">
-                      <label htmlFor="photos">Photos<sup
-                        style={{
-                          color: "#d83333",
-                          top: "-3px",
-                          fontSize: "14px",
-                          fontWeight: "500",
-                        }}
-                      >
-                        *
-                      </sup></label>
+                      <label htmlFor="photos">
+                        Photos
+                        <sup
+                          style={{
+                            color: "#d83333",
+                            top: "-3px",
+                            fontSize: "14px",
+                            fontWeight: "500",
+                          }}
+                        >
+                          *
+                        </sup>
+                      </label>
                       <Controller
                         name="photos"
                         control={control}
@@ -300,18 +407,17 @@ const BlogEditor: React.FC = () => {
                             type="file"
                             className="form-control"
                             multiple
-
                             accept="image/*"
                             placeholder="Upload your trip photos"
                             onChange={(e) => {
                               if (e && e.target && e.target.files) {
                                 if (e.target.files.length > 5) {
-                                  toastMessageError("Cannot select more than 5 Images")
-                                }
-                                else {
+                                  toastMessageError(
+                                    "Cannot select more than 5 Images"
+                                  );
+                                } else {
                                   handleImagesChange(e.target.files);
                                 }
-
                               }
                             }}
                             onBlur={onBlur}
@@ -319,7 +425,9 @@ const BlogEditor: React.FC = () => {
                           />
                         )}
                       />
-                      {errors.photos && <p className="error">{errors.photos.message}</p>}
+                      {errors.photos && (
+                        <p className="error">{errors.photos.message}</p>
+                      )}
                     </div>
 
                     <div className="form-group">
@@ -337,20 +445,25 @@ const BlogEditor: React.FC = () => {
                           />
                         )}
                       />
-                      {errors.tips && <p className="error">{errors.tips.message}</p>}
+                      {errors.tips && (
+                        <p className="error">{errors.tips.message}</p>
+                      )}
                     </div>
 
                     <div className="form-group">
-                      <label htmlFor="adventure">Adventure<sup
-                        style={{
-                          color: "#d83333",
-                          top: "-3px",
-                          fontSize: "14px",
-                          fontWeight: "500",
-                        }}
-                      >
-                        *
-                      </sup></label>
+                      <label htmlFor="adventure">
+                        Adventure
+                        <sup
+                          style={{
+                            color: "#d83333",
+                            top: "-3px",
+                            fontSize: "14px",
+                            fontWeight: "500",
+                          }}
+                        >
+                          *
+                        </sup>
+                      </label>
                       <Controller
                         name="adventure"
                         control={control}
@@ -364,11 +477,15 @@ const BlogEditor: React.FC = () => {
                           />
                         )}
                       />
-                      {errors.adventure && <p className="error">{errors.adventure.message}</p>}
+                      {errors.adventure && (
+                        <p className="error">{errors.adventure.message}</p>
+                      )}
                     </div>
 
                     <div className="form-group">
-                      <label htmlFor="accomodationReview">Accommodation Review</label>
+                      <label htmlFor="accomodationReview">
+                        Accomodation Review
+                      </label>
                       <Controller
                         name="accomodationReview"
                         control={control}
@@ -378,15 +495,21 @@ const BlogEditor: React.FC = () => {
                             {...field}
                             type="text"
                             className="form-control"
-                            placeholder="Enter accommodation review"
+                            placeholder="Enter accomodation review"
                           />
                         )}
                       />
-                      {errors.accomodationReview && <p className="error">{errors.accomodationReview.message}</p>}
+                      {errors.accomodationReview && (
+                        <p className="error">
+                          {errors.accomodationReview.message}
+                        </p>
+                      )}
                     </div>
 
                     <div className="form-group">
-                      <label htmlFor="destinationGuides">Destination Guides</label>
+                      <label htmlFor="destinationGuides">
+                        Destination Guides
+                      </label>
                       <Controller
                         name="destinationGuides"
                         control={control}
@@ -400,7 +523,11 @@ const BlogEditor: React.FC = () => {
                           />
                         )}
                       />
-                      {errors.destinationGuides && <p className="error">{errors.destinationGuides.message}</p>}
+                      {errors.destinationGuides && (
+                        <p className="error">
+                          {errors.destinationGuides.message}
+                        </p>
+                      )}
                     </div>
 
                     <div className="form-group">
@@ -418,11 +545,15 @@ const BlogEditor: React.FC = () => {
                           />
                         )}
                       />
-                      {errors.customerReview && <p className="error">{errors.customerReview.message}</p>}
+                      {errors.customerReview && (
+                        <p className="error">{errors.customerReview.message}</p>
+                      )}
                     </div>
 
                     <div className="form-group">
-                      <label htmlFor="travelChallenges">Travel Challenges</label>
+                      <label htmlFor="travelChallenges">
+                        Travel Challenges
+                      </label>
                       <Controller
                         name="travelChallenges"
                         control={control}
@@ -436,20 +567,27 @@ const BlogEditor: React.FC = () => {
                           />
                         )}
                       />
-                      {errors.travelChallenges && <p className="error">{errors.travelChallenges.message}</p>}
+                      {errors.travelChallenges && (
+                        <p className="error">
+                          {errors.travelChallenges.message}
+                        </p>
+                      )}
                     </div>
 
                     <div className="form-group">
-                      <label htmlFor="conclusion">Conclusion<sup
-                        style={{
-                          color: "#d83333",
-                          top: "-3px",
-                          fontSize: "14px",
-                          fontWeight: "500",
-                        }}
-                      >
-                        *
-                      </sup></label>
+                      <label htmlFor="conclusion">
+                        Conclusion
+                        <sup
+                          style={{
+                            color: "#d83333",
+                            top: "-3px",
+                            fontSize: "14px",
+                            fontWeight: "500",
+                          }}
+                        >
+                          *
+                        </sup>
+                      </label>
                       <Controller
                         name="conclusion"
                         control={control}
@@ -463,20 +601,25 @@ const BlogEditor: React.FC = () => {
                           />
                         )}
                       />
-                      {errors.conclusion && <p className="error">{errors.conclusion.message}</p>}
+                      {errors.conclusion && (
+                        <p className="error">{errors.conclusion.message}</p>
+                      )}
                     </div>
 
                     <div className="form-group">
-                      <label htmlFor="latitude">Latitude<sup
-                        style={{
-                          color: "#d83333",
-                          top: "-3px",
-                          fontSize: "14px",
-                          fontWeight: "500",
-                        }}
-                      >
-                        *
-                      </sup></label>
+                      <label htmlFor="latitude">
+                        Latitude
+                        <sup
+                          style={{
+                            color: "#d83333",
+                            top: "-3px",
+                            fontSize: "14px",
+                            fontWeight: "500",
+                          }}
+                        >
+                          *
+                        </sup>
+                      </label>
                       <Controller
                         name="latitude"
                         control={control}
@@ -490,20 +633,25 @@ const BlogEditor: React.FC = () => {
                           />
                         )}
                       />
-                      {errors.latitude && <p className="error">{errors.latitude.message}</p>}
+                      {errors.latitude && (
+                        <p className="error">{errors.latitude.message}</p>
+                      )}
                     </div>
 
                     <div className="form-group">
-                      <label htmlFor="longitude">Longitude<sup
-                        style={{
-                          color: "#d83333",
-                          top: "-3px",
-                          fontSize: "14px",
-                          fontWeight: "500",
-                        }}
-                      >
-                        *
-                      </sup></label>
+                      <label htmlFor="longitude">
+                        Longitude
+                        <sup
+                          style={{
+                            color: "#d83333",
+                            top: "-3px",
+                            fontSize: "14px",
+                            fontWeight: "500",
+                          }}
+                        >
+                          *
+                        </sup>
+                      </label>
                       <Controller
                         name="longitude"
                         control={control}
@@ -517,9 +665,10 @@ const BlogEditor: React.FC = () => {
                           />
                         )}
                       />
-                      {errors.longitude && <p className="error">{errors.longitude.message}</p>}
+                      {errors.longitude && (
+                        <p className="error">{errors.longitude.message}</p>
+                      )}
                     </div>
-
 
                     <div className="form-group">
                       <button
@@ -533,12 +682,10 @@ const BlogEditor: React.FC = () => {
                 </div>
               </div>
             </div>
-
           </div>
         </div>
         {/* container */}
       </section>
-
     </>
   );
 };
