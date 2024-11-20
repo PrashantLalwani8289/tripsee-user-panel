@@ -1,12 +1,13 @@
 // BlogEditor.tsx
 import { yupResolver } from "@hookform/resolvers/yup";
-import React from "react";
+import React, { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import "../App.css";
 import { ROUTES } from "../constants/routes";
 import { IBlogSchema } from "../interface/userInterface";
+import { Triangle } from "react-loader-spinner";
 import {
   CreateBlog,
   GetAiBlogs,
@@ -19,10 +20,12 @@ import {
   toastMessageError,
   toastMessageSuccess,
 } from "./utilities/commonToast/CommonToastMessage";
+import LoadingScreen from "./loader/Loader";
 const BlogEditor: React.FC = () => {
   const token = useSelector((state: RootState) => state.root.user?.token);
   const navigate = useNavigate();
   const PublicKey = "public_E9EI0xKylhWQ6Zg8IuojaJTrvQw=";
+  const [aiThinking, setAiThinking] = useState<boolean>(false);
 
   const {
     control,
@@ -46,16 +49,20 @@ const BlogEditor: React.FC = () => {
       toastMessageError("Please select a valid destination ");
       return;
     }
+    setAiThinking(true);
     const response = await GetAiBlogs(data, token as string);
-    console.log(response.data);
     if (response.success && response.data) {
+      const currentValues = getValues();
       reset({
+        ...currentValues,
         DestinationPlace: data,
         title: response.data.title,
         introduction: response.data.introduction,
         tips: response.data.tips,
         adventure: response.data.adventure,
-        accomodationReview: response.data.accomodationReview,
+        accomodationReview: response.data.accomodationReview
+          ? response.data.accomodationReview
+          : response.data.accommodationReview,
         destinationGuides: response.data.destinationGuides,
         customerReview: response.data.customerReview,
         travelChallenges: response.data.travelChallenges,
@@ -66,6 +73,7 @@ const BlogEditor: React.FC = () => {
     } else {
       toastMessageError(response.message);
     }
+    setAiThinking(false);
   };
 
   const handleImagesChange = async (files: FileList) => {
@@ -162,6 +170,7 @@ const BlogEditor: React.FC = () => {
 
   return (
     <>
+      {aiThinking && <LoadingScreen />}
       <section className="section-blog pb-30 pb-md-60 pb-lg-90">
         <div className="container">
           <div className="row justify-content-between">
