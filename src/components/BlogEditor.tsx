@@ -7,7 +7,6 @@ import { useNavigate } from "react-router-dom";
 import "../App.css";
 import { ROUTES } from "../constants/routes";
 import { IBlogSchema } from "../interface/userInterface";
-import { Triangle } from "react-loader-spinner";
 import {
   CreateBlog,
   GetAiBlogs,
@@ -51,7 +50,9 @@ const BlogEditor: React.FC = () => {
     }
     setAiThinking(true);
     const response = await GetAiBlogs(data, token as string);
-    if (response.success && response.data) {
+    console.log(response, "response");
+
+    if (response.success && response.data && response.success) {
       const currentValues = getValues();
       reset({
         ...currentValues,

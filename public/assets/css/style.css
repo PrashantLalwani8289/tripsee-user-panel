@@ -8731,6 +8731,13 @@ Home page 3
 /*****************************/
 /******** Article CSS ********/
 /*****************************/
+.article-wrapper[data-image] {
+  --bg-parallax-image: attr(data-image url);
+  background-image: var(--bg-parallax-image);
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
 .article-1.overlay {
   --bs-overlay-bg: linear-gradient(rgba(0, 0, 0, 0.40) 0%, rgba(0, 0, 0, 0.40) 100%);
   --bs-overlay-height: 100%;
@@ -8743,6 +8750,12 @@ Home page 3
   color: rgba(255, 255, 255, 0.6);
   font-weight: 400;
   font-size: 16px;
+}
+.article-wrapper {
+  background-image: var(--bg-parallax-image); /* Use the custom property */
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
 }
 .article-1 .article-wrapper {
   --bg-parallax-opacity: 1;
@@ -8758,9 +8771,9 @@ Home page 3
     padding: 100px 0 50px 0;
   }
 }
-.article-1 .article-wrapper-1 {
+/* .article-1 .article-wrapper-1 {
   --bg-parallax-image: url(../images/article/article-banner-1.jpg);
-}
+} */
 .article-1 .section-banner-title {
   font-size: 52px;
 }

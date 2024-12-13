@@ -78,3 +78,8 @@ export const GetUserBlogs = async (UserId: number): Promise<ApiResponse> => {
   console.log(data);
   return data;
 };
+
+export const countSubscribers = async (): Promise<ApiResponse> => {
+  const { data } = await axios.get(endpoints.Subscribe.SUB_COUNT);
+  return data;
+};

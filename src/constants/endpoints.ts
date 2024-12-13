@@ -23,6 +23,7 @@ export default {
   },
   Subscribe: {
     SUBSCRIBE: `${URL}/subscribe/subscribe-new-user`,
+    SUB_COUNT: `${URL}/subscribe/subscribe-count`,
     CONTACT_FORM: `${URL}/subscribe/contact-form`,
   },
 } as const;

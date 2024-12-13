@@ -10,21 +10,12 @@ import { useEffect, useState } from "react";
 import { Blog } from "../../interface/blog";
 import { GetAllBlogs, GetTop3Blogs } from "../../services/blogServices";
 import { ROUTES } from "../../constants/routes";
-// import  {useRef } from 'react';
 import "animate.css/animate.min.css";
 import { keyframes } from "@emotion/react";
 
-// import gsap from 'gsap';
-// import { ScrollTrigger } from 'gsap/ScrollTrigger';
-// import { useGSAP } from '@gsap/react';
-// import WOW from 'wowjs';
-
-// import WOW from 'wowjs'
 import { Reveal } from "react-awesome-reveal";
 
-// gsap.registerPlugin( ScrollTrigger);
 const Blogs = () => {
-  // const boxRef = useRef(null);
   const tadaAnimation = keyframes`
       from {
         transform: scale3d(1, 1, 1);
@@ -102,7 +93,7 @@ const Blogs = () => {
   const ScrollToTop = () => {
     window.scrollTo({
       top: 0,
-      behavior: "smooth", // Enable smooth scrolling
+      behavior: "smooth",
     });
   };
   useEffect(() => {
