@@ -48,7 +48,7 @@ const RoutesConfig: React.FC<RoutesConfigProps> = ({ isAuthenticated }) => {
         }
       />
       <Route
-        path={ROUTES.YOUR_ARTICLE}
+        path={ROUTES.BLOGS}
         element={
           <PublicRoutes isAuthenticated={isAuthenticated} element={<Blogs />} />
         }
@@ -62,7 +62,7 @@ const RoutesConfig: React.FC<RoutesConfigProps> = ({ isAuthenticated }) => {
       <Route
         path={ROUTES.EDITOR}
         element={
-          <PublicRoutes
+          <PrivateRoute
             isAuthenticated={isAuthenticated}
             element={<BlogEditor />}
           />
@@ -71,7 +71,7 @@ const RoutesConfig: React.FC<RoutesConfigProps> = ({ isAuthenticated }) => {
       <Route
         path={ROUTES.SIGN_UP}
         element={
-          <PrivateRoute
+          <PublicRoutes
             isAuthenticated={isAuthenticated}
             element={<SignUp />}
           />
@@ -81,7 +81,7 @@ const RoutesConfig: React.FC<RoutesConfigProps> = ({ isAuthenticated }) => {
       <Route
         path={ROUTES.SIGN_IN}
         element={
-          <PrivateRoute
+          <PublicRoutes
             isAuthenticated={isAuthenticated}
             element={<SignIn />}
           />
