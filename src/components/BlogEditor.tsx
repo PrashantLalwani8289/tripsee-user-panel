@@ -51,25 +51,28 @@ const BlogEditor: React.FC = () => {
     setAiThinking(true);
     const response = await GetAiBlogs(data, token as string);
     console.log(response, "response");
-
-    if (response.success && response.data && response.success) {
+    if (response.success && response.data) {
+      console.log(JSON.parse(response.data as unknown as string));
+      // const newData = JSON.parse(response.data);
+      // console.log(newData)
+      response.data = JSON.parse(response.data as unknown as string);
       const currentValues = getValues();
       reset({
         ...currentValues,
         DestinationPlace: data,
-        title: response.data.title,
-        introduction: response.data.introduction,
-        tips: response.data.tips,
-        adventure: response.data.adventure,
-        accomodationReview: response.data.accomodationReview
-          ? response.data.accomodationReview
-          : response.data.accommodationReview,
-        destinationGuides: response.data.destinationGuides,
-        customerReview: response.data.customerReview,
-        travelChallenges: response.data.travelChallenges,
-        conclusion: response.data.conclusion,
-        latitude: response.data.latitude,
-        longitude: response.data.longitude,
+        title: response.data!.title,
+        introduction: response.data!.introduction,
+        tips: response.data!.tips,
+        adventure: response.data!.adventure,
+        accomodationReview: response.data!.accomodationReview
+          ? response.data!.accomodationReview
+          : response.data!.accommodationReview,
+        destinationGuides: response.data!.destinationGuides,
+        customerReview: response.data!.customerReview,
+        travelChallenges: response.data!.travelChallenges,
+        conclusion: response.data!.conclusion,
+        latitude: response.data!.latitude,
+        longitude: response.data!.longitude,
       });
     } else {
       toastMessageError(response.message);

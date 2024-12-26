@@ -18,6 +18,7 @@ import {
   GetAllBlogs,
   GetAllComments,
   GetBlog,
+  isLiked,
   Reacted,
   SubmitComment,
 } from "../../services/blogServices";
@@ -175,11 +176,19 @@ const Article = () => {
       behavior: "smooth", // Enable smooth scrolling
     });
   };
+  const getIsLiked = async () => {
+    const response = await isLiked(
+      { blog_id: articleId as unknown as number },
+      token as string
+    );
+    console.log(response, "here");
+  };
   useEffect(() => {
     getAllBlogs();
     BlogData();
     CommentData();
     ScrollToTop();
+    getIsLiked();
   }, [articleId]);
 
   const handleReplySubmit = async (data: CommentSchema) => {

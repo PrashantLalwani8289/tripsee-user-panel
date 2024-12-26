@@ -20,6 +20,7 @@ export default {
     ADD_COMMENT: `${URL}/blog/add-comment`,
     GET_ALL_COMMENTS: `${URL}/blog/get-comments`,
     GET_AUTO_BLOGS: `${URL}/blog/get-auto-blogs`,
+    IS_LIKED: `${URL}/blog/is-liked`,
   },
   Subscribe: {
     SUBSCRIBE: `${URL}/subscribe/subscribe-new-user`,

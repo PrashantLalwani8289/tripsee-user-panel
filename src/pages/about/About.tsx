@@ -12,11 +12,14 @@ import { useEffect, useState } from "react";
 import { Blog } from "../../interface/blog";
 import { GetAllBlogs } from "../../services/blogServices";
 import { countSubscribers } from "../../services/userServices";
+import useWebSocket from "./websocket";
 
 const About = () => {
+  console.log("hererere:");
+  const { message } = useWebSocket("ws://localhost:3002/api/v1/blog/get-likes");
   const [blogs, setBlogs] = useState<Blog[]>([]);
   const [subscribers, setSubscribers] = useState<number>(0);
-  const [likes, setLikes] = useState<number>(0);
+  // const [likes, setLikes] = useState<number>(0);
   const [blogsLoading, setBlogsLoading] = useState<boolean>(true);
   const ScrollToTop = () => {
     window.scrollTo({
@@ -39,7 +42,6 @@ const About = () => {
     const response = await countSubscribers();
     if (response.success && response.data) {
       setSubscribers(response.data.sub_count as unknown as number);
-      setLikes(response.data.likes as unknown as number);
     } else {
       console.error(response.message);
     }
@@ -131,7 +133,7 @@ const About = () => {
                       </div>
                       <div className="counter-number">
                         <h6 className="odometer" data-count="18">
-                          {likes}
+                          {message}
                         </h6>
                         <h5>k+</h5>
                         <p>Total Likes</p>
