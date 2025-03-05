@@ -1,5 +1,5 @@
 // const URL = "http://13.127.131.122/api/v1"
-const URL = "http://127.0.0.1:3002/api/v1";
+const URL = "https://tracking-app-oyik.onrender.com/api/v1";
 
 export default {
   User: {

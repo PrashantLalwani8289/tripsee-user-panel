@@ -52,10 +52,10 @@ const BlogEditor: React.FC = () => {
     const response = await GetAiBlogs(data, token as string);
     console.log(response, "response");
     if (response.success && response.data) {
-      console.log(JSON.parse(response.data as unknown as string));
+      // console.log(JSON.parse(response.data as unknown as string));
       // const newData = JSON.parse(response.data);
       // console.log(newData)
-      response.data = JSON.parse(response.data as unknown as string);
+      // response.data = JSON.parse(response.data as unknown as string);
       const currentValues = getValues();
       reset({
         ...currentValues,
